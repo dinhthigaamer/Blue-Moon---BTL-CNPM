@@ -6,6 +6,7 @@ public enum ErrorCode {
     GLOBAL_ERROR,
     VALIDATION_ERROR,
     METHOD_NOT_ALLOWED,
+    NOT_FOUND,
     UNAUTHORIZED,
 
     // AUTH
