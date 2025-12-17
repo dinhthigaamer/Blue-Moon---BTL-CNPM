@@ -1,9 +1,10 @@
 package com.example.project.config;
 
-import io.swagger.v3.oas.models.ExternalDocumentation;
+import io.swagger.v3.oas.models.Components;
 import io.swagger.v3.oas.models.OpenAPI;
 import io.swagger.v3.oas.models.info.Info;
-import io.swagger.v3.oas.models.info.License;
+import io.swagger.v3.oas.models.security.SecurityRequirement;
+import io.swagger.v3.oas.models.security.SecurityScheme;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
@@ -11,14 +12,25 @@ import org.springframework.context.annotation.Configuration;
 public class SwaggerConfig {
 
     @Bean
-    public OpenAPI apartmentManagementOpenAPI() {
+    public OpenAPI customOpenAPI() {
+        final String securitySchemeName = "bearerAuth";
+
         return new OpenAPI()
-                .info(new Info().title("Apartment Management API")
-                        .description("Backend API for apartment fee management system")
-                        .version("v1.0")
-                        .license(new License().name("MIT")))
-                .externalDocs(new ExternalDocumentation()
-                        .description("Project Wiki")
-                        .url("https://example.com"));
+                .info(new Info()
+                        .title("Project API")
+                        .version("v1")
+                        .description("Apartment management backend")
+                )
+                // Khai báo dùng security global
+                .addSecurityItem(new SecurityRequirement().addList(securitySchemeName))
+                .components(new Components()
+                        .addSecuritySchemes(securitySchemeName,
+                                new SecurityScheme()
+                                        .name("Authorization")
+                                        .type(SecurityScheme.Type.HTTP)
+                                        .scheme("bearer")
+                                        .bearerFormat("JWT")
+                        )
+                );
     }
 }
