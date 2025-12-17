@@ -19,28 +19,58 @@ public class HouseholdController {
         this.householdService = householdService;
     }
 
+    /**
+     * GET /api/households
+     * Query: roomNumber, isVacant
+     */
     @GetMapping
-    public ApiResponse<List<HouseholdDTO>> getAll() {
-        return ApiResponse.ok(householdService.findAll());
+    public ApiResponse<List<HouseholdDTO>> getAll(
+            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) Boolean isVacant
+    ) {
+        return ApiResponse.ok(
+                householdService.findAll(roomNumber, isVacant)
+        );
     }
 
+    /**
+     * GET /api/households/{id}
+     */
     @GetMapping("/{id}")
     public ApiResponse<HouseholdDTO> getById(@PathVariable Long id) {
-        return ApiResponse.ok(householdService.findById(id));
+        return ApiResponse.ok(
+                householdService.findById(id)
+        );
     }
 
+    /**
+     * POST /api/households
+     */
     @PostMapping
-    public ApiResponse<HouseholdDTO> create(@RequestBody HouseholdCreateDTO dto) {
-        return ApiResponse.ok(householdService.create(dto));
+    public ApiResponse<HouseholdDTO> create(
+            @RequestBody HouseholdCreateDTO dto
+    ) {
+        return ApiResponse.ok(
+                householdService.create(dto)
+        );
     }
 
+    /**
+     * PUT /api/households/{id}
+     */
     @PutMapping("/{id}")
     public ApiResponse<HouseholdDTO> update(
             @PathVariable Long id,
-            @RequestBody HouseholdUpdateDTO dto) {
-        return ApiResponse.ok(householdService.update(id, dto));
+            @RequestBody HouseholdUpdateDTO dto
+    ) {
+        return ApiResponse.ok(
+                householdService.update(id, dto)
+        );
     }
 
+    /**
+     * DELETE /api/households/{id}
+     */
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         householdService.delete(id);

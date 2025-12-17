@@ -1,18 +1,16 @@
-package com.example.project.household.service;
+package com.example.project.household.service.impl;
 
 import com.example.project.common.exception.ApiException;
 import com.example.project.common.exception.ErrorCode;
-import com.example.project.household.dto.HouseholdCreateDTO;
-import com.example.project.household.dto.HouseholdDTO;
-import com.example.project.household.dto.HouseholdUpdateDTO;
+import com.example.project.household.dto.*;
 import com.example.project.household.entity.Household;
 import com.example.project.household.mapper.HouseholdMapper;
 import com.example.project.household.repository.HouseholdRepository;
 import com.example.project.household.service.HouseholdService;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class HouseholdServiceImpl implements HouseholdService {
@@ -27,14 +25,15 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
-    public List<HouseholdDTO> findAll(Integer page, Boolean isActive) {
-        List<Household> households = householdRepository.findAll();
-        List<HouseholdDTO> result = new ArrayList<>();
+    public List<HouseholdDTO> findAll(Integer roomNumber, Boolean isVacant) {
 
-        for (Household h : households) {
-            result.add(householdMapper.toDTO(h));
-        }
-        return result;
+        List<Household> households = householdRepository.findAll();
+
+        return households.stream()
+                .filter(h -> roomNumber == null || h.getRoomNumber().equals(roomNumber))
+                .filter(h -> isVacant == null || h.getIsVacant().equals(isVacant))
+                .map(householdMapper::toDTO)
+                .collect(Collectors.toList());
     }
 
     @Override
@@ -48,8 +47,8 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public HouseholdDTO create(HouseholdCreateDTO dto) {
         Household household = householdMapper.toEntity(dto);
-        householdRepository.save(household);
-        return householdMapper.toDTO(household);
+        Household saved = householdRepository.save(household);
+        return householdMapper.toDTO(saved);
     }
 
     @Override
@@ -58,9 +57,9 @@ public class HouseholdServiceImpl implements HouseholdService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
 
         householdMapper.updateEntity(dto, household);
-        householdRepository.save(household);
+        Household updated = householdRepository.save(household);
 
-        return householdMapper.toDTO(household);
+        return householdMapper.toDTO(updated);
     }
 
     @Override

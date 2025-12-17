@@ -9,20 +9,19 @@ public class HouseholdUpdateDTO {
     public String getOwnerName() {
         return ownerName;
     }
-
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
     }
-
     public Boolean getIsVacant() {
         return isVacant;
     }
-
     public void setIsVacant(Boolean isVacant) {
         this.isVacant = isVacant;
     }
-
-    public Long roomFeeId(){
+    public Long getRoomFeeId() {
         return roomFeeId;
+    }
+    public void setRoomFeeId(Long roomFeeId) {
+        this.roomFeeId = roomFeeId;
     }
 }

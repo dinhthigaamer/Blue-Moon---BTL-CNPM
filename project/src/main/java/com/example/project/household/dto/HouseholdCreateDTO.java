@@ -7,31 +7,31 @@ public class HouseholdCreateDTO {
     private Boolean isVacant;
     private Long roomFeeId;
 
+    //Getter
     public Integer getRoomNumber() {
         return roomNumber;
     }
-
-    public void setRoomNumber(Integer roomNumber) {
-        this.roomNumber = roomNumber;
-    }
-
     public String getOwnerName() {
         return ownerName;
     }
-
-    public void setOwnerName(String ownerName) {
-        this.ownerName = ownerName;
-    }
-
     public Boolean getIsVacant() {
         return isVacant;
     }
+    public Long getRoomFeeId() {
+        return roomFeeId;
+    }
 
+    //Setter
+    public void setRoomNumber(Integer roomNumber) {
+        this.roomNumber = roomNumber;
+    }
+    public void setOwnerName(String ownerName) {
+        this.ownerName = ownerName;
+    }
     public void setIsVacant(Boolean isVacant) {
         this.isVacant = isVacant;
     }
-
-    public Long roomFeeId(){
-        return roomFeeId;
+    public void setRoomFeeId(Long roomFeeId) {
+        this.roomFeeId = roomFeeId;
     }
 }
