@@ -27,7 +27,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
-    public List<HouseholdDTO> findAll() {
+    public List<HouseholdDTO> findAll(Integer page, Boolean isActive) {
         List<Household> households = householdRepository.findAll();
         List<HouseholdDTO> result = new ArrayList<>();
 
