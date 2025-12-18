@@ -17,14 +17,14 @@ public class Household extends BaseEntity {
     private Integer residentCount;
     private Integer vehicleCount;
     private Boolean isVacant;
-
+    /* 
     @ManyToOne
     @JoinColumn(name = "room_fee_id")
     private Fee roomFee;
 
     @OneToMany(mappedBy = "household")
     private List<Resident> residents = new ArrayList<>();
-
+     */
     public Household() {}
 
     public Integer getRoomNumber() {
@@ -66,20 +66,21 @@ public class Household extends BaseEntity {
     public void setIsVacant(Boolean isVacant) {
         this.isVacant = isVacant;
     }
-
+    /*
     public Fee getRoomFee() {
         return roomFee;
     }
-
+    
     public void setRoomFee(Fee roomFee) {
         this.roomFee = roomFee;
     }
-
+    
     public List<Resident> getResidents() {
         return residents;
     }
-
+    
     public void setResidents(List<Resident> residents) {
         this.residents = residents;
     }
+    */
 }

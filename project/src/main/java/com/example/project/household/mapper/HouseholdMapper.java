@@ -15,17 +15,18 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class HouseholdMapper {
-
+    /*
     private final FeeRepository feeRepository;
-
+    
     public HouseholdMapper(FeeRepository feeRepository) {
         this.feeRepository = feeRepository;
     }
-
+    */
+    
     /**
      * Entity -> DTO
-     */
-    public HouseholdDTO toDTO(Household entity) {
+    */
+   public HouseholdDTO toDTO(Household entity) {
         if (entity == null) {
             return null;
         }
@@ -37,14 +38,15 @@ public class HouseholdMapper {
         dto.setResidentCount(entity.getResidentCount());
         dto.setVehicleCount(entity.getVehicleCount());
         dto.setIsVacant(entity.getIsVacant());
-
-        if (entity.getRoomFee() != null) {
-            dto.setRoomFeeId(entity.getRoomFee().getId());
-            // optional – nếu sau này DTO có thêm field
-            // dto.setPrice(entity.getRoomFee().getDefaultAmount());
-            // dto.setArea(entity.getRoomFee().getArea());
-            // dto.setRoomFeeName(entity.getRoomFee().getName());
-        }
+        /*
+            if (entity.getRoomFee() != null) {
+                dto.setRoomFeeId(entity.getRoomFee().getId());
+                // optional – nếu sau này DTO có thêm field
+                // dto.setPrice(entity.getRoomFee().getDefaultAmount());
+                // dto.setArea(entity.getRoomFee().getArea());
+                // dto.setRoomFeeName(entity.getRoomFee().getName());
+            }
+        */
 
         return dto;
     }
@@ -62,16 +64,17 @@ public class HouseholdMapper {
         // mặc định khi tạo mới
         entity.setResidentCount(0);
         entity.setVehicleCount(0);
-
+        /*
         Fee fee = feeRepository.findById(dto.getRoomFeeId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
-
+        .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+        
         if (fee.getType() != FeeType.RENT) {
             throw new ApiException(ErrorCode.INVALID_FEE_TYPE);
         }
-
+        
         entity.setRoomFee(fee);
-
+        */
+        
         return entity;
     }
 
@@ -87,16 +90,17 @@ public class HouseholdMapper {
         if (dto.getIsVacant() != null) {
             entity.setIsVacant(dto.getIsVacant());
         }
-
+        /*
         if (dto.getRoomFeeId() != null) {
             Fee fee = feeRepository.findById(dto.getRoomFeeId())
-                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
-
+            .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+            
             if (fee.getType() != FeeType.RENT) {
                 throw new ApiException(ErrorCode.INVALID_FEE_TYPE);
             }
-
+            
             entity.setRoomFee(fee);
         }
+        */
     }
 }
