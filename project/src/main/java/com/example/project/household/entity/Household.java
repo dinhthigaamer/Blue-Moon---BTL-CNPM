@@ -1,10 +1,10 @@
 package com.example.project.household.entity;
 
 import com.example.project.common.base.BaseEntity;
-// thiếu phần fee, resident
+import com.example.project.resident.entity.Resident;
 import jakarta.persistence.*;
 
-import java.util.List;
+import java.util.*;
 
 @Entity
 @Table(name = "households")
@@ -21,10 +21,11 @@ public class Household extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "room_fee_id")
     private Fee roomFee;
+    */
 
     @OneToMany(mappedBy = "household")
     private List<Resident> residents = new ArrayList<>();
-     */
+    
     public Household() {}
 
     public Integer getRoomNumber() {

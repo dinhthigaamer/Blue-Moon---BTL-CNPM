@@ -1,0 +1,60 @@
+package com.example.project.resident.mapper;
+
+import com.example.project.common.exception.ApiException;
+import com.example.project.common.exception.ErrorCode;
+import com.example.project.household.entity.Household;
+import com.example.project.household.repository.HouseholdRepository;
+import com.example.project.resident.dto.ResidentCreateDTO;
+import com.example.project.resident.dto.ResidentDTO;
+import com.example.project.resident.dto.ResidentUpdateDTO;
+import com.example.project.resident.entity.Resident;
+import org.springframework.stereotype.Component;
+
+@Component
+public class ResidentMapper {
+
+    private final HouseholdRepository householdRepository;
+
+    public ResidentMapper(HouseholdRepository householdRepository) {
+        this.householdRepository = householdRepository;
+    }
+
+    public ResidentDTO toDTO(Resident entity) {
+        ResidentDTO dto = new ResidentDTO();
+        dto.setId(entity.getId());
+        dto.setFullName(entity.getFullName());
+        dto.setPhone(entity.getPhone());
+        dto.setVehicleCount(entity.getVehicleCount());
+
+        if (entity.getHousehold() != null) {
+            dto.setHouseholdId(entity.getHousehold().getId());
+            dto.setRoomNumber(entity.getHousehold().getRoomNumber());
+        }
+        return dto;
+    }
+
+    public Resident toEntity(ResidentCreateDTO dto) {
+        Resident r = new Resident();
+        r.setFullName(dto.getFullName());
+        r.setPhone(dto.getPhone());
+        r.setVehicleCount(dto.getVehicleCount() == null ? 0 : dto.getVehicleCount());
+
+        Household household = householdRepository.findById(dto.getHouseholdId())
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+        r.setHousehold(household);
+
+        return r;
+    }
+
+    public void updateEntity(ResidentUpdateDTO dto, Resident entity) {
+        if (dto.getFullName() != null) entity.setFullName(dto.getFullName());
+        if (dto.getPhone() != null) entity.setPhone(dto.getPhone());
+        if (dto.getVehicleCount() != null) entity.setVehicleCount(dto.getVehicleCount());
+
+        if (dto.getHouseholdId() != null) {
+            Household household = householdRepository.findById(dto.getHouseholdId())
+                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+            entity.setHousehold(household);
+        }
+    }
+}
