@@ -2,6 +2,7 @@ package com.example.project.fee.service;
 //import com.example.project.fee.dto.FeeCreateDTO;
 import com.example.project.fee.dto.FeeDTO;
 import com.example.project.fee.entity.Fee;
+import com.example.project.fee.entity.FeeType;
 import com.example.project.fee.mapper.FeeMapper;
 import com.example.project.fee.repository.FeeRepository;
 import com.example.project.common.exception.ApiException;
@@ -25,13 +26,20 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeDTO findByType(String type) {
-        Fee fee = repo.findByType(type)
+        FeeType feeType;
+        try {
+            feeType = FeeType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(ErrorCode.NOT_FOUND);
+        }
+        Fee fee = repo.findByType(feeType)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
         return mapper.toDTO(fee);
     }
     @Override
     public FeeDTO findById(Long id){
-        Fee fee = repo.findById(id).orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+        Fee fee = repo.findById(id)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
         return mapper.toDTO(fee);
     }
 
@@ -42,13 +50,25 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public FeeDTO update(String type, FeeDTO dto) {
-        Fee fee = repo.findByType(type)
+        FeeType feeType;
+        try {
+            feeType = FeeType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(ErrorCode.NOT_FOUND);
+        }
+        Fee fee = repo.findByType(feeType)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
         fee.setName(dto.getName());
-        //type không cần thiết phải cập nhật
-        //fee.setType(dto.getType());
-        fee.setDefaultAmount(dto.getDefaultAmount());
-        fee.setPricePerUnit(dto.getPricePerUnit());
+        // Chỉ cập nhật nếu giá trị từ DTO khác nul
+        if( dto.getType() != null) {
+            fee.setType(dto.getType());
+        }
+        if (dto.getDefaultAmount() != null) {
+            fee.setDefaultAmount(dto.getDefaultAmount());
+        }
+        if (dto.getPricePerUnit() != null) {
+            fee.setPricePerUnit(dto.getPricePerUnit());
+        }
         return mapper.toDTO(repo.save(fee));
     }
 
@@ -57,20 +77,45 @@ public class FeeServiceImpl implements FeeService {
         Fee fee = repo.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
         fee.setName(dto.getName());
-        //type không cần thiết phải cập nhật
-        //fee.setType(dto.getType());
-        fee.setDefaultAmount(dto.getDefaultAmount());
-        fee.setPricePerUnit(dto.getPricePerUnit());
+        // Chỉ cập nhật nếu giá trị từ DTO khác null
+        if (dto.getType() != null) {
+            fee.setType(dto.getType());
+        }
+        if (dto.getDefaultAmount() != null) {
+            fee.setDefaultAmount(dto.getDefaultAmount());
+        }
+        if (dto.getPricePerUnit() != null) {
+            fee.setPricePerUnit(dto.getPricePerUnit());
+        }
         return mapper.toDTO(repo.save(fee));
     }
 
 
     @Override
     public void delete(String type) {
-         Fee fee = repo.findByType(type)
+        FeeType feeType;
+        try {
+            feeType = FeeType.valueOf(type);
+        } catch (IllegalArgumentException e) {
+            throw new ApiException(ErrorCode.NOT_FOUND);
+        }
+        Fee fee = repo.findByType(feeType)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
-         Long id = fee.getId();
+        Long id = fee.getId();
         repo.deleteById(id);
     }
+//     public void delete(String type) {
+//     FeeType feeType;
+//     try {
+//         feeType = FeeType.valueOf(type);
+//     } catch (IllegalArgumentException e) {
+//         throw new ApiException(ErrorCode.NOT_FOUND);
+//     }
+
+//     Fee fee = repo.findByType(feeType)
+//             .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+
+//     repo.delete(fee);
+// }
 }
 

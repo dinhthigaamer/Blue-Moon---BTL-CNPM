@@ -2,7 +2,6 @@ package com.example.project.fee.entity;
 
 import java.math.BigDecimal;
 import com.example.project.common.base.BaseEntity;
-
 import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;

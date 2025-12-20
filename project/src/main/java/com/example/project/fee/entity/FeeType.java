@@ -7,5 +7,5 @@ public enum FeeType {
     ELECTRICITY, 
     WATER,
     MANAGEMENT_FEE,
-    OPTIONAL 
+    OPTIONAL //voluntary fees
 }
