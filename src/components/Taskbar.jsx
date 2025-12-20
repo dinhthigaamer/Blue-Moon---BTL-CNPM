@@ -1,9 +1,18 @@
+import { NavLink } from "react-router-dom";
+
 export default function Taskbar({ collapsed, toggle }) {
+    const menu = [
+        { label: "Trang chủ", path: "/" },
+        { label: "Cư dân", path: "/cu_dan" },
+        { label: "Khoản thu", path: "/khoan_thu" },
+        { label: "Tra cứu - Thống kê", path: "/tra_cuu" },
+    ];
+
     return (
         <aside
             className={`bg-white h-full shadow-sm transition-all duration-300
-        ${collapsed ? "w-20" : "w-64"}
-      `}
+            ${collapsed ? "w-20" : "w-64"}
+          `}
         >
             {/* Header sidebar */}
             <div className="flex items-center justify-between px-4 py-4">
@@ -23,28 +32,32 @@ export default function Taskbar({ collapsed, toggle }) {
             </div>
 
             {/* Menu */}
-            <ul className="mt-6 space-y-2 text-gray-600">
-                {[
-                    "Trang chủ",
-                    "Khách hàng",
-                    "Căn hộ",
-                    "Hợp đồng",
-                    "Hỗ trợ",
-                    "Báo cáo",
-                ].map((item) => (
-                    <li
-                        key={item}
-                        className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+            <nav className="mt-6 flex flex-col space-y-2">
+                {menu.map(item => (
+                    <NavLink
+                        key={item.path}
+                        to={item.path}
+                        className={({ isActive }) =>
+                            `mx-2 px-4 py-2 rounded cursor-pointer transition-colors
+                  ${isActive
+                                ? "bg-teal-50 text-teal-500 font-semibold"
+                                : "text-gray-600 hover:bg-gray-100"
+                            }`
+                        }
                     >
-                        {!collapsed && item}
-                    </li>
+                        {!collapsed && item.label}
+                    </NavLink>
                 ))}
-            </ul>
+            </nav>
 
             {/* Logout */}
-            <div className="absolute bottom-4 px-4 text-gray-400 cursor-pointer hover:text-red-400">
-                {!collapsed && "Đăng xuất"}
-            </div>
+            <button
+                className={`absolute bottom-4 mx-4 text-gray-400 hover:text-red-400
+              ${collapsed ? "hidden" : "block"}`}
+            >
+                Đăng xuất
+            </button>
         </aside>
+        // <p>Hello</p>
     );
 }
