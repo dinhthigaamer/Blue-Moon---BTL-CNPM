@@ -48,14 +48,15 @@
             <scope>runtime</scope>
         </dependency>
 
-        <!-- PostgreSQL -->
+        <!-- PostgreSQL (giữ phiên bản cụ thể, loại bỏ bản lặp) -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
+            <version>42.7.3</version>
             <scope>runtime</scope>
         </dependency>
 
-        <!-- H2 in-memory DB for development/testing without MySQL -->
+        <!-- H2 in-memory DB for development/testing without MySQL (loại bỏ bản lặp) -->
         <dependency>
             <groupId>com.h2database</groupId>
             <artifactId>h2</artifactId>
@@ -113,18 +114,6 @@
             <version>0.11.5</version>
             <scope>runtime</scope>
         </dependency>
-        <!--H2-->
-        <dependency>
-            <groupId>com.h2database</groupId>
-            <artifactId>h2</artifactId>
-            <scope>runtime</scope>
-        </dependency>
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
-        </dependency>
-
 
     </dependencies>
 

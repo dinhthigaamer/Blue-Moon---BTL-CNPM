@@ -18,9 +18,8 @@ public class Household extends BaseEntity {
     private Integer vehicleCount;
     private Boolean isVacant;
     /* 
-    @ManyToOne
-    @JoinColumn(name = "room_fee_id")
-    private Fee roomFee;
+    @OneToMany(mappedBy = "household")
+    private List<FeePayment> roomFee;
     */
 
     @OneToMany(mappedBy = "household")

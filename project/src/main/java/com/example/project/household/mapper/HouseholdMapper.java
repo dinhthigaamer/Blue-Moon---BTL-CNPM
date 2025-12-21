@@ -1,7 +1,7 @@
 package com.example.project.household.mapper;
 
-import com.example.project.common.exception.ApiException;
-import com.example.project.common.exception.ErrorCode;
+//import com.example.project.common.exception.ApiException;
+//import com.example.project.common.exception.ErrorCode;
 import com.example.project.household.dto.HouseholdCreateDTO;
 import com.example.project.household.dto.HouseholdDTO;
 import com.example.project.household.dto.HouseholdUpdateDTO;
