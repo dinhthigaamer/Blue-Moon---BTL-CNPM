@@ -1,10 +1,10 @@
 package com.example.project.household.controller;
 
+import com.example.project.household.service.impl.HouseholdServiceImpl;
 import com.example.project.common.response.ApiResponse;
 import com.example.project.household.dto.HouseholdCreateDTO;
 import com.example.project.household.dto.HouseholdDTO;
 import com.example.project.household.dto.HouseholdUpdateDTO;
-import com.example.project.household.service.HouseholdService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -13,23 +13,22 @@ import java.util.List;
 @RequestMapping("/api/households")
 public class HouseholdController {
 
-    private final HouseholdService householdService;
+    private final HouseholdServiceImpl householdService;
 
-    public HouseholdController(HouseholdService householdService) {
+    public HouseholdController(HouseholdServiceImpl householdService) {
         this.householdService = householdService;
     }
 
     /**
      * GET /api/households
-     * Query: roomNumber, isVacant
+     * Query: isVacant
      */
     @GetMapping
     public ApiResponse<List<HouseholdDTO>> getAll(
-            @RequestParam(required = false) Integer roomNumber,
             @RequestParam(required = false) Boolean isVacant
     ) {
         return ApiResponse.ok(
-                householdService.findAll(roomNumber, isVacant)
+                householdService.findAll(isVacant)
         );
     }
 

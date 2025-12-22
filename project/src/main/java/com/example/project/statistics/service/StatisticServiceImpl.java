@@ -1,7 +1,6 @@
 package com.example.project.statistics.service;
 
 import java.math.BigDecimal;
-import java.math.BigInteger;
 import java.util.List;
 import java.util.function.Function;
 import org.springframework.stereotype.Service;

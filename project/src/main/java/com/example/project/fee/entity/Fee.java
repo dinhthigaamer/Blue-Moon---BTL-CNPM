@@ -7,10 +7,12 @@ import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "fees")
 @Data
+@EqualsAndHashCode(callSuper = true)
 public class Fee extends BaseEntity {
     private String name;
 

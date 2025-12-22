@@ -25,12 +25,11 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
-    public List<HouseholdDTO> findAll(Integer roomNumber, Boolean isVacant) {
+    public List<HouseholdDTO> findAll(Boolean isVacant) {
 
         List<Household> households = householdRepository.findAll();
 
         return households.stream()
-                .filter(h -> roomNumber == null || h.getRoomNumber().equals(roomNumber))
                 .filter(h -> isVacant == null || h.getIsVacant().equals(isVacant))
                 .map(householdMapper::toDTO)
                 .collect(Collectors.toList());
