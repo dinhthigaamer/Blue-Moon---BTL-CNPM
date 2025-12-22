@@ -30,16 +30,16 @@ public class FeeServiceImpl implements FeeService {
         try {
             feeType = FeeType.valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new ApiException(ErrorCode.NOT_FOUND);
+            throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
         }
         Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
         return mapper.toDTO(fee);
     }
     @Override
     public FeeDTO findById(Long id){
         Fee fee = repo.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí có id "+id+" không tồn tại"));
         return mapper.toDTO(fee);
     }
 
@@ -54,10 +54,10 @@ public class FeeServiceImpl implements FeeService {
         try {
             feeType = FeeType.valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new ApiException(ErrorCode.NOT_FOUND);
+            throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
         }
         Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
         fee.setName(dto.getName());
         // Chỉ cập nhật nếu giá trị từ DTO khác nul
         if( dto.getType() != null) {
@@ -75,7 +75,7 @@ public class FeeServiceImpl implements FeeService {
     @Override
     public FeeDTO update(Long id, FeeDTO dto) {
         Fee fee = repo.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,"Phí có id "+id+" không tồn tại"));
         fee.setName(dto.getName());
         // Chỉ cập nhật nếu giá trị từ DTO khác null
         if (dto.getType() != null) {
@@ -97,10 +97,10 @@ public class FeeServiceImpl implements FeeService {
         try {
             feeType = FeeType.valueOf(type);
         } catch (IllegalArgumentException e) {
-            throw new ApiException(ErrorCode.NOT_FOUND);
+            throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
         }
         Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
         Long id = fee.getId();
         repo.deleteById(id);
     }

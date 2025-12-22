@@ -23,14 +23,14 @@ public class FeePaymentController {
     public ApiResponse<FeePaymentDTO> createFeePayment(
             @RequestBody FeePaymentCreateDTO dto) {
         FeePaymentDTO result = feePaymentService.create(dto);
-        return ApiResponse.ok(result);
+        return ApiResponse.ok(result, "Tạo mới phiếu thu phí thành công");
     }
     @PutMapping("/{id}")
     public ApiResponse<FeePaymentDTO> updateFeePayment(
             @PathVariable Long id,
             @RequestBody FeePaymentUpdateDTO dto) {
         return ApiResponse.ok(
-                feePaymentService.update(id, dto)
+                feePaymentService.update(id, dto), "Cập nhật phiếu thu phí thành công"
         );
     }
     @GetMapping("/")
@@ -47,12 +47,12 @@ public class FeePaymentController {
     @GetMapping("/search/{id}")
     public ApiResponse<FeePaymentDTO> getById(@PathVariable Long id) {
         return ApiResponse.ok(
-                feePaymentService.findById(id)
+                feePaymentService.findById(id), "Lấy thông tin phiếu thu phí thành công"
         );
     }
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteFeePayment(@PathVariable Long id) {
         feePaymentService.delete(id);
-        return ApiResponse.ok(null, "Fee payment deleted successfully");
+        return ApiResponse.ok(null, "Phiếu thu phí đã được xoá thành công");
     }
 }

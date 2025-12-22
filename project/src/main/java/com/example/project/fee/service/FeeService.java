@@ -8,6 +8,7 @@ public interface FeeService {
     //tìm theo id khá vô nghĩa, phải tìm theo type
     FeeDTO findById(Long id);
     //theo suy luận hiện tại thì mỗi type chỉ có một khoản phí nên tìm theo type là hợp lý
+    //nhưng sẽ phải đặt trường type là unique trong db
     FeeDTO findByType(String type);
     FeeDTO create(FeeDTO dto);
     FeeDTO update(String type, FeeDTO dto);

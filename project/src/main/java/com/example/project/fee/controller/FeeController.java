@@ -30,26 +30,26 @@ public class FeeController {
 
     @PostMapping
     public ApiResponse<FeeDTO> createFee(@RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.create(dto), "Fee created successfully");
+        return ApiResponse.ok(feeService.create(dto), "Phí loại"+ dto.getType() +"được tạo thành công");
     }
 
     @PutMapping("/id/{id}")
     public ApiResponse<FeeDTO> updateFee(
             @PathVariable Long id,
             @RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.update(id, dto), "Fee updated successfully");
+        return ApiResponse.ok(feeService.update(id, dto), "Phí có id "+ id +"được cập nhật thành công");
     }
 
     @PutMapping("/type/{type}")
     public ApiResponse<FeeDTO> updateFeeByType(
             @PathVariable String type,
             @RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.update(type, dto), "Fee updated successfully");
+        return ApiResponse.ok(feeService.update(type, dto), "Phí loại \"" + type + "\" được cập nhật thành công");
     }
 
     @DeleteMapping("/{type}")
     public ApiResponse<Void> deleteFee(@PathVariable String type) {
         feeService.delete(type);
-        return ApiResponse.ok(null, "Fee deleted successfully");
+        return ApiResponse.ok(null, "Phí loại \"" + type + "\" được xóa thành công");
     }
 }
