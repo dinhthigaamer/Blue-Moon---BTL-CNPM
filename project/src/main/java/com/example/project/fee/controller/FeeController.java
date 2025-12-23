@@ -24,7 +24,7 @@ public class FeeController {
     }
 
     @GetMapping("/type/{type}")
-    public ApiResponse<FeeDTO> getFeeByType(@PathVariable String type) {
+    public ApiResponse<List<FeeDTO>> getFeeByType(@PathVariable String type) {
         return ApiResponse.ok(feeService.findByType(type));
     }
 
@@ -47,9 +47,9 @@ public class FeeController {
         return ApiResponse.ok(feeService.update(type, dto), "Phí loại \"" + type + "\" được cập nhật thành công");
     }
 
-    @DeleteMapping("/{type}")
-    public ApiResponse<Void> deleteFee(@PathVariable String type) {
-        feeService.delete(type);
-        return ApiResponse.ok(null, "Phí loại \"" + type + "\" được xóa thành công");
+    @DeleteMapping("/{id}")
+    public ApiResponse<Void> deleteFee(@PathVariable Long id) {
+        feeService.delete(id);
+        return ApiResponse.ok(null, "Phí loại \"" + id + "\" được xóa thành công");
     }
 }

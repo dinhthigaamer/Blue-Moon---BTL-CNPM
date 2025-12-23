@@ -14,6 +14,7 @@ public class FeeMapper {
         dto.setType(entity.getType());
         dto.setDefaultAmount(entity.getDefaultAmount());
         dto.setPricePerUnit(entity.getPricePerUnit());
+        dto.setNote(entity.getNote());
         return dto;
     }
 
@@ -23,6 +24,7 @@ public class FeeMapper {
         fee.setType(dto.getType());
         fee.setDefaultAmount(dto.getDefaultAmount());
         fee.setPricePerUnit(dto.getPricePerUnit());
+        fee.setNote(dto.getNote());
         return fee;
     }
     //thay bằng hàm mới chuyển từ FeeDTO sang Fee

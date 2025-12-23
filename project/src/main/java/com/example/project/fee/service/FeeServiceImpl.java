@@ -25,16 +25,15 @@ public class FeeServiceImpl implements FeeService {
     }
 
     @Override
-    public FeeDTO findByType(String type) {
+    public List<FeeDTO> findByType(String type) {
         FeeType feeType;
         try {
             feeType = FeeType.valueOf(type);
         } catch (IllegalArgumentException e) {
             throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
         }
-        Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
-        return mapper.toDTO(fee);
+        List<FeeDTO> fees = repo.findByType(feeType).stream().map(mapper::toDTO).toList();
+        return fees;
     }
     @Override
     public FeeDTO findById(Long id){
@@ -58,8 +57,10 @@ public class FeeServiceImpl implements FeeService {
         }
         Fee fee = repo.findByType(feeType)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
-        fee.setName(dto.getName());
         // Chỉ cập nhật nếu giá trị từ DTO khác nul
+        if (dto.getName() != null) {
+            fee.setName(dto.getName());
+        }
         if( dto.getType() != null) {
             fee.setType(dto.getType());
         }
@@ -69,6 +70,9 @@ public class FeeServiceImpl implements FeeService {
         if (dto.getPricePerUnit() != null) {
             fee.setPricePerUnit(dto.getPricePerUnit());
         }
+        if (dto.getNote() != null) {
+            fee.setNote(dto.getNote());
+        }
         return mapper.toDTO(repo.save(fee));
     }
 
@@ -76,8 +80,10 @@ public class FeeServiceImpl implements FeeService {
     public FeeDTO update(Long id, FeeDTO dto) {
         Fee fee = repo.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,"Phí có id "+id+" không tồn tại"));
-        fee.setName(dto.getName());
         // Chỉ cập nhật nếu giá trị từ DTO khác null
+        if(dto.getName() != null){
+            fee.setName(dto.getName());
+        }
         if (dto.getType() != null) {
             fee.setType(dto.getType());
         }
@@ -87,21 +93,15 @@ public class FeeServiceImpl implements FeeService {
         if (dto.getPricePerUnit() != null) {
             fee.setPricePerUnit(dto.getPricePerUnit());
         }
+        if(dto.getNote() != null){
+            fee.setNote(dto.getNote());
+        }
         return mapper.toDTO(repo.save(fee));
     }
 
 
     @Override
-    public void delete(String type) {
-        FeeType feeType;
-        try {
-            feeType = FeeType.valueOf(type);
-        } catch (IllegalArgumentException e) {
-            throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
-        }
-        Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
-        Long id = fee.getId();
+    public void delete(Long id) {
         repo.deleteById(id);
     }
 //     public void delete(String type) {

@@ -10,7 +10,6 @@ import java.time.LocalDate;
 public class FeePaymentUpdateDTO {
     private Long householdId;
     private Long feeId;
-    private String name;
     private BigDecimal usageAmount;
     private BigDecimal voluntaryAmount;
     private Integer billingYear;

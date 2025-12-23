@@ -47,8 +47,7 @@ public class FeePaymentController {
     @GetMapping("/search/{id}")
     public ApiResponse<FeePaymentDTO> getById(@PathVariable Long id) {
         return ApiResponse.ok(
-                feePaymentService.findById(id), "Lấy thông tin phiếu thu phí thành công"
-        );
+                feePaymentService.findById(id));
     }
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteFeePayment(@PathVariable Long id) {

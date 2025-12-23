@@ -25,6 +25,8 @@ public class Fee extends BaseEntity {
     //dùng cho khoản không cố định theo đơn vị sử dụng
     private BigDecimal pricePerUnit;
     
+    //chú thích
+    private String note;
 
 }
 

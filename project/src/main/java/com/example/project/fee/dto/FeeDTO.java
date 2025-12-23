@@ -11,4 +11,5 @@ public class FeeDTO {
     private FeeType type;
     private BigDecimal defaultAmount;
     private BigDecimal pricePerUnit;
+    private String note;
 }

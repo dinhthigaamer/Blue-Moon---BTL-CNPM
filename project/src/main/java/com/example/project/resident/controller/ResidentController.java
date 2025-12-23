@@ -34,7 +34,7 @@ public class ResidentController {
 
     @PostMapping
     public ApiResponse<ResidentDTO> create(@RequestBody ResidentCreateDTO dto) {
-        return ApiResponse.ok(residentService.create(dto));
+        return ApiResponse.ok(residentService.create(dto), "Cư dân được tạo thành công.");
     }
 
     @PutMapping("/{id}")
@@ -42,12 +42,12 @@ public class ResidentController {
                 @PathVariable Long id,
                 @RequestBody ResidentUpdateDTO dto
     ) {
-        return ApiResponse.ok(residentService.update(id, dto));
+        return ApiResponse.ok(residentService.update(id, dto), "Cư dân được cập nhật thành công.");
     }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         residentService.delete(id);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok(null, "Cư dân được xóa thành công.");
     }
 }

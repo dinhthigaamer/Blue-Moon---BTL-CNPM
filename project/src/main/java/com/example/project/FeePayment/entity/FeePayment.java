@@ -25,8 +25,8 @@ public class FeePayment extends BaseEntity {
     @ManyToOne
     @JoinColumn(name = "fee_id", nullable = false)
     private Fee fee; 
-    // Usage amount for variable fees
     private String name;
+    // Usage amount for variable fees
     private BigDecimal usageAmount;
     // Total amount to be paid
     private BigDecimal amount;

@@ -43,7 +43,7 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Loại phí có ID " + dto.getFeeId() + " không tồn tại"));
         e.setHousehold(household);
         e.setFee(fee);
-        e.setName(dto.getName());
+        e.setName(fee.getName());
         e.setUsageAmount(dto.getUsageAmount());
         e.setBillingYear(dto.getBillingYear());
         e.setBillingMonth(dto.getBillingMonth());
@@ -71,9 +71,9 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại"));
         Fee fee = feeRepository.findById(dto.getFeeId())
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Loại phí có ID " + dto.getFeeId() + " không tồn tại"));
-        if (dto.getName() != null) {
-            e.setName(dto.getName());
-        }
+        e.setHousehold(household);
+        e.setFee(fee);
+        e.setName(fee.getName());
         if (dto.getUsageAmount() != null) {
             e.setUsageAmount(dto.getUsageAmount());
         }

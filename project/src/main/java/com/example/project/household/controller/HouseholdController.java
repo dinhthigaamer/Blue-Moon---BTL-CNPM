@@ -50,7 +50,7 @@ public class HouseholdController {
             @RequestBody HouseholdCreateDTO dto
     ) {
         return ApiResponse.ok(
-                householdService.create(dto)
+                householdService.create(dto), "Hộ dân được tạo thành công"
         );
     }
 
@@ -63,7 +63,7 @@ public class HouseholdController {
             @RequestBody HouseholdUpdateDTO dto
     ) {
         return ApiResponse.ok(
-                householdService.update(id, dto)
+                householdService.update(id, dto), "Hộ dân được cập nhật thành công"
         );
     }
 
@@ -73,6 +73,6 @@ public class HouseholdController {
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         householdService.delete(id);
-        return ApiResponse.ok(null);
+        return ApiResponse.ok(null, "Hộ dân được xoá thành công");
     }
 }
