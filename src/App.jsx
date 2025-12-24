@@ -1,38 +1,32 @@
-import { useState } from "react";
 import { Routes, Route } from "react-router-dom";
 
-import HeaderPage from "./components/HeaderPage";
-import Taskbar from "./components/Taskbar";
-import Body from "./components/Body";
+import MainLayout from "./MainLayout";
 
+// pages
+import TrangChu from "./pages/TrangChu";
 import CuDan from "./pages/CuDan";
 import KhoanThu from "./pages/KhoanThu";
 import TraCuu from "./pages/TraCuu";
-import TrangChu from "./pages/TrangChu"
+
+import DangNhap from "./pages/DangNhap";
+import DangKy from "./pages/DangKy";
+import QuenMatKhau from "./pages/QuenMatKhau";
 
 export default function App() {
-  const [collapsed, setCollapsed] = useState(false);
-
   return (
-    <div className="flex h-screen bg-gray-100">
-      <Taskbar
-        collapsed={collapsed}
-        toggle={() => setCollapsed(prev => !prev)}
-      />
+    <Routes>
+      {/* Auth pages – KHÔNG layout */}
+      <Route path="/dang_nhap" element={<DangNhap />} />
+      <Route path="/dang_ky" element={<DangKy />} />
+      <Route path="/quen_mat_khau" element={<QuenMatKhau />} />
 
-      <div className="flex flex-col flex-1">
-        <HeaderPage />
-
-        <Body>
-          <Routes>
-            <Route path="/" element={<TrangChu />} />
-            <Route path="/cu_dan" element={<CuDan />} />
-            <Route path="/khoan_thu" element={<KhoanThu />} />
-            <Route path="/tra_cuu" element={<TraCuu />}></Route>
-          </Routes>
-          {/* content*/}
-        </Body>
-      </div>
-    </div>
+      {/* Main pages – CÓ layout */}
+      <Route element={<MainLayout />}>
+        <Route path="/" element={<TrangChu />} />
+        <Route path="/cu_dan" element={<CuDan />} />
+        <Route path="/khoan_thu" element={<KhoanThu />} />
+        <Route path="/tra_cuu" element={<TraCuu />} />
+      </Route>
+    </Routes>
   );
 }
