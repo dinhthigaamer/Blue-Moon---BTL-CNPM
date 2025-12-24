@@ -1,3 +1,5 @@
+import logo from "../assets/Avatar.png"
+
 export default function HeaderPage() {
     return (
         <header className="bg-white px-6 py-4 flex justify-between items-center shadow-sm">
@@ -17,7 +19,7 @@ export default function HeaderPage() {
                     <p className="text-xs text-gray-400">Admin</p>
                 </div>
 
-                <div className="w-10 h-10 rounded-full bg-gray-300"></div>
+                <img src={logo} className="w-10 h-10 rounded-full" />
             </div>
         </header>
     );
