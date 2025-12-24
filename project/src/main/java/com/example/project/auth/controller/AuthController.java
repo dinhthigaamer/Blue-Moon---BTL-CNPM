@@ -20,12 +20,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<UserDTO> register(@RequestBody RegisterRequestDTO request) {
-        return ApiResponse.ok(authService.register(request), "Register success");
+        return ApiResponse.ok(authService.register(request), "Đăng ký thành công. Vui lòng kiểm tra email để kích hoạt tài khoản.");
     }
 
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(@RequestBody LoginRequestDTO request) {
-        return ApiResponse.ok(authService.login(request), "Login success");
+        return ApiResponse.ok(authService.login(request), "Đăng nhập thành công.");
     }
 
     @GetMapping("/me")

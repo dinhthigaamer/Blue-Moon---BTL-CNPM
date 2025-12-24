@@ -7,6 +7,7 @@ public enum ErrorCode {
     VALIDATION_ERROR,
     METHOD_NOT_ALLOWED,
     UNAUTHORIZED,
+    NOT_FOUND,
 
     // AUTH
     AUTH_INVALID_CREDENTIAL,
