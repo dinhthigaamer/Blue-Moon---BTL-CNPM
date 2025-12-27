@@ -8,9 +8,9 @@ import CuDan from "./pages/CuDan";
 import KhoanThu from "./pages/KhoanThu";
 import TraCuu from "./pages/TraCuu";
 
-import DangNhap from "./pages/DangNhap";
-import DangKy from "./pages/DangKy";
-import QuenMatKhau from "./pages/QuenMatKhau";
+import DangNhap from "./pages/taikhoan/DangNhap";
+import DangKy from "./pages/taikhoan/DangKy";
+import QuenMatKhau from "./pages/taikhoan/QuenMatKhau";
 
 export default function App() {
   return (

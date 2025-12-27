@@ -24,8 +24,7 @@ export default function DangNhap() {
                 className="w-full max-w-md bg-white rounded-lg shadow-md p-8"
             >
                 <h2 className="text-2xl font-bold text-center mb-6">
-                    <span className="text-teal-400">face</span>
-                    <span className="text-gray-700">WORKS</span>
+                    <span className="text-teal-400">Đăng nhập</span>
                 </h2>
 
                 <div className="mb-4">
