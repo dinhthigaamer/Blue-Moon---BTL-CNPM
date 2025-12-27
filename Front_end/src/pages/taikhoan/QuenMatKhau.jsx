@@ -6,7 +6,7 @@ export default function QuenMatKhau() {
 
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
-    const [timeLeft, setTimeLeft] = useState(60);
+    const [timeLeft, setTimeLeft] = useState(36);
 
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
