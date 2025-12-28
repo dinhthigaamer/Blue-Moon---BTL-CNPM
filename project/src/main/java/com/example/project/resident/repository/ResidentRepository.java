@@ -7,4 +7,5 @@ import java.util.List;
 
 public interface ResidentRepository extends JpaRepository<Resident, Long> {
     List<Resident> findByHouseholdId(Long householdId);
+    List<Resident> findByFullNameContainingIgnoreCase(String fullName);
 }

@@ -1,12 +1,21 @@
 package com.example.project.resident.dto;
 
+import com.example.project.resident.entity.ResidenceStatus;
 import lombok.Data;
+
+import java.time.LocalDate;
 
 @Data
 public class ResidentDTO {
     private Long id;
     private String fullName;
     private String phone;
+    private String cccd;
+    private LocalDate dateOfBirth;
+    private String religion;
+    private String ethnicity;
+    private String occupation;
+    private ResidenceStatus residenceStatus;
     private Integer vehicleCount;
 
     private Long householdId;
@@ -34,6 +43,54 @@ public class ResidentDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getEthnicity() {
+        return ethnicity;
+    }
+
+    public void setEthnicity(String ethnicity) {
+        this.ethnicity = ethnicity;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public ResidenceStatus getResidenceStatus() {
+        return residenceStatus;
+    }
+
+    public void setResidenceStatus(ResidenceStatus residenceStatus) {
+        this.residenceStatus = residenceStatus;
     }
 
     public Integer getVehicleCount() {

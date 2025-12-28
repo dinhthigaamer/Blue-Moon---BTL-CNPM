@@ -34,11 +34,13 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public List<ResidentDTO> findAll(Long householdId, Integer roomNumber) {
+    public List<ResidentDTO> findAll(Long householdId, Integer roomNumber, String fullName) {
         List<Resident> residents;
 
         if (householdId != null) {
             residents = residentRepository.findByHouseholdId(householdId);
+        } else if (fullName != null && !fullName.isBlank()) {
+            residents = residentRepository.findByFullNameContainingIgnoreCase(fullName);
         } else if (roomNumber != null) {
             Household h = householdRepository.findByRoomNumber(roomNumber)
                     .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));

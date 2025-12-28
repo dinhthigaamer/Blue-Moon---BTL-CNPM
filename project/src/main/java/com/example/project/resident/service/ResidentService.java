@@ -7,7 +7,7 @@ import com.example.project.resident.dto.ResidentUpdateDTO;
 import java.util.List;
 
 public interface ResidentService {
-    List<ResidentDTO> findAll(Long householdId, Integer roomNumber);
+    List<ResidentDTO> findAll(Long householdId, Integer roomNumber, String fullName);
     ResidentDTO findById(Long id);
     ResidentDTO create(ResidentCreateDTO dto);
     ResidentDTO update(Long id, ResidentUpdateDTO dto);

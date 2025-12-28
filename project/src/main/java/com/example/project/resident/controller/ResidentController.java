@@ -22,9 +22,10 @@ public class ResidentController {
     @GetMapping
     public ApiResponse<List<ResidentDTO>> getAll(
             @RequestParam(required = false) Long householdId,
-            @RequestParam(required = false) Integer roomNumber
+            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) String fullName
     ) {
-        return ApiResponse.ok(residentService.findAll(householdId, roomNumber));
+        return ApiResponse.ok(residentService.findAll(householdId, roomNumber, fullName));
     }
 
     @GetMapping("/{id}")
