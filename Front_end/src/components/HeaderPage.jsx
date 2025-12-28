@@ -1,5 +1,6 @@
 import logo from "../assets/Avatar.png"
 import { useState, useRef, useEffect } from "react";
+import { Link } from "react-router-dom";
 
 export default function HeaderPage({ account, setAccount }) {
     const [open, setOpen] = useState(false);
@@ -39,15 +40,18 @@ export default function HeaderPage({ account, setAccount }) {
                     <img
                         src={logo}
                         className="w-10 h-10 rounded-full"
-                        onClick={() => setOpen(!open)}
+                        onClick={(e) => setOpen(!open)}
                     />
 
                     {/* Menu */}
                     {open && (
                         <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-lg z-50">
-                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                            <Link
+                                to="/tai_khoan"
+                                className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
+                            >
                                 Trang cá nhân
-                            </div>
+                            </Link>
                             <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
                                 Cài đặt
                             </div>
