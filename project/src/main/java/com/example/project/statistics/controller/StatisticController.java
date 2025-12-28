@@ -12,15 +12,19 @@ import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;  
-import lombok.RequiredArgsConstructor;
+
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
 @RequestMapping("/api/statistics")
-@RequiredArgsConstructor
+
 public class StatisticController {
 
     private final StatisticServiceImpl statisticService;
+
+    public StatisticController(StatisticServiceImpl statisticService) {
+        this.statisticService = statisticService;
+    }
 
     @GetMapping("/monthly-revenue")
     public ApiResponse<MonthlyRevenueOutDTO> getMonthlyRevenue(

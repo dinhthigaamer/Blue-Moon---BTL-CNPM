@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>42.7.3</version>
+
             <scope>runtime</scope>
         </dependency>
 
@@ -67,8 +67,10 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <optional>true</optional>
+
+            <scope>provided</scope>
         </dependency>
+
 
         <!-- TEST: 2 cái này là đủ -->
         <dependency>

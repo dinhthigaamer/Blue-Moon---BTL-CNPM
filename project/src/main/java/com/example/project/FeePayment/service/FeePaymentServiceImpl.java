@@ -13,7 +13,6 @@ import com.example.project.household.entity.Household;
 import com.example.project.household.repository.HouseholdRepository;
 import com.example.project.common.exception.ApiException;
 import com.example.project.common.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -23,7 +22,6 @@ import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
 
 @Service
-@RequiredArgsConstructor
 public class FeePaymentServiceImpl implements FeePaymentService {
 
     private final FeeRepository feeRepository;
@@ -31,6 +29,17 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     private final FeePaymentRepository feePaymentRepository;
     private final FeeCalculationService calculationService;
     private final FeePaymentMapper feePaymentMapper;
+
+    
+    public FeePaymentServiceImpl(FeeRepository feeRepository, HouseholdRepository householdRepository,
+            FeePaymentRepository feePaymentRepository, FeeCalculationService calculationService,
+            FeePaymentMapper feePaymentMapper) {
+        this.feeRepository = feeRepository;
+        this.householdRepository = householdRepository;
+        this.feePaymentRepository = feePaymentRepository;
+        this.calculationService = calculationService;
+        this.feePaymentMapper = feePaymentMapper;
+    }
 
     //Trong FeePayment entity có 2 trường được đánh dấu not null là household và fee, nên thực hiện bắt lỗi và báo ra terminal khi 
     //hai trường này là null trong dto truyền vào để tạo FeePayment

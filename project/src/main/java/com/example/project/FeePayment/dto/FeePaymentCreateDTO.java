@@ -1,12 +1,12 @@
 package com.example.project.FeePayment.dto;
 
-import lombok.Data;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
 
 //dto này để tạo mới bản ghi
-@Data
+
 public class FeePaymentCreateDTO {
     private Long householdId;
     private Long feeId;
@@ -17,4 +17,78 @@ public class FeePaymentCreateDTO {
     private LocalDate startDate;
     private LocalDate dueDate;
     private Boolean mandatory;
+
+    public Long getHouseholdId() {
+        return householdId;
+    }
+
+    public void setHouseholdId(Long householdId) {
+        this.householdId = householdId;
+    }
+
+    public Long getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(Long feeId) {
+        this.feeId = feeId;
+    }
+
+    public BigDecimal getUsageAmount() {
+        return usageAmount;
+    }
+
+    public void setUsageAmount(BigDecimal usageAmount) {
+        this.usageAmount = usageAmount;
+    }
+
+    public BigDecimal getVoluntaryAmount() {
+        return voluntaryAmount;
+    }
+
+    public void setVoluntaryAmount(BigDecimal voluntaryAmount) {
+        this.voluntaryAmount = voluntaryAmount;
+    }
+
+    public Integer getBillingYear() {
+        return billingYear;
+    }
+
+    public void setBillingYear(Integer billingYear) {
+        this.billingYear = billingYear;
+    }
+
+    public Integer getBillingMonth() {
+        return billingMonth;
+    }
+
+    public void setBillingMonth(Integer billingMonth) {
+        this.billingMonth = billingMonth;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Boolean getMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+
 }

@@ -1,10 +1,6 @@
 package com.example.project.FeePayment.dto;
 import java.time.LocalDate;
 
-
-import lombok.Data;
-
-@Data
 public class FeePaymentSearchRequest {
     private Long householdId;
     private Long feeId;
@@ -16,5 +12,86 @@ public class FeePaymentSearchRequest {
     private LocalDate dueTo;
     private Boolean mandatory;
     private Boolean paid;
+
+    public Long getHouseholdId() {
+        return householdId;
+    }
+
+    public void setHouseholdId(Long householdId) {
+        this.householdId = householdId;
+    }
+
+    public Long getFeeId() {
+        return feeId;
+    }
+
+    public void setFeeId(Long feeId) {
+        this.feeId = feeId;
+    }
+
+    public Integer getBillingYear() {
+        return billingYear;
+    }
+
+    public void setBillingYear(Integer billingYear) {
+        this.billingYear = billingYear;
+    }
+
+    public Integer getBillingMonth() {
+        return billingMonth;
+    }
+
+    public void setBillingMonth(Integer billingMonth) {
+        this.billingMonth = billingMonth;
+    }
+
+    public LocalDate getStartFrom() {
+        return startFrom;
+    }
+
+    public void setStartFrom(LocalDate startFrom) {
+        this.startFrom = startFrom;
+    }
+
+    public LocalDate getStartTo() {
+        return startTo;
+    }
+
+    public void setStartTo(LocalDate startTo) {
+        this.startTo = startTo;
+    }
+
+    public LocalDate getDueFrom() {
+        return dueFrom;
+    }
+
+    public void setDueFrom(LocalDate dueFrom) {
+        this.dueFrom = dueFrom;
+    }
+
+    public LocalDate getDueTo() {
+        return dueTo;
+    }
+
+    public void setDueTo(LocalDate dueTo) {
+        this.dueTo = dueTo;
+    }
+
+    public Boolean getMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
+    }
+
 }
 

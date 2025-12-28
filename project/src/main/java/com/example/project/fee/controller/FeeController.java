@@ -2,16 +2,20 @@ package com.example.project.fee.controller;
 import com.example.project.common.response.ApiResponse;
 import com.example.project.fee.dto.FeeDTO;
 import com.example.project.fee.service.FeeService;
-import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/fees")
-@RequiredArgsConstructor
 public class FeeController {
 
     private final FeeService feeService;
+
+    
+
+    public FeeController(FeeService feeService) {
+        this.feeService = feeService;
+    }
 
     @GetMapping
     public ApiResponse<List<FeeDTO>> getAllFees() {

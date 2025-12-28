@@ -7,18 +7,22 @@ import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
 import com.example.project.FeePayment.service.FeePaymentServiceImpl;
 import com.example.project.common.response.ApiResponse;
 
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/fee-payments")
-@RequiredArgsConstructor
+
 public class FeePaymentController {
 
     private final FeePaymentServiceImpl feePaymentService;
+    
 
+    public FeePaymentController(FeePaymentServiceImpl feePaymentService) {
+        this.feePaymentService = feePaymentService;
+    }
     @PostMapping
     public ApiResponse<FeePaymentDTO> createFeePayment(
             @RequestBody FeePaymentCreateDTO dto) {

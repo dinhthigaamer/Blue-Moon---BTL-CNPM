@@ -9,12 +9,10 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.Table;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "fee_payments")
-@Data
 @EqualsAndHashCode(callSuper = true)
 public class FeePayment extends BaseEntity {
 
@@ -44,5 +42,103 @@ public class FeePayment extends BaseEntity {
     private Boolean paid;
     //Ngày nộp
     private LocalDate paidDate;
+
+    public Household getHousehold() {
+        return household;
+    }
+
+    public void setHousehold(Household household) {
+        this.household = household;
+    }
+
+    public Fee getFee() {
+        return fee;
+    }
+
+    public void setFee(Fee fee) {
+        this.fee = fee;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public BigDecimal getUsageAmount() {
+        return usageAmount;
+    }
+
+    public void setUsageAmount(BigDecimal usageAmount) {
+        this.usageAmount = usageAmount;
+    }
+
+    public BigDecimal getAmount() {
+        return amount;
+    }
+
+    public void setAmount(BigDecimal amount) {
+        this.amount = amount;
+    }
+
+    public Integer getBillingYear() {
+        return billingYear;
+    }
+
+    public void setBillingYear(Integer billingYear) {
+        this.billingYear = billingYear;
+    }
+
+    public Integer getBillingMonth() {
+        return billingMonth;
+    }
+
+    public void setBillingMonth(Integer billingMonth) {
+        this.billingMonth = billingMonth;
+    }
+
+    public LocalDate getStartDate() {
+        return startDate;
+    }
+
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
+    }
+
+    public LocalDate getDueDate() {
+        return dueDate;
+    }
+
+    public void setDueDate(LocalDate dueDate) {
+        this.dueDate = dueDate;
+    }
+
+    public Boolean getMandatory() {
+        return mandatory;
+    }
+
+    public void setMandatory(Boolean mandatory) {
+        this.mandatory = mandatory;
+    }
+
+    public Boolean getPaid() {
+        return paid;
+    }
+
+    public void setPaid(Boolean paid) {
+        this.paid = paid;
+    }
+
+    public LocalDate getPaidDate() {
+        return paidDate;
+    }
+
+    public void setPaidDate(LocalDate paidDate) {
+        this.paidDate = paidDate;
+    }
+
+
 }
 

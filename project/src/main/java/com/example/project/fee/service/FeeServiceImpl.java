@@ -7,17 +7,23 @@ import com.example.project.fee.mapper.FeeMapper;
 import com.example.project.fee.repository.FeeRepository;
 import com.example.project.common.exception.ApiException;
 import com.example.project.common.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
+
 public class FeeServiceImpl implements FeeService {
 
     private final FeeRepository repo;
     private final FeeMapper mapper;
+
+    
+    public FeeServiceImpl(FeeRepository repo, FeeMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<FeeDTO> findAll() {
