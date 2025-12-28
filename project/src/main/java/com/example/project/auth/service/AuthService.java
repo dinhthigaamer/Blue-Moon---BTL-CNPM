@@ -4,6 +4,7 @@ import com.example.project.auth.dto.AuthResponse;
 import com.example.project.auth.dto.LoginRequestDTO;
 import com.example.project.auth.dto.RegisterRequestDTO;
 import com.example.project.auth.dto.UserDTO;
+import com.example.project.auth.dto.UserUpdateDTO;
 
 public interface AuthService {
 
@@ -12,4 +13,5 @@ public interface AuthService {
     UserDTO register(RegisterRequestDTO request);
 
     UserDTO getCurrentUser();
+    UserDTO updateCurrentUser(UserUpdateDTO request);
 }

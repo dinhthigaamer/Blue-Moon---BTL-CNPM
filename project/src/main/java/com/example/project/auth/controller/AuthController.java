@@ -7,6 +7,7 @@ import com.example.project.auth.dto.UserDTO;
 import com.example.project.auth.service.AuthService;
 import com.example.project.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
+import com.example.project.auth.dto.UserUpdateDTO;
 
 @RestController
 @RequestMapping("/api/auth")
@@ -20,16 +21,21 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<UserDTO> register(@RequestBody RegisterRequestDTO request) {
-        return ApiResponse.ok(authService.register(request), "Đăng ký thành công. Vui lòng kiểm tra email để kích hoạt tài khoản.");
+        return ApiResponse.ok(authService.register(request), "Register success");
     }
 
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(@RequestBody LoginRequestDTO request) {
-        return ApiResponse.ok(authService.login(request), "Đăng nhập thành công.");
+        return ApiResponse.ok(authService.login(request), "Login success");
     }
 
     @GetMapping("/me")
     public ApiResponse<UserDTO> getCurrentUser() {
         return ApiResponse.ok(authService.getCurrentUser());
+    }
+
+    @PutMapping("/me")
+    public ApiResponse<UserDTO> updateMe(@RequestBody UserUpdateDTO request) {
+        return ApiResponse.ok(authService.updateCurrentUser(request), "Update success");
     }
 }

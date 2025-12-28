@@ -2,6 +2,9 @@ package com.example.project.common.exception;
 
 public enum ErrorCode {
 
+    //COMMON
+    BAD_REQUEST,
+
     // GLOBAL
     GLOBAL_ERROR,
     VALIDATION_ERROR,
@@ -15,7 +18,5 @@ public enum ErrorCode {
     AUTH_USERNAME_EXISTED,
     AUTH_PHONE_EXISTED,
     AUTH_CCCD_EXISTED,
-
-    // Những module khác thêm sau...
-    ;
+    AUTH_INVALID_PASSWORD;
 }
