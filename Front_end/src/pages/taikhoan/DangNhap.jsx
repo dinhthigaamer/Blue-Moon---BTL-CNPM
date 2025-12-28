@@ -1,7 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import { useOutletContext } from "react-router-dom";
 
-export default function DangNhap() {
+export default function DangNhap({ account, setAccount }) {
     const [form, setForm] = useState({ username: "", password: "" });
     const navigate = useNavigate();
 

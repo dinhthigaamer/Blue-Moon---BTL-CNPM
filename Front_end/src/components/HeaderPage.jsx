@@ -1,6 +1,22 @@
 import logo from "../assets/Avatar.png"
+import { useState, useRef, useEffect } from "react";
 
-export default function HeaderPage() {
+export default function HeaderPage({ account, setAccount }) {
+    const [open, setOpen] = useState(false);
+    const ref = useRef(null);
+
+    // đóng menu khi click ra ngoài
+    useEffect(() => {
+        const handleClickOutside = (e) => {
+            if (ref.current && !ref.current.contains(e.target)) {
+                setOpen(false);
+            }
+        };
+
+        document.addEventListener("mousedown", handleClickOutside);
+        return () => document.removeEventListener("mousedown", handleClickOutside);
+    }, []);
+
     return (
         <header className="bg-white px-6 py-4 flex justify-between items-center shadow-sm">
             <h1 className="text-xl font-semibold text-gray-700">
@@ -15,11 +31,33 @@ export default function HeaderPage() {
                 />
 
                 <div className="text-right">
-                    <p className="text-sm font-semibold text-gray-700">Sofia</p>
-                    <p className="text-xs text-gray-400">Admin</p>
+                    <p className="text-sm font-semibold text-gray-700">{account.name}</p>
+                    <p className="text-xs text-gray-400">{account.role}</p>
                 </div>
 
-                <img src={logo} className="w-10 h-10 rounded-full" />
+                <div className="relative" ref={ref}>
+                    <img
+                        src={logo}
+                        className="w-10 h-10 rounded-full"
+                        onClick={() => setOpen(!open)}
+                    />
+
+                    {/* Menu */}
+                    {open && (
+                        <div className="absolute right-0 mt-2 w-44 bg-white border rounded-lg shadow-lg z-50">
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                Trang cá nhân
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
+                                Cài đặt
+                            </div>
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">
+                                Đăng xuất
+                            </div>
+                        </div>
+                    )}
+                </div>
+
             </div>
         </header>
     );

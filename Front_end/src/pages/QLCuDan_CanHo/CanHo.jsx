@@ -14,11 +14,10 @@ export default function CanHo() {
                 className="w-1/4 bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded transition-colors"
                 onClick={handleClick}
             >
-
-                Thêm hộ dân
+                Thêm căn hộ
             </button>
             <p className="font-semibold py-2">
-                Danh sách hộ dân
+                Danh sách căn hộ
             </p>
             <table class="border border-gray-400 border-collapse w-full">
                 <thead>
