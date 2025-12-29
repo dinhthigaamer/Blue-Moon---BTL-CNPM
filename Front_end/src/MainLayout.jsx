@@ -4,7 +4,7 @@ import Taskbar from "./components/Taskbar";
 import HeaderPage from "./components/HeaderPage";
 import Body from "./components/Body";
 
-export default function MainLayout() {
+export default function MainLayout({ account, setAccount }) {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
@@ -15,7 +15,10 @@ export default function MainLayout() {
             />
 
             <div className="flex flex-col flex-1">
-                <HeaderPage />
+                <HeaderPage
+                    account={account}
+                    setAccount={setAccount}
+                />
                 <Body>
                     <Outlet />
                 </Body>

@@ -2,9 +2,9 @@ import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 
 export default function DangKy() {
-    const roles = ["ADMIN", "ACCOUNTANT", "USER"];
-    let passwordSimilar = 1;
-
+    const navigate = useNavigate()
+    const roles = ["ADMIN", "ACCOUNTANT"];
+    const names = ["Quản lý", "Kế toán"]
     const [error, setError] = useState("");
     const [errorCccd, setErrorCccd] = useState("")
 
@@ -53,13 +53,19 @@ export default function DangKy() {
     const handleSubmit = (e) => {
         e.preventDefault();
 
-        if (form.password !== form.confirmPassword) {
+        if (error) {
             alert("Mật khẩu xác nhận không khớp!");
             return;
         }
 
+        if (errorCccd) {
+            alert("Mã căn cước không hợp lệ!");
+            return;
+        }
+
         console.log("Register data:", form);
-        alert("Đăng ký thành công (demo)");
+        alert("Đăng ký thành công !");
+        navigate("/dang_nhap")
     };
 
     return (
@@ -143,9 +149,9 @@ export default function DangKy() {
                         onChange={handleChange}
                         required
                     >
-                        <option value="ADMIN">{roles[0]}</option>
-                        <option value="ADMIN">{roles[1]}</option>
-                        <option value="ADMIN">{roles[2]}</option>
+                        {roles.map((item, index) => (
+                            <option value={item}>{names[index]}</option>
+                        ))}
                     </select>
                 </div>
 

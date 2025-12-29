@@ -4,6 +4,7 @@ export default function Taskbar({ collapsed, toggle }) {
     const menu = [
         { label: "Trang chủ", path: "/" },
         { label: "Căn hộ", path: "/can_ho" },
+        { label: "Cư dân", path: "/cu_dan" },
         { label: "Khoản thu", path: "/khoan_thu" },
         { label: "Tra cứu - Thống kê", path: "/tra_cuu" },
     ];
