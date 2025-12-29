@@ -1,5 +1,5 @@
 import { useParams, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 export default function ChiTietCuDan() {
     const { id } = useParams();
@@ -10,11 +10,11 @@ export default function ChiTietCuDan() {
     const infor = [
         { label: "Phòng", key: "roomNumber" },
         { label: "Họ và tên", key: "fullName" },
-        { label: "Số điện thoại", key: "phone" },
+        { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
-        { label: "Ngày sinh", key: "dateOfBirth" },
+        { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
-        { label: "Số phương tiện", key: "vehicleCount" },
+        { label: "Số phương tiện", key: "vehicleCount", type: "number" },
         { label: "Dân tộc", key: "ethnicity" },
         { label: "Tôn giáo", key: "religion" },
         { label: "Nghề nghiệp", key: "occupation" }
@@ -24,7 +24,13 @@ export default function ChiTietCuDan() {
         "fullName": "Nguyễn Văn A",
         "phone": "0123456789",
         "roomNumber": "A1-203",
+        "dateOfBirth": "2020-01-02"
     });
+
+    useEffect(() => {
+        if (!cuDan["dateOfBirth"])
+            setCuDan({ ...cuDan, "dateOfBirth": "2000-01-01" });
+    }, []);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -92,7 +98,7 @@ export default function ChiTietCuDan() {
                             {
                                 infor.map((item, index) => {
                                     // console.log(item.key, cuDan[item.key] || "Không có");
-                                    return (<Info label={item.label} value={cuDan[item.key] || "Không có"} />);
+                                    return (<Info label={item.label} value={cuDan[item.key] || null} />);
                                 })
                             }
                         </div>
@@ -107,7 +113,8 @@ export default function ChiTietCuDan() {
                                     return (<Input
                                         label={item.label}
                                         name={item.key}
-                                        value={cuDan[item.key] || "Không có"}
+                                        value={cuDan[item.key] || null}
+                                        type={cuDan[item.type] || "text"}
                                         onChange={handleChange}
                                     />);
                                 })
