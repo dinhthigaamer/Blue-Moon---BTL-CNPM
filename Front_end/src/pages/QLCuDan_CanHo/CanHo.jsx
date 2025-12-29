@@ -1,8 +1,27 @@
 import { useNavigate } from 'react-router-dom'
 import { useState } from 'react'
+import MyTable from "../../components/MyTable"
 
 export default function CanHo() {
     const [isOpen, setIsOpen] = useState(false);
+
+    const columns = [
+        { label: "Số phòng", key: "roomNumber" },
+        { label: "Chủ sở hữu", key: "ownerName" },
+        { label: "Số người", key: "residentCount" },
+        { label: "Số phương tiện", key: "vehicleCount" },
+    ]
+
+    const data = [
+        {
+            "id": 10,
+            "roomNumber": 101,
+            "ownerName": "Nguyen Van A",
+            "residentCount": 0,
+            "vehicleCount": 0,
+            "isVacant": false
+        }
+    ]
 
     function handleClick() {
         setIsOpen(true)
@@ -19,7 +38,11 @@ export default function CanHo() {
             <p className="font-semibold py-2">
                 Danh sách căn hộ
             </p>
-            <table class="border border-gray-400 border-collapse w-full">
+            <MyTable
+                columns={columns}
+                data={data}
+            />
+            {/* <table class="border border-gray-400 border-collapse w-full">
                 <thead>
                     <tr>
                         <th class="border border-gray-400 px-4 py-2">Mã căn hộ</th>
@@ -38,7 +61,7 @@ export default function CanHo() {
                         <td class="border border-gray-400 px-4 py-2 text-center">20</td>
                     </tr>
                 </tbody>
-            </table>
+            </table> */}
 
             {isOpen && (
                 <div>

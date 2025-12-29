@@ -52,9 +52,6 @@ export default function HeaderPage({ account, setAccount }) {
                             >
                                 Trang cá nhân
                             </Link>
-                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer">
-                                Cài đặt
-                            </div>
                             <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">
                                 Đăng xuất
                             </div>

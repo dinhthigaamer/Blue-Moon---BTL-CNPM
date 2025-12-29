@@ -5,6 +5,9 @@ import MainLayout from "./MainLayout";
 // pages
 import TrangChu from "./pages/TrangChu";
 import CanHo from "./pages/QLCuDan_CanHo/CanHo";
+import CuDan from "./pages/QLCuDan_CanHo/CuDan";
+import ChiTietCuDan from "./pages/QLCuDan_CanHo/ChiTietCuDan";
+import ChiTietCanHo from "./pages/QLCuDan_CanHo/ChiTietCanHo";
 import KhoanThu from "./pages/KhoanThu";
 import TraCuu from "./pages/TraCuu";
 import TaiKhoan from "./pages/taikhoan/TaiKhoan"
@@ -29,7 +32,17 @@ export default function App() {
       <Route element={<MainLayout account={account} setAccount={setAccount} />}>
         <Route path="/" element={<TrangChu />} />
         <Route path="/tai_khoan" element={<TaiKhoan />} />
-        <Route path="/can_ho" element={<CanHo />} />
+
+        <Route path="/can_ho">
+          <Route index element={<CanHo />} />
+          <Route path=":id" element={<ChiTietCanHo />} />
+        </Route>
+
+        <Route path="/cu_dan" >
+          <Route index element={<CuDan />} />
+          <Route path=":id" element={<ChiTietCuDan />} />
+        </Route>
+
         <Route path="/khoan_thu" element={<KhoanThu />} />
         <Route path="/tra_cuu" element={<TraCuu />} />
       </Route>
