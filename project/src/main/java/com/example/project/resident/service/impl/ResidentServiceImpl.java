@@ -8,12 +8,17 @@ import com.example.project.resident.dto.ResidentCreateDTO;
 import com.example.project.resident.dto.ResidentDTO;
 import com.example.project.resident.dto.ResidentUpdateDTO;
 import com.example.project.resident.entity.Resident;
+import com.example.project.resident.entity.ResidenceStatus;
 import com.example.project.resident.mapper.ResidentMapper;
 import com.example.project.resident.service.ResidentService;
 import com.example.project.resident.repository.ResidentRepository;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.List;
 
 @Service
@@ -34,28 +39,72 @@ public class ResidentServiceImpl implements ResidentService {
     }
 
     @Override
-    public List<ResidentDTO> findAll(Long householdId, Integer roomNumber, String fullName) {
-        List<Resident> residents;
+    public List<ResidentDTO> findAll(
+            Long id,
+            Long householdId,
+            Integer roomNumber,
+            String fullName,
+            String phone,
+            String cccd,
+            LocalDate dateOfBirth,
+            String religion,
+            String ethnicity,
+            String occupation,
+            ResidenceStatus residenceStatus,
+            Integer vehicleCount
+    ) {
+        Specification<Resident> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-        if (householdId != null) {
-            residents = residentRepository.findByHouseholdId(householdId);
-        } else if (fullName != null && !fullName.isBlank()) {
-            residents = residentRepository.findByFullNameContainingIgnoreCase(fullName);
-        } else if (roomNumber != null) {
-            Household h = householdRepository.findByRoomNumber(roomNumber)
-                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
-            residents = residentRepository.findByHouseholdId(h.getId());
-        } else {
-            residents = residentRepository.findAll();
-        }
+            if (id != null) {
+                predicates.add(cb.equal(root.get("id"), id));
+            }
+            if (householdId != null) {
+                predicates.add(cb.equal(root.get("household").get("id"), householdId));
+            }
+            if (roomNumber != null) {
+                predicates.add(cb.equal(root.get("household").get("roomNumber"), roomNumber));
+            }
+            if (fullName != null && !fullName.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("fullName")), "%" + fullName.toLowerCase() + "%"));
+            }
+            if (phone != null && !phone.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("phone")), "%" + phone.toLowerCase() + "%"));
+            }
+            if (cccd != null && !cccd.isBlank()) {
+                predicates.add(cb.equal(root.get("cccd"), cccd));
+            }
+            if (dateOfBirth != null) {
+                predicates.add(cb.equal(root.get("dateOfBirth"), dateOfBirth));
+            }
+            if (religion != null && !religion.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("religion")), "%" + religion.toLowerCase() + "%"));
+            }
+            if (ethnicity != null && !ethnicity.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("ethnicity")), "%" + ethnicity.toLowerCase() + "%"));
+            }
+            if (occupation != null && !occupation.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("occupation")), "%" + occupation.toLowerCase() + "%"));
+            }
+            if (residenceStatus != null) {
+                predicates.add(cb.equal(root.get("residenceStatus"), residenceStatus));
+            }
+            if (vehicleCount != null) {
+                predicates.add(cb.equal(root.get("vehicleCount"), vehicleCount));
+            }
 
-        return residents.stream().map(residentMapper::toDTO).toList();
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return residentRepository.findAll(spec).stream()
+                .map(residentMapper::toDTO)
+                .toList();
     }
 
     @Override
     public ResidentDTO findById(Long id) {
         Resident r = residentRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Cư dân có ID " + id + " không tồn tại"));
         return residentMapper.toDTO(r);
     }
 
@@ -73,7 +122,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Transactional
     public ResidentDTO update(Long id, ResidentUpdateDTO dto) {
         Resident resident = residentRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Cư dân có ID " + id + " không tồn tại"));
 
         Long oldHouseholdId = resident.getHousehold().getId();
 
@@ -93,7 +142,7 @@ public class ResidentServiceImpl implements ResidentService {
     @Transactional
     public void delete(Long id) {
         Resident resident = residentRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Cư dân có ID " + id + " không tồn tại"));
 
         Long householdId = resident.getHousehold().getId();
         residentRepository.delete(resident);
@@ -103,7 +152,7 @@ public class ResidentServiceImpl implements ResidentService {
 
     private void recalcHousehold(Long householdId) {
         Household h = householdRepository.findById(householdId)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có ID " + householdId + " không tồn tại"));
 
         List<Resident> residents = residentRepository.findByHouseholdId(householdId);
 

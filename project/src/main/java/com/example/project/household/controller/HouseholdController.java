@@ -21,14 +21,26 @@ public class HouseholdController {
 
     /**
      * GET /api/households
-     * Query: isVacant
+     * Query: id, roomNumber, ownerName, residentCount, vehicleCount, isVacant
      */
     @GetMapping
     public ApiResponse<List<HouseholdDTO>> getAll(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) String ownerName,
+            @RequestParam(required = false) Integer residentCount,
+            @RequestParam(required = false) Integer vehicleCount,
             @RequestParam(required = false) Boolean isVacant
     ) {
         return ApiResponse.ok(
-                householdService.findAll(isVacant)
+                householdService.findAll(
+                        id,
+                        roomNumber,
+                        ownerName,
+                        residentCount,
+                        vehicleCount,
+                        isVacant
+                )
         );
     }
 

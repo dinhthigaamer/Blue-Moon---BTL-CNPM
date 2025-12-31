@@ -1,13 +1,16 @@
 package com.example.project.resident.dto;
 
 import com.example.project.resident.entity.ResidenceStatus;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+
 
 import java.time.LocalDate;
 
-@Data
+
 public class ResidentCreateDTO {
+    @NotBlank(message = "Họ tên là bắt buộc")
     private String fullName;
     private String phone;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải gồm đúng 12 chữ số")
@@ -18,6 +21,7 @@ public class ResidentCreateDTO {
     private String occupation;
     private ResidenceStatus residenceStatus;
     private Integer vehicleCount;
+    @NotNull(message = "HouseholdId là bắt buộc")
     private Long householdId; // bắt buộc
 
     public String getFullName() {
