@@ -7,10 +7,12 @@ import com.example.project.household.entity.Household;
 import com.example.project.household.mapper.HouseholdMapper;
 import com.example.project.household.repository.HouseholdRepository;
 import com.example.project.household.service.HouseholdService;
+import jakarta.persistence.criteria.Predicate;
+import org.springframework.data.jpa.domain.Specification;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
 public class HouseholdServiceImpl implements HouseholdService {
@@ -25,20 +27,48 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
-    public List<HouseholdDTO> findAll(Boolean isVacant) {
+    public List<HouseholdDTO> findAll(
+            Long id,
+            Integer roomNumber,
+            String ownerName,
+            Integer residentCount,
+            Integer vehicleCount,
+            Boolean isVacant
+    ) {
+        Specification<Household> spec = (root, query, cb) -> {
+            List<Predicate> predicates = new ArrayList<>();
 
-        List<Household> households = householdRepository.findAll();
+            if (id != null) {
+                predicates.add(cb.equal(root.get("id"), id));
+            }
+            if (roomNumber != null) {
+                predicates.add(cb.equal(root.get("roomNumber"), roomNumber));
+            }
+            if (ownerName != null && !ownerName.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("ownerName")), "%" + ownerName.toLowerCase() + "%"));
+            }
+            if (residentCount != null) {
+                predicates.add(cb.equal(root.get("residentCount"), residentCount));
+            }
+            if (vehicleCount != null) {
+                predicates.add(cb.equal(root.get("vehicleCount"), vehicleCount));
+            }
+            if (isVacant != null) {
+                predicates.add(cb.equal(root.get("isVacant"), isVacant));
+            }
 
-        return households.stream()
-                .filter(h -> isVacant == null || h.getIsVacant().equals(isVacant))
+            return cb.and(predicates.toArray(new Predicate[0]));
+        };
+
+        return householdRepository.findAll(spec).stream()
                 .map(householdMapper::toDTO)
-                .collect(Collectors.toList());
+                .toList();
     }
 
     @Override
     public HouseholdDTO findById(Long id) {
         Household household = householdRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có id:" +id+ " không tồn tại"));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có ID " + id + " không tồn tại"));
 
         return householdMapper.toDTO(household);
     }
@@ -53,7 +83,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public HouseholdDTO update(Long id, HouseholdUpdateDTO dto) {
         Household household = householdRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có ID " + id + " không tồn tại"));
 
         householdMapper.updateEntity(dto, household);
         Household updated = householdRepository.save(household);
@@ -64,7 +94,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public void delete(Long id) {
         Household household = householdRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có ID " + id + " không tồn tại"));
 
         householdRepository.delete(household);
     }

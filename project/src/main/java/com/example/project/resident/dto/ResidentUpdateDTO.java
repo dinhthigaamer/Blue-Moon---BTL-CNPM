@@ -2,11 +2,11 @@ package com.example.project.resident.dto;
 
 import com.example.project.resident.entity.ResidenceStatus;
 import jakarta.validation.constraints.Pattern;
-import lombok.Data;
+
 
 import java.time.LocalDate;
 
-@Data
+
 public class ResidentUpdateDTO {
     private String fullName;
     private String phone;

@@ -1,11 +1,11 @@
 package com.example.project.resident.dto;
 
 import com.example.project.resident.entity.ResidenceStatus;
-import lombok.Data;
+
 
 import java.time.LocalDate;
 
-@Data
+
 public class ResidentDTO {
     private Long id;
     private String fullName;

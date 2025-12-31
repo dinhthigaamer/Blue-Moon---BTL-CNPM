@@ -1,5 +1,7 @@
 package com.example.project.household.dto;
 
+import com.example.project.resident.dto.ResidentDTO;
+import java.util.List;
 
 public class HouseholdDTO {
 
@@ -9,6 +11,7 @@ public class HouseholdDTO {
     private Integer residentCount;
     private Integer vehicleCount;
     private Boolean isVacant;  
+    private List<ResidentDTO> residents;
 
     public Long getId() {
         return id;
@@ -56,6 +59,14 @@ public class HouseholdDTO {
 
     public void setIsVacant(Boolean isVacant) {
         this.isVacant = isVacant;
+    }
+
+    public List<ResidentDTO> getResidents() {
+        return residents;
+    }
+
+    public void setResidents(List<ResidentDTO> residents) {
+        this.residents = residents;
     }
      
 

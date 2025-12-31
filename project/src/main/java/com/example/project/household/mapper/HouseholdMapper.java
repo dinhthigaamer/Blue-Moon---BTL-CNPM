@@ -4,10 +4,16 @@ import com.example.project.household.dto.HouseholdCreateDTO;
 import com.example.project.household.dto.HouseholdDTO;
 import com.example.project.household.dto.HouseholdUpdateDTO;
 import com.example.project.household.entity.Household;
+import com.example.project.resident.mapper.ResidentMapper;
 import org.springframework.stereotype.Component;
 
 @Component
 public class HouseholdMapper {
+    private final ResidentMapper residentMapper;
+
+    public HouseholdMapper(ResidentMapper residentMapper) {
+        this.residentMapper = residentMapper;
+    }
     
     /**
      * Entity -> DTO
@@ -24,6 +30,11 @@ public class HouseholdMapper {
         dto.setResidentCount(entity.getResidentCount());
         dto.setVehicleCount(entity.getVehicleCount());
         dto.setIsVacant(entity.getIsVacant());
+        if (entity.getResidents() != null) {
+            dto.setResidents(entity.getResidents().stream()
+                    .map(residentMapper::toDTO)
+                    .toList());
+        }
         /*
             if (entity.getRoomFee() != null) {
                 dto.setRoomFeeId(entity.getRoomFee().getId());
