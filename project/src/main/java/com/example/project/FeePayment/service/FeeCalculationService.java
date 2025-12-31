@@ -1,7 +1,6 @@
 package com.example.project.FeePayment.service;
 
 import com.example.project.fee.entity.Fee;
-import com.example.project.household.entity.Household;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
@@ -9,7 +8,7 @@ import java.math.BigDecimal;
 @Service
 public class FeeCalculationService {
 
-    public BigDecimal calculateFee(Fee fee, Household household, BigDecimal usageAmount, BigDecimal voluntaryAmount) {
+    public BigDecimal calculateFee(Fee fee, BigDecimal usageAmount, BigDecimal voluntaryAmount) {
 
         return switch (fee.getType()) {
 

@@ -44,12 +44,6 @@ public class FeeController {
         return ApiResponse.ok(feeService.update(id, dto), "Phí có id "+ id +"được cập nhật thành công");
     }
 
-    @PutMapping("/type/{type}")
-    public ApiResponse<FeeDTO> updateFeeByType(
-            @PathVariable String type,
-            @RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.update(type, dto), "Phí loại \"" + type + "\" được cập nhật thành công");
-    }
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteFee(@PathVariable Long id) {

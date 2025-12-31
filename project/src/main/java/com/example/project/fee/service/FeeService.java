@@ -11,7 +11,6 @@ public interface FeeService {
     //nhưng sẽ phải đặt trường type là unique trong db
     List<FeeDTO> findByType(String type);
     FeeDTO create(FeeDTO dto);
-    FeeDTO update(String type, FeeDTO dto);
     FeeDTO update(Long id, FeeDTO dto);
     void delete(Long id);
 }

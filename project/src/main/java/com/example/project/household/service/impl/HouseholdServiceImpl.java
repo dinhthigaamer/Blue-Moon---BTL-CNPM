@@ -38,7 +38,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public HouseholdDTO findById(Long id) {
         Household household = householdRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có id:" +id+ " không tồn tại"));
 
         return householdMapper.toDTO(household);
     }

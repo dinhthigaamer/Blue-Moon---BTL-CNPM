@@ -11,6 +11,7 @@ public enum ErrorCode {
     METHOD_NOT_ALLOWED,
     UNAUTHORIZED,
     NOT_FOUND,
+    NULL_ERROR,
 
     // AUTH
     AUTH_INVALID_CREDENTIAL,
@@ -19,4 +20,5 @@ public enum ErrorCode {
     AUTH_PHONE_EXISTED,
     AUTH_CCCD_EXISTED,
     AUTH_INVALID_PASSWORD;
+
 }
