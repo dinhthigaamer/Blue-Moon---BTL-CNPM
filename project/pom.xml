@@ -52,7 +52,7 @@
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-
+            <version>42.7.3</version>
             <scope>runtime</scope>
         </dependency>
 
@@ -67,10 +67,8 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-
-            <scope>provided</scope>
+            <optional>true</optional>
         </dependency>
-
 
         <!-- TEST: 2 cái này là đủ -->
         <dependency>
@@ -117,12 +115,10 @@
             <scope>runtime</scope>
         </dependency>
 
-    
-      <dependency>
-        <groupId>javax</groupId>
-        <artifactId>javaee-api</artifactId>
-        <version>8.0.1</version>
-      </dependency>
+        <dependency>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-mail</artifactId>
+        </dependency>
     </dependencies>
 
     <build>
