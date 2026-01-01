@@ -13,7 +13,8 @@ public class FeeCalculationService {
         return switch (fee.getType()) {
 
             case MANAGEMENT_FEE ->
-                fee.getDefaultAmount();
+                fee.getPricePerUnit()
+                   .multiply(usageAmount);
 
             case SERVICE_FEE ->
                 fee.getPricePerUnit()
