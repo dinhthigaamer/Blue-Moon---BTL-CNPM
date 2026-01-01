@@ -2,7 +2,7 @@ package com.example.project.common.exception;
 
 public enum ErrorCode {
 
-    //COMMON
+    // COMMON
     BAD_REQUEST,
 
     // GLOBAL
@@ -11,7 +11,6 @@ public enum ErrorCode {
     METHOD_NOT_ALLOWED,
     UNAUTHORIZED,
     NOT_FOUND,
-    NULL_ERROR,
 
     // AUTH
     AUTH_INVALID_CREDENTIAL,
@@ -19,6 +18,17 @@ public enum ErrorCode {
     AUTH_USERNAME_EXISTED,
     AUTH_PHONE_EXISTED,
     AUTH_CCCD_EXISTED,
-    AUTH_INVALID_PASSWORD;
+    AUTH_INVALID_PASSWORD,
+    AUTH_EMAIL_EXISTED,
+
+    // AUTH OTP
+    AUTH_OTP_NOT_FOUND,
+    AUTH_OTP_EXPIRED,
+    AUTH_OTP_INVALID,
+    AUTH_OTP_COOLDOWN,
+
+// MAIL
+    MAIL_SEND_FAILED,
+    NULL_ERROR, MAIL_FORMAT_ERROR
 
 }

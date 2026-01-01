@@ -17,7 +17,7 @@ public class GlobalExceptionHandler {
 
         if (code == ErrorCode.UNAUTHORIZED || code == ErrorCode.AUTH_INVALID_CREDENTIAL) {
             status = HttpStatus.UNAUTHORIZED;
-        } else if (code.name().endsWith("NOT_FOUND")) {
+        } else if (code.name().endsWith("_NOT_FOUND")) {
             status = HttpStatus.NOT_FOUND;
         }
 

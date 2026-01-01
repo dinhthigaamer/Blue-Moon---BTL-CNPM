@@ -27,15 +27,14 @@ public class User extends BaseEntity {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false, length = 20)
-    private Role role = Role.USER;
+    private Role role = Role.ACCOUNTANT;
 
     @Column(nullable = false)
     private Boolean enabled = true;
 
     public enum Role {
         ADMIN,
-        ACCOUNTANT,
-        USER
+        ACCOUNTANT
     }
 
     // no-args constructor cho JPA
