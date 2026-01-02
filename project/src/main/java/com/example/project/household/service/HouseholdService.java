@@ -12,6 +12,7 @@ public interface HouseholdService {
             Long id,
             Integer roomNumber,
             String ownerName,
+            Double area,
             Integer residentCount,
             Integer vehicleCount,
             Boolean isVacant

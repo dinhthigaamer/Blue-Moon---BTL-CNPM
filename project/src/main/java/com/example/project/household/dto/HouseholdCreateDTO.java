@@ -1,8 +1,12 @@
 package com.example.project.household.dto;
+
+import io.swagger.v3.oas.annotations.media.Schema;
 public class HouseholdCreateDTO {
 
     private Integer roomNumber;
     private String ownerName;
+    @Schema(description = "Diện tích căn hộ (m2)")
+    private Double area;
     private Boolean isVacant;
 
     public Integer getRoomNumber() {
@@ -19,6 +23,14 @@ public class HouseholdCreateDTO {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public Double getArea() {
+        return area;
+    }
+
+    public void setArea(Double area) {
+        this.area = area;
     }
 
     public Boolean getIsVacant() {

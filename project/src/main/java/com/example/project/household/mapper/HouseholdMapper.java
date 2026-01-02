@@ -27,6 +27,7 @@ public class HouseholdMapper {
         dto.setId(entity.getId());
         dto.setRoomNumber(entity.getRoomNumber());
         dto.setOwnerName(entity.getOwnerName());
+        dto.setArea(entity.getArea());
         dto.setResidentCount(entity.getResidentCount());
         dto.setVehicleCount(entity.getVehicleCount());
         dto.setIsVacant(entity.getIsVacant());
@@ -55,6 +56,7 @@ public class HouseholdMapper {
 
         entity.setRoomNumber(dto.getRoomNumber());
         entity.setOwnerName(dto.getOwnerName());
+        entity.setArea(dto.getArea());
         entity.setIsVacant(dto.getIsVacant());
 
         // mặc định khi tạo mới
@@ -74,6 +76,10 @@ public class HouseholdMapper {
 
         if (dto.getIsVacant() != null) {
             entity.setIsVacant(dto.getIsVacant());
+        }
+
+        if (dto.getArea() != null) {
+            entity.setArea(dto.getArea());
         }
     }
 }

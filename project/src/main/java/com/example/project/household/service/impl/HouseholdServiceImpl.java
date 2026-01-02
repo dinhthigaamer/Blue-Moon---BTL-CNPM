@@ -31,6 +31,7 @@ public class HouseholdServiceImpl implements HouseholdService {
             Long id,
             Integer roomNumber,
             String ownerName,
+            Double area,
             Integer residentCount,
             Integer vehicleCount,
             Boolean isVacant
@@ -46,6 +47,9 @@ public class HouseholdServiceImpl implements HouseholdService {
             }
             if (ownerName != null && !ownerName.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("ownerName")), "%" + ownerName.toLowerCase() + "%"));
+            }
+            if (area != null) {
+                predicates.add(cb.equal(root.get("area"), area));
             }
             if (residentCount != null) {
                 predicates.add(cb.equal(root.get("residentCount"), residentCount));
