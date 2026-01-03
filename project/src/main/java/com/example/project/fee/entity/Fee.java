@@ -6,12 +6,12 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Enumerated;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Table;
-import lombok.Data;
+
 import lombok.EqualsAndHashCode;
 
 @Entity
 @Table(name = "fees")
-@Data
+
 @EqualsAndHashCode(callSuper = true)
 public class Fee extends BaseEntity {
     private String name;
@@ -27,6 +27,46 @@ public class Fee extends BaseEntity {
     
     //chú thích
     private String note;
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public FeeType getType() {
+        return type;
+    }
+
+    public void setType(FeeType type) {
+        this.type = type;
+    }
+
+    public BigDecimal getDefaultAmount() {
+        return defaultAmount;
+    }
+
+    public void setDefaultAmount(BigDecimal defaultAmount) {
+        this.defaultAmount = defaultAmount;
+    }
+
+    public BigDecimal getPricePerUnit() {
+        return pricePerUnit;
+    }
+
+    public void setPricePerUnit(BigDecimal pricePerUnit) {
+        this.pricePerUnit = pricePerUnit;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
+    }
 
 }
 

@@ -3,6 +3,7 @@ package com.example.project.resident.entity;
 import com.example.project.common.base.BaseEntity;
 import com.example.project.household.entity.Household;
 import jakarta.persistence.*;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "residents")
@@ -12,6 +13,20 @@ public class Resident extends BaseEntity {
     private String fullName;
 
     private String phone;
+
+    @Column(unique = true)
+    private String cccd;
+
+    private LocalDate dateOfBirth;
+
+    private String religion;
+
+    private String ethnicity;
+
+    private String occupation;
+
+    @Enumerated(EnumType.STRING)
+    private ResidenceStatus residenceStatus;
 
     private Integer vehicleCount = 0;
 
@@ -41,6 +56,54 @@ public class Resident extends BaseEntity {
 
     public void setVehicleCount(Integer vehicleCount) {
         this.vehicleCount = vehicleCount;
+    }
+
+    public String getCccd() {
+        return cccd;
+    }
+
+    public void setCccd(String cccd) {
+        this.cccd = cccd;
+    }
+
+    public LocalDate getDateOfBirth() {
+        return dateOfBirth;
+    }
+
+    public void setDateOfBirth(LocalDate dateOfBirth) {
+        this.dateOfBirth = dateOfBirth;
+    }
+
+    public String getReligion() {
+        return religion;
+    }
+
+    public void setReligion(String religion) {
+        this.religion = religion;
+    }
+
+    public String getEthnicity() {
+        return ethnicity;
+    }
+
+    public void setEthnicity(String ethnicity) {
+        this.ethnicity = ethnicity;
+    }
+
+    public String getOccupation() {
+        return occupation;
+    }
+
+    public void setOccupation(String occupation) {
+        this.occupation = occupation;
+    }
+
+    public ResidenceStatus getResidenceStatus() {
+        return residenceStatus;
+    }
+
+    public void setResidenceStatus(ResidenceStatus residenceStatus) {
+        this.residenceStatus = residenceStatus;
     }
 
     public Household getHousehold() {

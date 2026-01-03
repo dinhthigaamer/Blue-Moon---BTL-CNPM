@@ -6,19 +6,21 @@ import com.example.project.FeePayment.dto.FeePaymentDTO;
 import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
 import com.example.project.FeePayment.service.FeePaymentServiceImpl;
 import com.example.project.common.response.ApiResponse;
-
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.ResponseEntity;
+import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
 @RequestMapping("/api/fee-payments")
-@RequiredArgsConstructor
+
 public class FeePaymentController {
 
     private final FeePaymentServiceImpl feePaymentService;
+    
 
+    public FeePaymentController(FeePaymentServiceImpl feePaymentService) {
+        this.feePaymentService = feePaymentService;
+    }
     @PostMapping
     public ApiResponse<FeePaymentDTO> createFeePayment(
             @RequestBody FeePaymentCreateDTO dto) {
@@ -40,9 +42,9 @@ public class FeePaymentController {
         );
     }
     @GetMapping("/search")
-    public ResponseEntity<List<FeePaymentDTO>> searchFeePayments(FeePaymentSearchRequest req) {
+    public ApiResponse<List<FeePaymentDTO>> searchFeePayments(FeePaymentSearchRequest req) {
         List<FeePaymentDTO> results = feePaymentService.search(req);
-        return ResponseEntity.ok(results);
+        return ApiResponse.ok(results);
     }
     @GetMapping("/search/{id}")
     public ApiResponse<FeePaymentDTO> getById(@PathVariable Long id) {

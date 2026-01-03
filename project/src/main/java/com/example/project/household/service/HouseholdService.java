@@ -8,7 +8,15 @@ import java.util.List;
 
 public interface HouseholdService {
 
-    List<HouseholdDTO> findAll(Boolean isVacant);
+    List<HouseholdDTO> findAll(
+            Long id,
+            Integer roomNumber,
+            String ownerName,
+            Double area,
+            Integer residentCount,
+            Integer vehicleCount,
+            Boolean isVacant
+    );
 
     HouseholdDTO findById(Long id);
 

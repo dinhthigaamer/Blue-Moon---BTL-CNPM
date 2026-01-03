@@ -7,17 +7,23 @@ import com.example.project.fee.mapper.FeeMapper;
 import com.example.project.fee.repository.FeeRepository;
 import com.example.project.common.exception.ApiException;
 import com.example.project.common.exception.ErrorCode;
-import lombok.RequiredArgsConstructor;
+
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 
 @Service
-@RequiredArgsConstructor
+
 public class FeeServiceImpl implements FeeService {
 
     private final FeeRepository repo;
     private final FeeMapper mapper;
+
+    
+    public FeeServiceImpl(FeeRepository repo, FeeMapper mapper) {
+        this.repo = repo;
+        this.mapper = mapper;
+    }
 
     @Override
     public List<FeeDTO> findAll() {
@@ -47,34 +53,6 @@ public class FeeServiceImpl implements FeeService {
         return mapper.toDTO(repo.save(mapper.toEntity(dto)));
     }
 
-    @Override
-    public FeeDTO update(String type, FeeDTO dto) {
-        FeeType feeType;
-        try {
-            feeType = FeeType.valueOf(type);
-        } catch (IllegalArgumentException e) {
-            throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí :\"" + type + "\" không hợp lệ");
-        }
-        Fee fee = repo.findByType(feeType)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phí loại \"" + type + "\" chưa được tạo"));
-        // Chỉ cập nhật nếu giá trị từ DTO khác nul
-        if (dto.getName() != null) {
-            fee.setName(dto.getName());
-        }
-        if( dto.getType() != null) {
-            fee.setType(dto.getType());
-        }
-        if (dto.getDefaultAmount() != null) {
-            fee.setDefaultAmount(dto.getDefaultAmount());
-        }
-        if (dto.getPricePerUnit() != null) {
-            fee.setPricePerUnit(dto.getPricePerUnit());
-        }
-        if (dto.getNote() != null) {
-            fee.setNote(dto.getNote());
-        }
-        return mapper.toDTO(repo.save(fee));
-    }
 
     @Override
     public FeeDTO update(Long id, FeeDTO dto) {
@@ -102,6 +80,7 @@ public class FeeServiceImpl implements FeeService {
 
     @Override
     public void delete(Long id) {
+        if (repo.existsById(id)==false) throw new ApiException(ErrorCode.NOT_FOUND, "Loại phí có :\"" + id +"\" không tồn tại.");
         repo.deleteById(id);
     }
 //     public void delete(String type) {

@@ -19,14 +19,21 @@ import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueOutDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryInDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryOutDTO;
 
-import lombok.RequiredArgsConstructor;
 
 @Service
-@RequiredArgsConstructor
+
 public class StatisticServiceImpl implements StatisticServer {
     private final FeePaymentService feepaymentService;
     private final FeeRepository feeRepository;
     private final ResidentRepository residentRepository;
+
+    
+    public StatisticServiceImpl(FeePaymentService feepaymentService, FeeRepository feeRepository,
+            ResidentRepository residentRepository) {
+        this.feepaymentService = feepaymentService;
+        this.feeRepository = feeRepository;
+        this.residentRepository = residentRepository;
+    }
     public BigDecimal sumField(List<FeePaymentDTO> payments, Function<FeePaymentDTO, BigDecimal> mapper) {
     return payments.stream()
                .map(mapper)

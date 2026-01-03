@@ -2,8 +2,8 @@ package com.example.project.fee.repository;
 import com.example.project.fee.entity.Fee;
 import com.example.project.fee.entity.FeeType;
 import org.springframework.data.jpa.repository.JpaRepository;
-import java.util.Optional;
+import java.util.List;
 
 public interface FeeRepository extends JpaRepository<Fee, Long> {
-    Optional<Fee> findByType(FeeType type);
+    List<Fee> findByType(FeeType type);
 }

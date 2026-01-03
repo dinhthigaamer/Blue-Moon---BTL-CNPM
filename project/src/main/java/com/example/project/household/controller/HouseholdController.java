@@ -5,6 +5,7 @@ import com.example.project.common.response.ApiResponse;
 import com.example.project.household.dto.HouseholdCreateDTO;
 import com.example.project.household.dto.HouseholdDTO;
 import com.example.project.household.dto.HouseholdUpdateDTO;
+import io.swagger.v3.oas.annotations.Parameter;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -21,14 +22,29 @@ public class HouseholdController {
 
     /**
      * GET /api/households
-     * Query: isVacant
+     * Query: id, roomNumber, ownerName, area, residentCount, vehicleCount, isVacant
      */
     @GetMapping
     public ApiResponse<List<HouseholdDTO>> getAll(
+            @RequestParam(required = false) Long id,
+            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) String ownerName,
+            @Parameter(description = "Diện tích căn hộ (m2)")
+            @RequestParam(required = false) Double area,
+            @RequestParam(required = false) Integer residentCount,
+            @RequestParam(required = false) Integer vehicleCount,
             @RequestParam(required = false) Boolean isVacant
     ) {
         return ApiResponse.ok(
-                householdService.findAll(isVacant)
+                householdService.findAll(
+                        id,
+                        roomNumber,
+                        ownerName,
+                        area,
+                        residentCount,
+                        vehicleCount,
+                        isVacant
+                )
         );
     }
 

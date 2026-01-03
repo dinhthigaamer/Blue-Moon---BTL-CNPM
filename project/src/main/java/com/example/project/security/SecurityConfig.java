@@ -2,7 +2,7 @@ package com.example.project.security;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.http.HttpMethod;  // ⭐ nhớ import cái này
+import org.springframework.http.HttpMethod;  // nhớ import cái này
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.dao.DaoAuthenticationProvider;
@@ -41,22 +41,23 @@ public class SecurityConfig {
 
         http
                 .csrf(csrf -> csrf.disable())
-                .cors(cors -> {}) // tạm để trống, sau cần CORS chi tiết thì fill
+                .cors(cors -> {})
                 .exceptionHandling(ex -> ex.authenticationEntryPoint(authEntryPoint))
                 .sessionManagement(session -> session
                         .sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 )
                 .authorizeHttpRequests(auth -> auth
-
+                        // public
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password/request-otp").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password/confirm").permitAll()
 
-                        // .requestMatchers(
-                        //         "/swagger-ui/**",
-                        //         "/v3/api-docs/**"
-                        // ).permitAll()
-                        // .requestMatchers("/h2-console/**").permitAll()
-                        .anyRequest().permitAll()
+                        .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+
+                        .requestMatchers("/api/fees/**", "/api/fee-payments/**", "/api/statistics/**")
+                        .hasAnyRole("ADMIN", "ACCOUNTANT")
+
+                        .anyRequest().hasRole("ADMIN")
                 )
                 .authenticationProvider(authenticationProvider())
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class);

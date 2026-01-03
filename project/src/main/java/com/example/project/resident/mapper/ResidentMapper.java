@@ -24,6 +24,12 @@ public class ResidentMapper {
         dto.setId(entity.getId());
         dto.setFullName(entity.getFullName());
         dto.setPhone(entity.getPhone());
+        dto.setCccd(entity.getCccd());
+        dto.setDateOfBirth(entity.getDateOfBirth());
+        dto.setReligion(entity.getReligion());
+        dto.setEthnicity(entity.getEthnicity());
+        dto.setOccupation(entity.getOccupation());
+        dto.setResidenceStatus(entity.getResidenceStatus());
         dto.setVehicleCount(entity.getVehicleCount());
 
         if (entity.getHousehold() != null) {
@@ -37,10 +43,19 @@ public class ResidentMapper {
         Resident r = new Resident();
         r.setFullName(dto.getFullName());
         r.setPhone(dto.getPhone());
+        r.setCccd(dto.getCccd());
+        r.setDateOfBirth(dto.getDateOfBirth());
+        r.setReligion(dto.getReligion());
+        r.setEthnicity(dto.getEthnicity());
+        r.setOccupation(dto.getOccupation());
+        r.setResidenceStatus(dto.getResidenceStatus());
         r.setVehicleCount(dto.getVehicleCount() == null ? 0 : dto.getVehicleCount());
 
         Household household = householdRepository.findById(dto.getHouseholdId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                .orElseThrow(() -> new ApiException(
+                        ErrorCode.NOT_FOUND,
+                        "Hộ dân có ID " + dto.getHouseholdId() + " không tồn tại"
+                ));
         r.setHousehold(household);
 
         return r;
@@ -49,11 +64,20 @@ public class ResidentMapper {
     public void updateEntity(ResidentUpdateDTO dto, Resident entity) {
         if (dto.getFullName() != null) entity.setFullName(dto.getFullName());
         if (dto.getPhone() != null) entity.setPhone(dto.getPhone());
+        if (dto.getCccd() != null) entity.setCccd(dto.getCccd());
+        if (dto.getDateOfBirth() != null) entity.setDateOfBirth(dto.getDateOfBirth());
+        if (dto.getReligion() != null) entity.setReligion(dto.getReligion());
+        if (dto.getEthnicity() != null) entity.setEthnicity(dto.getEthnicity());
+        if (dto.getOccupation() != null) entity.setOccupation(dto.getOccupation());
+        if (dto.getResidenceStatus() != null) entity.setResidenceStatus(dto.getResidenceStatus());
         if (dto.getVehicleCount() != null) entity.setVehicleCount(dto.getVehicleCount());
 
         if (dto.getHouseholdId() != null) {
             Household household = householdRepository.findById(dto.getHouseholdId())
-                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND));
+                    .orElseThrow(() -> new ApiException(
+                            ErrorCode.NOT_FOUND,
+                            "Hộ dân có ID " + dto.getHouseholdId() + " không tồn tại"
+                    ));
             entity.setHousehold(household);
         }
     }

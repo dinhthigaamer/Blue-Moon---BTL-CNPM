@@ -32,7 +32,7 @@ public class UserMapper {
         if (dto.getRole() != null) {
             user.setRole(User.Role.valueOf(dto.getRole()));
         } else {
-            user.setRole(User.Role.USER);
+            user.setRole(User.Role.ACCOUNTANT);
         }
         return user;
     }
