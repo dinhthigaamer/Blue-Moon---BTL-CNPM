@@ -1,8 +1,138 @@
+import React, { useState } from "react";
+import {
+  getMonthlyRevenue,
+  getFeeSummary,
+  getVoluntarySummary,
+  getResidentsCount,
+} from "../services/feeService";
+
 export default function TraCuu() {
-    return (
+  const [year, setYear] = useState("");
+  const [month, setMonth] = useState("");
+  const [feeId, setFeeId] = useState("");
+  const [result, setResult] = useState({});
+
+  const handleMonthlyRevenue = async () => {
+    const res = await getMonthlyRevenue({ year, month });
+    if (res.success) setResult({ ...result, monthlyRevenue: res.data });
+  };
+
+  const handleFeeSummary = async () => {
+    const res = await getFeeSummary({ feeId, year, month });
+    if (res.success) setResult({ ...result, feeSummary: res.data });
+  };
+
+  const handleVoluntarySummary = async () => {
+    const res = await getVoluntarySummary({ year, month });
+    if (res.success) setResult({ ...result, voluntarySummary: res.data });
+  };
+
+  const handleResidentsCount = async () => {
+    const res = await getResidentsCount();
+    if (res.success) setResult({ ...result, residentsCount: res.data });
+  };
+
+  return (
+    <div className="p-6">
+      <h1 className="text-2xl font-bold mb-4"> Tra cứu & Thống kê</h1>
+
+      <div className="grid grid-cols-3 gap-4 mb-6">
         <div>
-            <h1>Tra cứu - Thống kê</h1>
-            <p>Báo cáo, thống kê, tìm kiếm</p>
+          <label className="block mb-1">Năm:</label>
+          <input
+            type="number"
+            value={year}
+            onChange={(e) => setYear(e.target.value)}
+            className="border px-2 py-1 w-full"
+          />
         </div>
-    );
+        <div>
+          <label className="block mb-1">Tháng:</label>
+          <input
+            type="number"
+            value={month}
+            onChange={(e) => setMonth(e.target.value)}
+            className="border px-2 py-1 w-full"
+          />
+        </div>
+        <div>
+          <label className="block mb-1">Fee ID:</label>
+          <input
+            type="number"
+            value={feeId}
+            onChange={(e) => setFeeId(e.target.value)}
+            className="border px-2 py-1 w-full"
+          />
+        </div>
+      </div>
+
+      <div className="space-x-2 mb-6">
+        <button
+          onClick={handleMonthlyRevenue}
+          className="bg-blue-500 text-white px-4 py-2 rounded"
+        >
+          Thống kê doanh thu tháng
+        </button>
+        <button
+          onClick={handleFeeSummary}
+          className="bg-green-500 text-white px-4 py-2 rounded"
+        >
+          Thống kê theo loại phí
+        </button>
+        <button
+          onClick={handleVoluntarySummary}
+          className="bg-purple-500 text-white px-4 py-2 rounded"
+        >
+          Thống kê khoản tự nguyện
+        </button>
+        <button
+          onClick={handleResidentsCount}
+          className="bg-orange-500 text-white px-4 py-2 rounded"
+        >
+          Tổng số cư dân
+        </button>
+      </div>
+
+      {/* Hiển thị kết quả */}
+      <div className="space-y-4">
+        {result.monthlyRevenue && (
+          <div className="border p-4 rounded bg-white">
+            <h2 className="font-semibold">Doanh thu tháng</h2>
+            <p>
+              Năm {result.monthlyRevenue.year}, Tháng {result.monthlyRevenue.month}:{" "}
+              {result.monthlyRevenue.total.toLocaleString()} đ
+            </p>
+          </div>
+        )}
+
+        {result.feeSummary && (
+          <div className="border p-4 rounded bg-white">
+            <h2 className="font-semibold">Theo loại phí</h2>
+            <p>
+              {result.feeSummary.name} (ID {result.feeSummary.fee_id}) - Tháng{" "}
+              {result.feeSummary.month}/{result.feeSummary.year}:{" "}
+              {result.feeSummary.total.toLocaleString()} đ
+            </p>
+          </div>
+        )}
+
+        {result.voluntarySummary && (
+          <div className="border p-4 rounded bg-white">
+            <h2 className="font-semibold">Khoản thu tự nguyện</h2>
+            <p>
+              Năm {result.voluntarySummary.year}, Tháng {result.voluntarySummary.month}:{" "}
+              {result.voluntarySummary.total.toLocaleString()} đ
+            </p>
+          </div>
+        )}
+
+        {result.residentsCount && (
+          <div className="border p-4 rounded bg-white">
+            <h2 className="font-semibold">Tổng số cư dân</h2>
+            <p>{result.residentsCount} người</p>
+          </div>
+        )}
+      </div>
+    </div>
+  );
 }

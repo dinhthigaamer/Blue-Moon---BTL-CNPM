@@ -15,6 +15,8 @@ import DangNhap from "./pages/taikhoan/DangNhap";
 import DangKy from "./pages/taikhoan/DangKy";
 import QuenMatKhau from "./pages/taikhoan/QuenMatKhau";
 
+import TaoKhoanThu from "./pages/TaoKhoanThu";
+
 export default function App() {
   const [account, setAccount] = useState({
     "name": "Dacia",
@@ -44,6 +46,7 @@ export default function App() {
         </Route>
 
         <Route path="/khoan_thu" element={<KhoanThu />} />
+        <Route path="/khoan_thu/tao" element={<TaoKhoanThu />} />
         <Route path="/tra_cuu" element={<TraCuu />} />
       </Route>
     </Routes>
