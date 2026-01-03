@@ -3,6 +3,7 @@ package com.example.project.auth.repository;
 import com.example.project.auth.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 
+import java.util.List;
 import java.util.Optional;
 
 public interface AuthRepository extends JpaRepository<User, Long> {
@@ -18,4 +19,6 @@ public interface AuthRepository extends JpaRepository<User, Long> {
     boolean existsByCccd(String cccd);
 
     boolean existsByEmail(String email);
+
+    List<User> findByEnabledFalse();
 }

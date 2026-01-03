@@ -49,10 +49,12 @@ public class SecurityConfig {
                 .authorizeHttpRequests(auth -> auth
                         // public
                         .requestMatchers(HttpMethod.POST, "/api/auth/login").permitAll()
+                        .requestMatchers(HttpMethod.POST, "/api/auth/register").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password/request-otp").permitAll()
                         .requestMatchers(HttpMethod.POST, "/api/auth/forgot-password/confirm").permitAll()
 
                         .requestMatchers("/swagger-ui/**", "/v3/api-docs/**").permitAll()
+                        .requestMatchers("/api/admin/**").hasRole("ADMIN")
 
                         .requestMatchers("/api/fees/**", "/api/fee-payments/**", "/api/statistics/**")
                         .hasAnyRole("ADMIN", "ACCOUNTANT")
