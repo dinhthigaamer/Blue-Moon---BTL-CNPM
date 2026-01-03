@@ -1,11 +1,22 @@
 import { useState } from "react";
 
 export default function TaiKhoan() {
+    // const [user, setUser] = useState({
+    //     username: "phamthi",
+    //     email: "phamthi@gmail.com",
+    //     phone: "",
+    // });
+
     const [user, setUser] = useState({
-        username: "phamthi",
-        email: "phamthi@gmail.com",
-        phone: "",
+        username: "thi",
+        password: "123456",
+        fullname: "phạm thi", email: "longle336699@gmail.com", phone: "0363636363",
+        cccd: "000000000000",
+        role: "ADMIN"
     });
+
+    const roles = ["ADMIN", "ACCOUNTANT"];
+    const names = ["Quản lý", "Kế toán"]
 
     const [editing, setEditing] = useState(false);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
@@ -60,6 +71,16 @@ export default function TaiKhoan() {
                             </div>
 
                             <div>
+                                <p className="text-sm text-gray-500">Họ và tên</p>
+                                <p className="font-medium">{user.fullname}</p>
+                            </div>
+
+                            <div>
+                                <p className="text-sm text-gray-500">Mã căn cước</p>
+                                <p className="font-medium">{user.cccd}</p>
+                            </div>
+
+                            <div>
                                 <p className="text-sm text-gray-500">Email</p>
                                 <p className="font-medium">{user.email}</p>
                             </div>
@@ -69,6 +90,11 @@ export default function TaiKhoan() {
                                 <p className="font-medium">
                                     {user.phone || "Chưa cập nhật"}
                                 </p>
+                            </div>
+
+                            <div>
+                                <p className="text-sm text-gray-500">Vai trò</p>
+                                <p className="font-medium">{user.role}</p>
                             </div>
 
                             <div className="flex gap-3 pt-4">
@@ -92,14 +118,7 @@ export default function TaiKhoan() {
                     {/* SỬA THÔNG TIN */}
                     {editing && (
                         <form onSubmit={handleSubmit} className="space-y-4">
-                            <input
-                                name="username"
-                                value={user.username}
-                                onChange={handleChange}
-                                className="w-full border px-3 py-2 rounded"
-                                placeholder="Tên đăng nhập"
-                            />
-
+                            <p className="text-sm text-gray-500">Email</p>
                             <input
                                 name="email"
                                 value={user.email}
@@ -108,6 +127,7 @@ export default function TaiKhoan() {
                                 placeholder="Email"
                             />
 
+                            <p className="text-sm text-gray-500">Số điện thoại</p>
                             <input
                                 name="phone"
                                 value={user.phone}
@@ -115,6 +135,22 @@ export default function TaiKhoan() {
                                 className="w-full border px-3 py-2 rounded"
                                 placeholder="Số điện thoại"
                             />
+
+                            <p className="text-sm text-gray-500">Vai trò</p>
+                            <select name="role"
+                                className="w-full px-4 py-2
+                                    border rounded
+                                    bg-white
+                                    focus:outline-none
+                                    focus:ring-2 focus:ring-teal-400
+                                    "
+                                onChange={handleChange}
+                                required
+                            >
+                                {roles.map((item, index) => (
+                                    <option value={item}>{names[index]}</option>
+                                ))}
+                            </select>
 
                             <div className="flex justify-end gap-2">
                                 <button

@@ -49,7 +49,7 @@ export default function CanHo() {
     return (
         <div className="min-h-screen flex flex-col space-y-4">
             <p className="font-semibold py-2">
-                Danh sách căn hộ
+                Danh sách căn hộ, bấm vào để xem chi tiết
             </p>
             <MyTable
                 columns={columns}
@@ -110,6 +110,10 @@ export default function CanHo() {
             )}
         </div>
     );
+}
+
+function clickRowHandler() {
+    
 }
 
 function Input({ label, ...props }) {

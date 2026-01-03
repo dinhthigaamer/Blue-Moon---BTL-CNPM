@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
+import authAPI from "../../api/authAPI"
 
 export default function DangKy() {
     const navigate = useNavigate()
@@ -50,7 +51,7 @@ export default function DangKy() {
 
     }, [form.cccd]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
         if (error) {
@@ -63,9 +64,14 @@ export default function DangKy() {
             return;
         }
 
-        console.log("Register data:", form);
-        alert("Đăng ký thành công !");
-        navigate("/dang_nhap")
+        try {
+            const response = await authAPI.register(form);
+            if (response.message == "Register success") {
+                
+            } 
+        } catch {
+            console.log("Error");
+        }
     };
 
     return (

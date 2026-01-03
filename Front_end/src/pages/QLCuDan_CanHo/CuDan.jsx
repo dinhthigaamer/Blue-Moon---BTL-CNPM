@@ -70,7 +70,7 @@ export default function CuDan() {
     return (
         <div className="min-h-screen flex flex-col space-y-4 ">
             <p className="font-semibold py-2">
-                Danh sách cư dân
+                Danh sách cư dân, bấm vào để xem chi tiết
             </p>
             <MyTable
                 columns={columns}
