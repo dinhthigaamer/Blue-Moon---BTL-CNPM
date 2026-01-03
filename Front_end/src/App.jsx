@@ -9,24 +9,29 @@ import CuDan from "./pages/QLCuDan_CanHo/CuDan";
 import ChiTietCuDan from "./pages/QLCuDan_CanHo/ChiTietCuDan";
 import ChiTietCanHo from "./pages/QLCuDan_CanHo/ChiTietCanHo";
 import KhoanThu from "./pages/KhoanThu";
+import TaoKhoanThu from "./pages/TaoKhoanThu";
 import TraCuu from "./pages/TraCuu";
-import TaiKhoan from "./pages/taikhoan/TaiKhoan"
+
+// Tài khoản
+import TaiKhoan from "./pages/taikhoan/TaiKhoan";
 import DangNhap from "./pages/taikhoan/DangNhap";
 import DangKy from "./pages/taikhoan/DangKy";
 import QuenMatKhau from "./pages/taikhoan/QuenMatKhau";
 
-import TaoKhoanThu from "./pages/TaoKhoanThu";
-
 export default function App() {
   const [account, setAccount] = useState({
-    "name": "Dacia",
-    "role": "Admin"
+    name: "Dacia",
+    role: "Admin",
   });
 
+  
   return (
     <Routes>
       {/* Auth pages – KHÔNG layout */}
-      <Route path="/dang_nhap" element={<DangNhap account={account} setAccount={setAccount} />} />
+      <Route
+        path="/dang_nhap"
+        element={<DangNhap account={account} setAccount={setAccount} />}
+      />
       <Route path="/dang_ky" element={<DangKy />} />
       <Route path="/quen_mat_khau" element={<QuenMatKhau />} />
 
@@ -40,7 +45,7 @@ export default function App() {
           <Route path=":id" element={<ChiTietCanHo />} />
         </Route>
 
-        <Route path="/cu_dan" >
+        <Route path="/cu_dan">
           <Route index element={<CuDan />} />
           <Route path=":id" element={<ChiTietCuDan />} />
         </Route>
