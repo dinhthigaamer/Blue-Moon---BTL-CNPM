@@ -11,8 +11,10 @@ import com.example.project.common.exception.ErrorCode;
 import com.example.project.integration.mail.GmailOtpMailService;
 import com.example.project.security.JwtTokenProvider;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -49,22 +51,30 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public AuthResponse login(LoginRequestDTO request) {
-        Authentication authentication = authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        request.getUsername(),
-                        request.getPassword()
-                )
-        );
+        try {
+            Authentication authentication = authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            request.getUsername(),
+                            request.getPassword()
+                    )
+            );
 
-        SecurityContextHolder.getContext().setAuthentication(authentication);
-        String token = tokenProvider.generateToken(authentication);
+            SecurityContextHolder.getContext().setAuthentication(authentication);
+            String token = tokenProvider.generateToken(authentication);
 
-        User user = authRepository.findByUsername(request.getUsername())
-                .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
+            User user = authRepository.findByUsername(request.getUsername())
+                    .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
 
-        UserDTO userDTO = userMapper.toDTO(user);
-        return new AuthResponse(token, userDTO);
+            UserDTO userDTO = userMapper.toDTO(user);
+            return new AuthResponse(token, userDTO);
+
+        } catch (DisabledException e) {
+            throw new ApiException(ErrorCode.ACCOUNT_NOT_APPROVED, "Tài khoản đang chờ admin duyệt");
+        } catch (AuthenticationException e) {
+            throw new ApiException(ErrorCode.AUTH_INVALID_CREDENTIALS, "Sai tài khoản hoặc mật khẩu");
+        }
     }
+
 
     @Override
     public UserDTO register(RegisterRequestDTO request) {
@@ -87,7 +97,7 @@ public class AuthServiceImpl implements AuthService {
 
         User user = userMapper.toEntity(request);
         user.setPassword(passwordEncoder.encode(request.getPassword()));
-        user.setEnabled(true);
+        user.setEnabled(false);
 
         user = authRepository.save(user);
         return userMapper.toDTO(user);
