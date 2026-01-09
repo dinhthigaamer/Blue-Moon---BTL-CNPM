@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getFeePaymentById } from "../services/feeService";
+import { getFeePaymentById } from "../api/feeService";
+
 import { useParams } from "react-router-dom";
 
 export default function ChiTietKhoanThu() {

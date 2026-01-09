@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
-import { createFeePayment, getFees } from "../services/feeService";
+import { createFeePayment, getFees } from "../api/feeService";
+
 
 export default function FeePaymentForm({ onSuccess }) {
   const [form, setForm] = useState({

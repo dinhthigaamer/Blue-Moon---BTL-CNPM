@@ -1,10 +1,6 @@
 import React, { useState } from "react";
-import {
-  getMonthlyRevenue,
-  getFeeSummary,
-  getVoluntarySummary,
-  getResidentsCount,
-} from "../services/feeService";
+import { getMonthlyRevenue, getFeeSummary, getVoluntarySummary, getResidentsCount } from "../api/feeService";
+
 
 export default function TraCuu() {
   const [year, setYear] = useState("");

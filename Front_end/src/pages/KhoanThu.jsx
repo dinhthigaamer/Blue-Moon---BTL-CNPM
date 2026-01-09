@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getFeePayments, deleteFeePayment } from "../services/feeService";
+import { getFeePayments, deleteFeePayment } from "../api/feeService";
+
 import FeePaymentTable from "../components/FeePaymentTable";
 import { useNavigate } from "react-router-dom";
 

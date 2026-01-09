@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from "react";
-import { getFees, createFee, updateFee, deleteFee } from "../services/feeService";
+import { getFees, createFee, updateFee, deleteFee } from "../api/feeService";
+
 
 export default function LoaiPhi() {
   const [fees, setFees] = useState([]);
