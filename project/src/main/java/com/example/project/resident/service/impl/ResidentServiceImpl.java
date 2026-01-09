@@ -45,6 +45,7 @@ public class ResidentServiceImpl implements ResidentService {
             Integer roomNumber,
             String fullName,
             String phone,
+            String email,
             String cccd,
             LocalDate dateOfBirth,
             String religion,
@@ -71,6 +72,9 @@ public class ResidentServiceImpl implements ResidentService {
             }
             if (phone != null && !phone.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("phone")), "%" + phone.toLowerCase() + "%"));
+            }
+            if (email != null && !email.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
             }
             if (cccd != null && !cccd.isBlank()) {
                 predicates.add(cb.equal(root.get("cccd"), cccd));

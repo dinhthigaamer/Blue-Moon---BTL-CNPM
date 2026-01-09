@@ -15,6 +15,7 @@ public interface ResidentService {
             Integer roomNumber,
             String fullName,
             String phone,
+            String email,
             String cccd,
             LocalDate dateOfBirth,
             String religion,

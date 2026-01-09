@@ -24,6 +24,7 @@ public class ResidentMapper {
         dto.setId(entity.getId());
         dto.setFullName(entity.getFullName());
         dto.setPhone(entity.getPhone());
+        dto.setEmail(entity.getEmail());
         dto.setCccd(entity.getCccd());
         dto.setDateOfBirth(entity.getDateOfBirth());
         dto.setReligion(entity.getReligion());
@@ -44,6 +45,7 @@ public class ResidentMapper {
         Resident r = new Resident();
         r.setFullName(dto.getFullName());
         r.setPhone(dto.getPhone());
+        r.setEmail(dto.getEmail());
         r.setCccd(dto.getCccd());
         r.setDateOfBirth(dto.getDateOfBirth());
         r.setReligion(dto.getReligion());
@@ -66,6 +68,7 @@ public class ResidentMapper {
     public void updateEntity(ResidentUpdateDTO dto, Resident entity) {
         if (dto.getFullName() != null) entity.setFullName(dto.getFullName());
         if (dto.getPhone() != null) entity.setPhone(dto.getPhone());
+        if (dto.getEmail() != null) entity.setEmail(dto.getEmail());
         if (dto.getCccd() != null) entity.setCccd(dto.getCccd());
         if (dto.getDateOfBirth() != null) entity.setDateOfBirth(dto.getDateOfBirth());
         if (dto.getReligion() != null) entity.setReligion(dto.getReligion());

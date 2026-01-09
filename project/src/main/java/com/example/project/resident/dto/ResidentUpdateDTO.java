@@ -1,6 +1,7 @@
 package com.example.project.resident.dto;
 
 import com.example.project.resident.entity.ResidenceStatus;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
 
@@ -10,6 +11,8 @@ import java.time.LocalDate;
 public class ResidentUpdateDTO {
     private String fullName;
     private String phone;
+    @Email(message = "Email không hợp lệ")
+    private String email;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải gồm đúng 12 chữ số")
     private String cccd;
     private LocalDate dateOfBirth;
@@ -35,6 +38,14 @@ public class ResidentUpdateDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCccd() {

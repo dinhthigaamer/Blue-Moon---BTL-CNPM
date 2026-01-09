@@ -10,6 +10,7 @@ public class ResidentDTO {
     private Long id;
     private String fullName;
     private String phone;
+    private String email;
     private String cccd;
     private LocalDate dateOfBirth;
     private String religion;
@@ -44,6 +45,14 @@ public class ResidentDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCccd() {
