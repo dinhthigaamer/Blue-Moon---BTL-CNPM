@@ -20,7 +20,8 @@ export default function TaiKhoan() {
                 if (response.data.success === true) {
                     setUser(response.data.data.user);
                 }
-            } catch {
+            } catch (e) {
+                console.log(e);
                 alert("Đã xảy ra lỗi, vui lòng thử lại !");
                 navigate("/");
             }
