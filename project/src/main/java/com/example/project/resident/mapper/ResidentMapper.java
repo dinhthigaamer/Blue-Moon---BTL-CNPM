@@ -30,7 +30,8 @@ public class ResidentMapper {
         dto.setEthnicity(entity.getEthnicity());
         dto.setOccupation(entity.getOccupation());
         dto.setResidenceStatus(entity.getResidenceStatus());
-        dto.setVehicleCount(entity.getVehicleCount());
+        dto.setCarCount(entity.getCarCount());
+        dto.setBikeCount(entity.getBikeCount());
 
         if (entity.getHousehold() != null) {
             dto.setHouseholdId(entity.getHousehold().getId());
@@ -49,7 +50,8 @@ public class ResidentMapper {
         r.setEthnicity(dto.getEthnicity());
         r.setOccupation(dto.getOccupation());
         r.setResidenceStatus(dto.getResidenceStatus());
-        r.setVehicleCount(dto.getVehicleCount() == null ? 0 : dto.getVehicleCount());
+        r.setCarCount(dto.getCarCount() == null ? 0 : dto.getCarCount());
+        r.setBikeCount(dto.getBikeCount() == null ? 0 : dto.getBikeCount());
 
         Household household = householdRepository.findById(dto.getHouseholdId())
                 .orElseThrow(() -> new ApiException(
@@ -70,7 +72,8 @@ public class ResidentMapper {
         if (dto.getEthnicity() != null) entity.setEthnicity(dto.getEthnicity());
         if (dto.getOccupation() != null) entity.setOccupation(dto.getOccupation());
         if (dto.getResidenceStatus() != null) entity.setResidenceStatus(dto.getResidenceStatus());
-        if (dto.getVehicleCount() != null) entity.setVehicleCount(dto.getVehicleCount());
+        if (dto.getCarCount() != null) entity.setCarCount(dto.getCarCount());
+        if (dto.getBikeCount() != null) entity.setBikeCount(dto.getBikeCount());
 
         if (dto.getHouseholdId() != null) {
             Household household = householdRepository.findById(dto.getHouseholdId())

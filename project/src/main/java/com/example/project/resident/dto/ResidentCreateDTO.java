@@ -20,7 +20,8 @@ public class ResidentCreateDTO {
     private String ethnicity;
     private String occupation;
     private ResidenceStatus residenceStatus;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
     @NotNull(message = "HouseholdId là bắt buộc")
     private Long householdId; // bắt buộc
 
@@ -88,12 +89,20 @@ public class ResidentCreateDTO {
         this.residenceStatus = residenceStatus;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Long getHouseholdId() {

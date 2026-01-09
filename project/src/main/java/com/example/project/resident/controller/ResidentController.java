@@ -35,7 +35,8 @@ public class ResidentController {
             @RequestParam(required = false) String ethnicity,
             @RequestParam(required = false) String occupation,
             @RequestParam(required = false) ResidenceStatus residenceStatus,
-            @RequestParam(required = false) Integer vehicleCount
+            @RequestParam(required = false) Integer carCount,
+            @RequestParam(required = false) Integer bikeCount
     ) {
         return ApiResponse.ok(residentService.findAll(
                 id,
@@ -49,7 +50,8 @@ public class ResidentController {
                 ethnicity,
                 occupation,
                 residenceStatus,
-                vehicleCount
+                carCount,
+                bikeCount
         ));
     }
 

@@ -16,7 +16,8 @@ public class ResidentDTO {
     private String ethnicity;
     private String occupation;
     private ResidenceStatus residenceStatus;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
 
     private Long householdId;
     private Integer roomNumber;
@@ -93,12 +94,20 @@ public class ResidentDTO {
         this.residenceStatus = residenceStatus;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Long getHouseholdId() {

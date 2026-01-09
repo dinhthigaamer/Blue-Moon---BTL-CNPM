@@ -19,7 +19,8 @@ public class Household extends BaseEntity {
     private String ownerName;
     private Double area;
     private Integer residentCount;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
     private Boolean isVacant;
     
     @OneToMany(mappedBy = "household", fetch = FetchType.LAZY)
@@ -60,12 +61,20 @@ public class Household extends BaseEntity {
         this.residentCount = residentCount;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Boolean getIsVacant() {

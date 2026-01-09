@@ -21,7 +21,8 @@ public interface ResidentService {
             String ethnicity,
             String occupation,
             ResidenceStatus residenceStatus,
-            Integer vehicleCount
+            Integer carCount,
+            Integer bikeCount
     );
     ResidentDTO findById(Long id);
     ResidentDTO create(ResidentCreateDTO dto);

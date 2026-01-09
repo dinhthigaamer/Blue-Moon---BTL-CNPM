@@ -14,7 +14,8 @@ public interface HouseholdService {
             String ownerName,
             Double area,
             Integer residentCount,
-            Integer vehicleCount,
+            Integer carCount,
+            Integer bikeCount,
             Boolean isVacant
     );
 

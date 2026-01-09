@@ -29,7 +29,8 @@ public class HouseholdMapper {
         dto.setOwnerName(entity.getOwnerName());
         dto.setArea(entity.getArea());
         dto.setResidentCount(entity.getResidentCount());
-        dto.setVehicleCount(entity.getVehicleCount());
+        dto.setCarCount(entity.getCarCount());
+        dto.setBikeCount(entity.getBikeCount());
         dto.setIsVacant(entity.getIsVacant());
         if (entity.getResidents() != null) {
             dto.setResidents(entity.getResidents().stream()
@@ -61,7 +62,8 @@ public class HouseholdMapper {
 
         // mặc định khi tạo mới
         entity.setResidentCount(0);
-        entity.setVehicleCount(0);
+        entity.setCarCount(0);
+        entity.setBikeCount(0);
         return entity;
     }
 
