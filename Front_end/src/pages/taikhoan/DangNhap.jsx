@@ -22,7 +22,7 @@ export default function DangNhap({ account, setAccount }) {
             console.log(response);
 
             if (response.data.message === "Login success") {
-                localStorage.setItem("accessToken", response.data.token);
+                localStorage.setItem("accessToken", response.data.data.token);
 
                 localStorage.setItem("user", JSON.stringify({
                     name: response.data.data.user.username,

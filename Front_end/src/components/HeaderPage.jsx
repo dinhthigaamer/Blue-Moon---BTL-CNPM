@@ -15,7 +15,8 @@ export default function HeaderPage({ account, setAccount, namePage, setNamePage 
         "/tra_cuu": "Tra cứu - Thống kê",
         "/dang_ky": "Đăng ký",
         "/dang_nhap": "Đăng nhập",
-        "/khoan_thu": "Khoản thu"
+        "/khoan_thu": "Khoản thu",
+        "/tai_khoan": "Tài khoản"
     };
 
     setNamePage(pageTitles[location.pathname]);
