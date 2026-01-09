@@ -1,8 +1,11 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { useOutletContext } from "react-router-dom";
+import authAPI from "../../api/authAPI";
 
 export default function DangNhap({ account, setAccount }) {
+    const [errorUserName, setErrorUserName] = useState("");
+    const [errorPass, setErrorPass] = useState("");
     const [form, setForm] = useState({ username: "", password: "" });
     const navigate = useNavigate();
 
@@ -10,12 +13,43 @@ export default function DangNhap({ account, setAccount }) {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
 
-        console.log("Login data:", form);
-        // demo thành công
-        navigate("/");
+        try {
+            const response = await authAPI.login(form);
+
+            console.log(response);
+
+            if (response.data.message === "Login success") {
+                localStorage.setItem("accessToken", response.data.token);
+
+                localStorage.setItem("user", JSON.stringify({
+                    name: response.data.data.user.username,
+                    role: response.data.data.user.role
+                }));
+
+                setAccount({
+                    "name": response.data.data.user.username,
+                    "role": response.data.data.user.role
+                });
+
+                setErrorUserName("");
+                setErrorPass("");
+                navigate("/");
+            }
+            else if (response.data.errorCode === "AUTH_USER_NOT_FOUND") {
+                setErrorUserName("Tên đăng nhập không tồn tại");
+                return;
+            }
+            else {
+                setErrorPass("Mật khẩu sai !");
+                return;
+            }
+        } catch (error) {
+            console.log(error.response?.data);
+            alert("Đăng nhập thất bại, vui lòng thử lại !");
+        }
     };
 
     return (
@@ -38,6 +72,7 @@ export default function DangNhap({ account, setAccount }) {
                         required
                         className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-teal-400 outline-none"
                     />
+                    {errorUserName && <span className="text-red-500 text-sm">{errorUserName}</span>}
                 </div>
 
                 <div className="mb-4">
@@ -50,6 +85,7 @@ export default function DangNhap({ account, setAccount }) {
                         required
                         className="w-full px-4 py-2 border rounded focus:ring-2 focus:ring-teal-400 outline-none"
                     />
+                    {errorPass && <span className="text-red-500 text-sm">{errorPass}</span>}
                 </div>
 
                 <div className="flex justify-between items-center mb-6 text-sm">

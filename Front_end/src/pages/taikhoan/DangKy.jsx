@@ -5,9 +5,12 @@ import authAPI from "../../api/authAPI"
 export default function DangKy() {
     const navigate = useNavigate()
     const roles = ["ADMIN", "ACCOUNTANT"];
-    const names = ["Quản lý", "Kế toán"]
+    const names = ["Quản lý", "Kế toán"];
     const [error, setError] = useState("");
+    const [errorUserName, setErrorUserName] = useState("");
     const [errorCccd, setErrorCccd] = useState("")
+    const [errorPhone, setErrorPhone] = useState("")
+    const [errorEmail, setErrorEmail] = useState("")
 
     const [form, setForm] = useState({
         username: "",
@@ -51,26 +54,70 @@ export default function DangKy() {
 
     }, [form.cccd]);
 
+    {/*Kiểm tra phone có đúng form*/ }
+    useEffect(() => {
+        if (form.phone.length != 10) {
+            setErrorPhone("Số điện thoại ko hợp lệ");
+        } else {
+            const hasNonDigit = /[^0-9]/.test(form.cccd)
+
+            if (hasNonDigit)
+                setErrorPhone("Số căn cước không hợp lệ")
+            else
+                setErrorPhone("")
+        }
+
+    }, [form.phone]);
+
+    // Hàm kiểm tra dữ liệu vào và gọi API đăng ký
     const handleSubmit = async (e) => {
         e.preventDefault();
 
-        if (error) {
+        if (error === "Mật khẩu không khớp") {
             alert("Mật khẩu xác nhận không khớp!");
             return;
         }
 
-        if (errorCccd) {
+        if (errorCccd == "Số căn cước không hợp lệ") {
             alert("Mã căn cước không hợp lệ!");
             return;
         }
 
+        // Gọi API đăng ký
         try {
+            console.log(form);
             const response = await authAPI.register(form);
-            if (response.message == "Register success") {
-                
-            } 
-        } catch {
-            console.log("Error");
+
+            // Đăng ký thành công -> về trang đăng nhập
+            if (response.data.message == "Register success") {
+                alert("Đăng ký thành công, vui lòng đợi ban quản trị chung cư xét duyệt");
+
+                setError("");
+                setErrorUserName("");
+                setErrorPhone("");
+                setErrorCccd("");
+
+                navigate("/dang_nhap");
+            }
+            else if (response.data.errorCode === "AUTH_USERNAME_EXISTED") {
+                setErrorUserName("Tên đăng nhập đã được sử dụng");
+                return;
+            }
+            else if (response.data.errorCode === "AUTH_PHONE_EXISTED") {
+                setErrorPhone("Số điện thoại đã được sử dụng");
+                return;
+            }
+            else if (response.data.errorCode === "AUTH_CCCD_EXISTED") {
+                setErrorCccd("Số căn cước đã được sử dụng");
+                return;
+            }
+            else {
+                alert("Đăng ký thất bại, vui lòng thử lại !");
+                return;
+            }
+        } catch (e) {
+            console.log(e);
+            alert("Đăng ký thất bại, vui lòng kiểm tra lại kết nối");
         }
     };
 
@@ -111,6 +158,7 @@ export default function DangKy() {
                         required
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
                     />
+                    {errorEmail && <span className="text-red-500 text-sm">{errorEmail}</span>}
                 </div>
 
                 {/* Phone */}
@@ -125,6 +173,7 @@ export default function DangKy() {
                         required
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
                     />
+                    {errorPhone && <span className="text-red-500 text-sm">{errorPhone}</span>}
                 </div>
 
                 {/* CCCD */}
@@ -173,6 +222,7 @@ export default function DangKy() {
                         required
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
                     />
+                    {errorUserName && <span className="text-red-500 text-sm">{errorUserName}</span>}
                 </div>
 
                 {/* Password */}

@@ -4,13 +4,15 @@ import Taskbar from "./components/Taskbar";
 import HeaderPage from "./components/HeaderPage";
 import Body from "./components/Body";
 
-export default function MainLayout({ account, setAccount }) {
+export default function MainLayout({ account, setAccount, namePage, setNamePage }) {
     const [collapsed, setCollapsed] = useState(false);
 
     return (
         <div className="flex h-screen bg-gray-100">
             <Taskbar
                 collapsed={collapsed}
+                namePage={namePage}
+                setNamePage={setNamePage}
                 toggle={() => setCollapsed(prev => !prev)}
             />
 
@@ -18,6 +20,9 @@ export default function MainLayout({ account, setAccount }) {
                 <HeaderPage
                     account={account}
                     setAccount={setAccount}
+
+                    namePage={namePage}
+                    setNamePage={setNamePage}
                 />
                 <Body>
                     <Outlet />
