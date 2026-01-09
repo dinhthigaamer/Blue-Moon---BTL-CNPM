@@ -1,6 +1,7 @@
 package com.example.project.resident.dto;
 
 import com.example.project.resident.entity.ResidenceStatus;
+import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Pattern;
 
 
@@ -10,6 +11,8 @@ import java.time.LocalDate;
 public class ResidentUpdateDTO {
     private String fullName;
     private String phone;
+    @Email(message = "Email không hợp lệ")
+    private String email;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải gồm đúng 12 chữ số")
     private String cccd;
     private LocalDate dateOfBirth;
@@ -17,7 +20,8 @@ public class ResidentUpdateDTO {
     private String ethnicity;
     private String occupation;
     private ResidenceStatus residenceStatus;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
     private Long householdId; // optional: đổi hộ khẩu (chuyển phòng)
 
     public String getFullName() {
@@ -34,6 +38,14 @@ public class ResidentUpdateDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCccd() {
@@ -84,12 +96,20 @@ public class ResidentUpdateDTO {
         this.residenceStatus = residenceStatus;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Long getHouseholdId() {

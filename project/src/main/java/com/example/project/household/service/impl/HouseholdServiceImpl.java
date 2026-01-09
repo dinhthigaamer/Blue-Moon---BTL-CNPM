@@ -33,7 +33,8 @@ public class HouseholdServiceImpl implements HouseholdService {
             String ownerName,
             Double area,
             Integer residentCount,
-            Integer vehicleCount,
+            Integer carCount,
+            Integer bikeCount,
             Boolean isVacant
     ) {
         Specification<Household> spec = (root, query, cb) -> {
@@ -54,8 +55,11 @@ public class HouseholdServiceImpl implements HouseholdService {
             if (residentCount != null) {
                 predicates.add(cb.equal(root.get("residentCount"), residentCount));
             }
-            if (vehicleCount != null) {
-                predicates.add(cb.equal(root.get("vehicleCount"), vehicleCount));
+            if (carCount != null) {
+                predicates.add(cb.equal(root.get("carCount"), carCount));
+            }
+            if (bikeCount != null) {
+                predicates.add(cb.equal(root.get("bikeCount"), bikeCount));
             }
             if (isVacant != null) {
                 predicates.add(cb.equal(root.get("isVacant"), isVacant));

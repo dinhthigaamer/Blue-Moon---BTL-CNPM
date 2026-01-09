@@ -14,6 +14,9 @@ public class Resident extends BaseEntity {
 
     private String phone;
 
+    @Column(length = 100)
+    private String email;
+
     @Column(unique = true)
     private String cccd;
 
@@ -28,7 +31,8 @@ public class Resident extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private ResidenceStatus residenceStatus;
 
-    private Integer vehicleCount = 0;
+    private Integer carCount = 0;
+    private Integer bikeCount = 0;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "household_id", nullable = false)
@@ -50,12 +54,28 @@ public class Resident extends BaseEntity {
         this.phone = phone;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public String getEmail() {
+        return email;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setEmail(String email) {
+        this.email = email;
+    }
+
+    public Integer getCarCount() {
+        return carCount;
+    }
+
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public String getCccd() {
