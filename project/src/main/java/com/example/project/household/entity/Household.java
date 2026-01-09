@@ -17,6 +17,8 @@ public class Household extends BaseEntity {
     @Column(unique = true, nullable = false)
     private Integer roomNumber;
     private String ownerName;
+    @Column(length = 12)
+    private String ownerCccd;
     private Double area;
     private Integer residentCount;
     private Integer carCount;
@@ -43,6 +45,14 @@ public class Household extends BaseEntity {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getOwnerCccd() {
+        return ownerCccd;
+    }
+
+    public void setOwnerCccd(String ownerCccd) {
+        this.ownerCccd = ownerCccd;
     }
 
     public Double getArea() {

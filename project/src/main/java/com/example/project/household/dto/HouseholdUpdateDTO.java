@@ -4,6 +4,7 @@ import io.swagger.v3.oas.annotations.media.Schema;
 
 public class HouseholdUpdateDTO {
     private String ownerName;
+    private String ownerCccd;
     @Schema(description = "Diện tích căn hộ (m2)")
     private Double area;
     private Boolean isVacant;
@@ -15,6 +16,14 @@ public class HouseholdUpdateDTO {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getOwnerCccd() {
+        return ownerCccd;
+    }
+
+    public void setOwnerCccd(String ownerCccd) {
+        this.ownerCccd = ownerCccd;
     }
 
     public Boolean getIsVacant() {

@@ -9,6 +9,7 @@ public class HouseholdDTO {
     private Long id;
     private Integer roomNumber;
     private String ownerName;
+    private String ownerCccd;
     @Schema(description = "Diện tích căn hộ (m2)")
     private Double area;
     private Integer residentCount;
@@ -39,6 +40,14 @@ public class HouseholdDTO {
 
     public void setOwnerName(String ownerName) {
         this.ownerName = ownerName;
+    }
+
+    public String getOwnerCccd() {
+        return ownerCccd;
+    }
+
+    public void setOwnerCccd(String ownerCccd) {
+        this.ownerCccd = ownerCccd;
     }
 
     public Double getArea() {
