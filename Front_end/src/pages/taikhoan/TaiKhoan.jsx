@@ -1,19 +1,33 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import authAPI from "../../api/authAPI"
+import { useNavigate } from "react-router-dom";
 
 export default function TaiKhoan() {
-    // const [user, setUser] = useState({
-    //     username: "phamthi",
-    //     email: "phamthi@gmail.com",
-    //     phone: "",
-    // });
-
+    const navigate = useNavigate();
     const [user, setUser] = useState({
-        username: "thi",
-        password: "123456",
-        fullname: "phạm thi", email: "longle336699@gmail.com", phone: "0363636363",
-        cccd: "000000000000",
-        role: "ADMIN"
+        username: "",
+        password: "",
+        fullname: "", email: "", phone: "",
+        cccd: "",
+        role: ""
     });
+
+    useEffect(() => {
+        const fetchMe = async () => {
+            try {
+                const response = await authAPI.getMe();
+
+                if (response.data.success === true) {
+                    setUser(response.data.data.user);
+                }
+            } catch {
+                alert("Đã xảy ra lỗi, vui lòng thử lại !");
+                navigate("/");
+            }
+        };
+
+        fetchMe();
+    }, []);
 
     const roles = ["ADMIN", "ACCOUNTANT"];
     const names = ["Quản lý", "Kế toán"]

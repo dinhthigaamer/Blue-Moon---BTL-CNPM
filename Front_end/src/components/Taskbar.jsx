@@ -1,6 +1,6 @@
 import { NavLink } from "react-router-dom";
 
-export default function Taskbar({ collapsed, toggle }) {
+export default function Taskbar({ collapsed, toggle, namePage, setNamePage }) {
   const menu = [
     { label: "Trang chủ", path: "/" },
     { label: "Căn hộ", path: "/can_ho" },
@@ -39,12 +39,14 @@ export default function Taskbar({ collapsed, toggle }) {
           <NavLink
             key={item.path}
             to={item.path}
+            onClick={() => {
+              setNamePage(item.label);
+            }}
             className={({ isActive }) =>
               `mx-2 px-4 py-2 rounded cursor-pointer transition-colors
-              ${
-                isActive
-                  ? "bg-teal-50 text-teal-500 font-semibold"
-                  : "text-gray-600 hover:bg-gray-100"
+              ${isActive
+                ? "bg-teal-50 text-teal-500 font-semibold"
+                : "text-gray-600 hover:bg-gray-100"
               }`
             }
           >

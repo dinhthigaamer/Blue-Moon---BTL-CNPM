@@ -1,10 +1,24 @@
 import logo from "../assets/Avatar.png"
 import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
+import { useLocation } from "react-router-dom";
 
-export default function HeaderPage({ account, setAccount }) {
+export default function HeaderPage({ account, setAccount, namePage, setNamePage }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
+    const location = useLocation();
+
+    const pageTitles = {
+        "/": "Trang chủ",
+        "/can_ho": "Căn hộ",
+        "/cu_dan": "Cư dân",
+        "/tra_cuu": "Tra cứu - Thống kê",
+        "/dang_ky": "Đăng ký",
+        "/dang_nhap": "Đăng nhập",
+        "/khoan_thu": "Khoản thu"
+    };
+
+    setNamePage(pageTitles[location.pathname]);
 
     // đóng menu khi click ra ngoài
     useEffect(() => {
@@ -21,7 +35,7 @@ export default function HeaderPage({ account, setAccount }) {
     return (
         <header className="bg-white px-6 py-4 flex justify-between items-center shadow-sm">
             <h1 className="text-xl font-semibold text-gray-700">
-                Trang chủ
+                {namePage}
             </h1>
 
             <div className="flex items-center gap-4">

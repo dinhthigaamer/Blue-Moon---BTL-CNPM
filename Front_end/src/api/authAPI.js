@@ -19,4 +19,12 @@ authAPI.updateMe = async function (user) {
     return axiosClient.put("/auth/me", user);
 };
 
+authAPI.requestOTP = async function (email) {
+    return axiosClient.post("/auth/forgot-password/request-otp", email);
+};
+
+authAPI.confirmOTP = async function (infor) {
+    return axiosClient.post("/auth/forgot-password/confirm", infor);
+}
+
 export default authAPI;

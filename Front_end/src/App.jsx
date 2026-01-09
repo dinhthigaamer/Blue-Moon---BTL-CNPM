@@ -1,5 +1,5 @@
 import { Routes, Route } from "react-router-dom";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import MainLayout from "./MainLayout";
 
 // pages
@@ -24,7 +24,16 @@ export default function App() {
     role: "Admin",
   });
 
-  
+  const [namePage, setNamePage] = useState("Trang chủ")
+
+  useEffect(() => {
+    const savedUser = localStorage.getItem("user");
+
+    if (savedUser) {
+      setAccount(JSON.parse(savedUser));
+    }
+  }, []);
+
   return (
     <Routes>
       {/* Auth pages – KHÔNG layout */}
@@ -36,7 +45,9 @@ export default function App() {
       <Route path="/quen_mat_khau" element={<QuenMatKhau />} />
 
       {/* Main pages – CÓ layout */}
-      <Route element={<MainLayout account={account} setAccount={setAccount} />}>
+      <Route element={<MainLayout account={account} setAccount={setAccount}
+        namePage={namePage} setNamePage={setNamePage}
+      />}>
         <Route path="/" element={<TrangChu />} />
         <Route path="/tai_khoan" element={<TaiKhoan />} />
 
