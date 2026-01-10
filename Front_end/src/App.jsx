@@ -4,14 +4,17 @@ import MainLayout from "./MainLayout";
 
 // pages
 import TrangChu from "./pages/TrangChu";
-import CanHo from "./pages/QLCuDan_CanHo/CanHo";
-import CuDan from "./pages/QLCuDan_CanHo/CuDan";
-import ChiTietCuDan from "./pages/QLCuDan_CanHo/ChiTietCuDan";
-import ChiTietCanHo from "./pages/QLCuDan_CanHo/ChiTietCanHo";
+import CanHo from "./pages/ql_can_ho/CanHo";
+import CuDan from "./pages/ql_cu_dan/CuDan";
+import ChiTietCuDan from "./pages/ql_cu_dan/ChiTietCuDan";
+import SuaCuDan from "./pages/ql_cu_dan/SuaCuDan";
+import ThemCuDan from "./pages/ql_cu_dan/ThemCuDan";
+
+import ChiTietCanHo from "./pages/ql_can_ho/ChiTietCanHo";
 import KhoanThu from "./pages/KhoanThu";
 import TaoKhoanThu from "./pages/TaoKhoanThu";
 import TraCuu from "./pages/TraCuu";
-
+import QLTaiKhoan from "./pages/taikhoan/QLTaiKhoan";
 // Tài khoản
 import TaiKhoan from "./pages/taikhoan/TaiKhoan";
 import DangNhap from "./pages/taikhoan/DangNhap";
@@ -50,21 +53,22 @@ export default function App() {
       />}>
         <Route path="/" element={<TrangChu />} />
         <Route path="/tai_khoan" element={<TaiKhoan />} />
+        <Route path="/quan_ly_tai_khoan" element={<QLTaiKhoan />} />
 
         <Route path="/can_ho">
           <Route index element={<CanHo />} />
           <Route path=":id" element={<ChiTietCanHo />} />
         </Route>
 
-        <Route path="/cu_dan">
-          <Route index element={<CuDan />} />
-          <Route path=":id" element={<ChiTietCuDan />} />
-        </Route>
+        <Route path="/cu_dan" element={<CuDan />} />
+        <Route path="/cu_dan/:id" element={<ChiTietCuDan />} />
+        <Route path="/cu_dan/:id/edit" element={<SuaCuDan />} />
+        <Route path="/cu_dan/add" element={<ThemCuDan />} />
 
         <Route path="/khoan_thu" element={<KhoanThu />} />
         <Route path="/khoan_thu/tao" element={<TaoKhoanThu />} />
         <Route path="/tra_cuu" element={<TraCuu />} />
       </Route>
-    </Routes>
+    </Routes >
   );
 }

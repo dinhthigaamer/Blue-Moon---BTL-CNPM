@@ -12,13 +12,19 @@ export default function TaiKhoan() {
         role: ""
     });
 
+    const role = {
+        "ADMIN": "Ban quản lý",
+        "ACCOUNTANT": "Kế toán"
+    };
+
     useEffect(() => {
         const fetchMe = async () => {
             try {
                 const response = await authAPI.getMe();
 
                 if (response.data.success === true) {
-                    setUser(response.data.data.user);
+                    // console.log(response.data.data);
+                    setUser(response.data.data);
                 }
             } catch (e) {
                 console.log(e);
@@ -30,26 +36,54 @@ export default function TaiKhoan() {
         fetchMe();
     }, []);
 
-    const roles = ["ADMIN", "ACCOUNTANT"];
-    const names = ["Quản lý", "Kế toán"]
-
     const [editing, setEditing] = useState(false);
     const [showPasswordForm, setShowPasswordForm] = useState(false);
     const [password, setPassword] = useState({
-        current: "",
-        newPass: "",
+        oldPassword: "",
+        newPassword: "",
         confirm: "",
     });
+    const [errorPass, setErrorPass] = useState("");
+
+    {/*Kiểm tra mật khẩu có trùng khớp*/ }
+    useEffect(() => {
+        if (!password.confirm) return;
+
+        if (password.newPassword !== password.confirm) {
+            setErrorPass("Mật khẩu không khớp");
+        } else {
+            setErrorPass("");
+        }
+    }, [password.newPassword, password.confirm]);
 
     const handleChange = (e) => {
         const { name, value } = e.target;
         setUser((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        setEditing(false);
-        alert("Cập nhật thông tin thành công (demo)");
+
+        try {
+            const response = await authAPI.updateMe({ ...user, ...password });
+
+            if (response.data.success === true) {
+                alert("Cập nhật thành công");
+                navigate("/tai_khoan");
+            }
+        } catch (e) {
+            if (e.response.data.errorCode === "AUTH_PHONE_EXISTED") {
+                alert("Số điện thoại đã được sử dụng");
+            }
+            else if (e.response.data.errorCode === "AUTH_CCCD_EXISTED") {
+                alert("Số căn cước đã được sử dụng");
+            }
+            else if (e.response.data.errorCode === "AUTH_USER_NOT_FOUND") {
+                alert("Không tìm thấy tài khoản");
+            }
+            else
+                alert("Đã xảy ra lỗi, vui lòng thử lại !");
+        }
     };
 
     const handlePasswordChange = (e) => {
@@ -57,15 +91,33 @@ export default function TaiKhoan() {
         setPassword((prev) => ({ ...prev, [name]: value }));
     };
 
-    const handlePasswordSubmit = (e) => {
+    const handlePasswordSubmit = async (e) => {
         e.preventDefault();
         if (password.newPass !== password.confirm) {
             alert("Mật khẩu xác nhận không khớp");
             return;
         }
+
+        try {
+            const response = await authAPI.updateMe({ ...user, ...password });
+
+            if (response.data.success === true) {
+                alert("Cập nhật thành công");
+                navigate("/tai_khoan");
+            }
+        } catch (e) {
+            if (e.response.data.errorCode === "AUTH_INVALID_PASSWORD") {
+                alert("Mật khẩu sai");
+            }
+            else if (e.response.data.errorCode === "AUTH_USER_NOT_FOUND") {
+                alert("Không tìm thấy tài khoản");
+            }
+            else
+                alert("Đã xảy ra lỗi, vui lòng thử lại !");
+        };
+
         setShowPasswordForm(false);
         setPassword({ current: "", newPass: "", confirm: "" });
-        alert("Đổi mật khẩu thành công (demo)");
     };
 
     return (
@@ -109,7 +161,7 @@ export default function TaiKhoan() {
 
                             <div>
                                 <p className="text-sm text-gray-500">Vai trò</p>
-                                <p className="font-medium">{user.role}</p>
+                                <p className="font-medium">{role[user.role]}</p>
                             </div>
 
                             <div className="flex gap-3 pt-4">
@@ -140,6 +192,7 @@ export default function TaiKhoan() {
                                 onChange={handleChange}
                                 className="w-full border px-3 py-2 rounded"
                                 placeholder="Email"
+                                required
                             />
 
                             <p className="text-sm text-gray-500">Số điện thoại</p>
@@ -149,6 +202,7 @@ export default function TaiKhoan() {
                                 onChange={handleChange}
                                 className="w-full border px-3 py-2 rounded"
                                 placeholder="Số điện thoại"
+                                required
                             />
 
                             <p className="text-sm text-gray-500">Vai trò</p>
@@ -162,8 +216,8 @@ export default function TaiKhoan() {
                                 onChange={handleChange}
                                 required
                             >
-                                {roles.map((item, index) => (
-                                    <option value={item}>{names[index]}</option>
+                                {["ADMIN", "ACCOUNTANT"].map((item, index) => (
+                                    <option value={item}>{role[item]}</option>
                                 ))}
                             </select>
 
@@ -193,30 +247,36 @@ export default function TaiKhoan() {
 
                             <input
                                 type="password"
-                                name="current"
+                                name="oldPassword"
                                 placeholder="Mật khẩu hiện tại"
-                                value={password.current}
+                                value={password.oldPassword}
                                 onChange={handlePasswordChange}
                                 className="w-full border px-3 py-2 rounded"
+                                required
                             />
 
                             <input
                                 type="password"
-                                name="newPass"
+                                name="newPassword"
                                 placeholder="Mật khẩu mới"
-                                value={password.newPass}
+                                value={password.newPassword}
                                 onChange={handlePasswordChange}
                                 className="w-full border px-3 py-2 rounded"
+                                required
                             />
 
-                            <input
-                                type="password"
-                                name="confirm"
-                                placeholder="Xác nhận mật khẩu mới"
-                                value={password.confirm}
-                                onChange={handlePasswordChange}
-                                className="w-full border px-3 py-2 rounded"
-                            />
+                            <div>
+                                <input
+                                    type="password"
+                                    name="confirm"
+                                    placeholder="Xác nhận mật khẩu mới"
+                                    value={password.confirm}
+                                    onChange={handlePasswordChange}
+                                    className="w-full border px-3 py-2 rounded"
+                                    required
+                                />
+                                {errorPass && <span className="text-red-500 text-sm">{errorPass}</span>}
+                            </div>
 
                             <div className="flex justify-end gap-2">
                                 <button

@@ -78,7 +78,7 @@ export default function DangKy() {
             return;
         }
 
-        if (errorCccd == "Số căn cước không hợp lệ") {
+        if (errorCccd === "Số căn cước không hợp lệ") {
             alert("Mã căn cước không hợp lệ!");
             return;
         }
