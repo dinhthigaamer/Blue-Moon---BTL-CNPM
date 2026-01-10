@@ -1,6 +1,7 @@
 import React from 'react';
 
-const MyTable = ({ columns, data, clickRowHandler = (e) => console.log(e.target.closest("tr").dataset.id) }) => {
+const MyTable = ({ columns, data, clickRowHandler }) => {
+    // console.log(clickRowHandler);
     return (
         <div className="overflow-x-auto rounded-lg border border-gray-200 shadow-sm">
             <table className="min-w-full divide-y divide-gray-200 bg-white text-sm">
@@ -24,9 +25,9 @@ const MyTable = ({ columns, data, clickRowHandler = (e) => console.log(e.target.
 
                 <tbody className="divide-y divide-gray-200">
                     {data.map((row, rowIndex) => (
-                        <tr data-id={row.id}
+                        <tr key={row.id}
                             className="hover:bg-gray-50 transition-colors"
-                            onClick={clickRowHandler}
+                            onClick={(e) => { clickRowHandler(row) }}
                         >
                             {/* Hiển thị STT dựa trên rowIndex */}
                             <td className="whitespace-nowrap px-4 py-2 text-gray-700 font-medium">

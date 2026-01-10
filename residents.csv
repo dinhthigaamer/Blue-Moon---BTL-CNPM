@@ -1,0 +1,6 @@
+id,household_id,full_name,phone,email,cccd,date_of_birth,ethnicity,religion,occupation,vehicle_count,car_count,bike_count,residence_status,created_at,updated_at
+1,1,Nguyễn Văn Hùng,0901000001,hung.nguyen@gmail.com,012345678901,1978-04-12,Kinh,Không,Kỹ sư,3,1,2,NONE,,
+2,2,Trần Thị Lan,0901000002,lan.tran@gmail.com,012345678902,1982-08-20,Kinh,Phật,Giáo viên,1,0,1,TEMPORARY_RESIDENCE,,
+3,3,Lê Văn Nam,0901000003,nam.le@gmail.com,012345678903,1990-01-15,Kinh,Không,Lập trình viên,2,2,0,NONE,,
+4,4,Phạm Thị Hoa,0901000004,hoa.pham@gmail.com,012345678904,1985-12-05,Kinh,Công giáo,Bác sĩ,2,1,1,TEMPORARY_ABSENCE,,
+5,5,Ngô Văn Tùng,0901000005,tung.ngo@gmail.com,012345678905,1975-06-30,Kinh,Không,Kỹ sư,1,1,0,NONE,,
