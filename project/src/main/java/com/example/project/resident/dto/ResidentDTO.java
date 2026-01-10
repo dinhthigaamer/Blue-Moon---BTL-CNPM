@@ -10,13 +10,15 @@ public class ResidentDTO {
     private Long id;
     private String fullName;
     private String phone;
+    private String email;
     private String cccd;
     private LocalDate dateOfBirth;
     private String religion;
     private String ethnicity;
     private String occupation;
     private ResidenceStatus residenceStatus;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
 
     private Long householdId;
     private Integer roomNumber;
@@ -43,6 +45,14 @@ public class ResidentDTO {
 
     public void setPhone(String phone) {
         this.phone = phone;
+    }
+
+    public String getEmail() {
+        return email;
+    }
+
+    public void setEmail(String email) {
+        this.email = email;
     }
 
     public String getCccd() {
@@ -93,12 +103,20 @@ public class ResidentDTO {
         this.residenceStatus = residenceStatus;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Long getHouseholdId() {

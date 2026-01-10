@@ -22,7 +22,7 @@ public class HouseholdController {
 
     /**
      * GET /api/households
-     * Query: id, roomNumber, ownerName, area, residentCount, vehicleCount, isVacant
+     * Query: id, roomNumber, ownerName, area, residentCount, carCount, bikeCount, isVacant
      */
     @GetMapping
     public ApiResponse<List<HouseholdDTO>> getAll(
@@ -32,7 +32,8 @@ public class HouseholdController {
             @Parameter(description = "Diện tích căn hộ (m2)")
             @RequestParam(required = false) Double area,
             @RequestParam(required = false) Integer residentCount,
-            @RequestParam(required = false) Integer vehicleCount,
+            @RequestParam(required = false) Integer carCount,
+            @RequestParam(required = false) Integer bikeCount,
             @RequestParam(required = false) Boolean isVacant
     ) {
         return ApiResponse.ok(
@@ -42,7 +43,8 @@ public class HouseholdController {
                         ownerName,
                         area,
                         residentCount,
-                        vehicleCount,
+                        carCount,
+                        bikeCount,
                         isVacant
                 )
         );

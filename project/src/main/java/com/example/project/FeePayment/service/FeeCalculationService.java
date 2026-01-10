@@ -4,7 +4,6 @@ import com.example.project.fee.entity.Fee;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 
-
 @Service
 public class FeeCalculationService {
 
@@ -12,21 +11,9 @@ public class FeeCalculationService {
 
         return switch (fee.getType()) {
 
-            case MANAGEMENT_FEE ->
+            case MANAGEMENT_FEE, SERVICE_FEE, GUI_XE_MAY, GUI_XE_O_TO, ELECTRICITY, WATER ->
                 fee.getPricePerUnit()
-                   .multiply(usageAmount);
-
-            case SERVICE_FEE ->
-                fee.getPricePerUnit()
-                   .multiply(usageAmount);
-
-            case PARKING ->
-                fee.getPricePerUnit()
-                   .multiply(usageAmount);
-
-            case ELECTRICITY, WATER ->
-                fee.getPricePerUnit()
-                   .multiply(usageAmount);
+                        .multiply(usageAmount);
 
             case OPTIONAL ->
                 voluntaryAmount;
@@ -34,4 +21,3 @@ public class FeeCalculationService {
         };
     }
 }
-

@@ -45,13 +45,15 @@ public class ResidentServiceImpl implements ResidentService {
             Integer roomNumber,
             String fullName,
             String phone,
+            String email,
             String cccd,
             LocalDate dateOfBirth,
             String religion,
             String ethnicity,
             String occupation,
             ResidenceStatus residenceStatus,
-            Integer vehicleCount
+            Integer carCount,
+            Integer bikeCount
     ) {
         Specification<Resident> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
@@ -71,6 +73,9 @@ public class ResidentServiceImpl implements ResidentService {
             if (phone != null && !phone.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("phone")), "%" + phone.toLowerCase() + "%"));
             }
+            if (email != null && !email.isBlank()) {
+                predicates.add(cb.like(cb.lower(root.get("email")), "%" + email.toLowerCase() + "%"));
+            }
             if (cccd != null && !cccd.isBlank()) {
                 predicates.add(cb.equal(root.get("cccd"), cccd));
             }
@@ -89,8 +94,11 @@ public class ResidentServiceImpl implements ResidentService {
             if (residenceStatus != null) {
                 predicates.add(cb.equal(root.get("residenceStatus"), residenceStatus));
             }
-            if (vehicleCount != null) {
-                predicates.add(cb.equal(root.get("vehicleCount"), vehicleCount));
+            if (carCount != null) {
+                predicates.add(cb.equal(root.get("carCount"), carCount));
+            }
+            if (bikeCount != null) {
+                predicates.add(cb.equal(root.get("bikeCount"), bikeCount));
             }
 
             return cb.and(predicates.toArray(new Predicate[0]));
@@ -157,12 +165,16 @@ public class ResidentServiceImpl implements ResidentService {
         List<Resident> residents = residentRepository.findByHouseholdId(householdId);
 
         int residentCount = residents.size();
-        int vehicleCount = residents.stream()
-                .map(r -> r.getVehicleCount() == null ? 0 : r.getVehicleCount())
+        int carCount = residents.stream()
+                .map(r -> r.getCarCount() == null ? 0 : r.getCarCount())
+                .reduce(0, Integer::sum);
+        int bikeCount = residents.stream()
+                .map(r -> r.getBikeCount() == null ? 0 : r.getBikeCount())
                 .reduce(0, Integer::sum);
 
         h.setResidentCount(residentCount);
-        h.setVehicleCount(vehicleCount);
+        h.setCarCount(carCount);
+        h.setBikeCount(bikeCount);
 
         householdRepository.save(h);
     }

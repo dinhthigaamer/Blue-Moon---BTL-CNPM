@@ -9,10 +9,12 @@ public class HouseholdDTO {
     private Long id;
     private Integer roomNumber;
     private String ownerName;
+    private String ownerCccd;
     @Schema(description = "Diện tích căn hộ (m2)")
     private Double area;
     private Integer residentCount;
-    private Integer vehicleCount;
+    private Integer carCount;
+    private Integer bikeCount;
     private Boolean isVacant;  
     private List<ResidentDTO> residents;
 
@@ -40,6 +42,14 @@ public class HouseholdDTO {
         this.ownerName = ownerName;
     }
 
+    public String getOwnerCccd() {
+        return ownerCccd;
+    }
+
+    public void setOwnerCccd(String ownerCccd) {
+        this.ownerCccd = ownerCccd;
+    }
+
     public Double getArea() {
         return area;
     }
@@ -56,12 +66,20 @@ public class HouseholdDTO {
         this.residentCount = residentCount;
     }
 
-    public Integer getVehicleCount() {
-        return vehicleCount;
+    public Integer getCarCount() {
+        return carCount;
     }
 
-    public void setVehicleCount(Integer vehicleCount) {
-        this.vehicleCount = vehicleCount;
+    public void setCarCount(Integer carCount) {
+        this.carCount = carCount;
+    }
+
+    public Integer getBikeCount() {
+        return bikeCount;
+    }
+
+    public void setBikeCount(Integer bikeCount) {
+        this.bikeCount = bikeCount;
     }
 
     public Boolean getIsVacant() {

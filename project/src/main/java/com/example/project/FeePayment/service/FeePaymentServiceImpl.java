@@ -11,8 +11,10 @@ import com.example.project.fee.entity.Fee;
 import com.example.project.fee.repository.FeeRepository;
 import com.example.project.household.entity.Household;
 import com.example.project.household.repository.HouseholdRepository;
+import com.example.project.fee.entity.FeeType;
 import com.example.project.common.exception.ApiException;
 import com.example.project.common.exception.ErrorCode;
+import com.example.project.integration.mail.ReceiptService;
 import org.springframework.stereotype.Service;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -29,30 +31,56 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     private final FeePaymentRepository feePaymentRepository;
     private final FeeCalculationService calculationService;
     private final FeePaymentMapper feePaymentMapper;
+    private final ReceiptService receiptService;
 
-    
     public FeePaymentServiceImpl(FeeRepository feeRepository, HouseholdRepository householdRepository,
             FeePaymentRepository feePaymentRepository, FeeCalculationService calculationService,
-            FeePaymentMapper feePaymentMapper) {
+            FeePaymentMapper feePaymentMapper, ReceiptService receiptService) {
         this.feeRepository = feeRepository;
         this.householdRepository = householdRepository;
         this.feePaymentRepository = feePaymentRepository;
         this.calculationService = calculationService;
         this.feePaymentMapper = feePaymentMapper;
+        this.receiptService = receiptService;
     }
 
-    //Trong FeePayment entity có 2 trường được đánh dấu not null là household và fee
+    // Trong FeePayment entity có 2 trường được đánh dấu not null là household và
+    // fee
     @Override
     public FeePaymentDTO create(FeePaymentCreateDTO dto) {
         FeePayment e = new FeePayment();
         Household household = householdRepository.findById(dto.getHouseholdId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
+                        "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
         Fee fee = feeRepository.findById(dto.getFeeId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
+                        "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
+
+        // Kiểm tra xem feePayment cho loại phí này đã có trong tháng và năm này chưa
+        if (feePaymentRepository.existsByHouseholdAndFeeAndBillingYearAndBillingMonth(household, fee,
+                dto.getBillingYear(), dto.getBillingMonth())) {
+            throw new ApiException(ErrorCode.BAD_REQUEST,
+                    "Khoản thu phí cho hộ dân này với loại phí, năm và tháng đã tồn tại.");
+        }
+
         e.setHousehold(household);
         e.setFee(fee);
         e.setName(fee.getName());
-        e.setUsageAmount(dto.getUsageAmount());
+
+        // tính usageAmount dựa trên FeeType
+        BigDecimal usageAmount;
+        FeeType feeType = fee.getType();
+        if (feeType == FeeType.MANAGEMENT_FEE || feeType == FeeType.SERVICE_FEE) {
+            usageAmount = BigDecimal.valueOf(household.getArea());
+        } else if (feeType == FeeType.GUI_XE_MAY) {
+            usageAmount = BigDecimal.valueOf(household.getBikeCount());
+        } else if (feeType == FeeType.GUI_XE_O_TO) {
+            usageAmount = BigDecimal.valueOf(household.getCarCount());
+        } else {
+            usageAmount = dto.getUsageAmount(); // loại khác thì dung usageAmount từ dto
+        }
+        e.setUsageAmount(usageAmount);
+
         e.setBillingYear(dto.getBillingYear());
         e.setBillingMonth(dto.getBillingMonth());
         e.setStartDate(dto.getStartDate());
@@ -64,10 +92,11 @@ public class FeePaymentServiceImpl implements FeePaymentService {
             e.setPaid(true);
             e.setPaidDate(LocalDate.now());
         }
-        BigDecimal usageAmount = dto.getUsageAmount();
         BigDecimal voluntaryAmount = dto.getVoluntaryAmount();
         if (e.getMandatory() == true && voluntaryAmount != null)
             throw new ApiException(ErrorCode.BAD_REQUEST, "Khoản thu phí đóng góp tự nguyện không bắt buộc!");
+        if (e.getMandatory() == false && (voluntaryAmount == null || voluntaryAmount.compareTo(BigDecimal.ZERO) <= 0))
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Khoản thu phí đóng góp tự nguyện phải lớn hơn 0!");
         BigDecimal amount = calculationService.calculateFee(fee, usageAmount, voluntaryAmount);
         e.setAmount(amount);
         return feePaymentMapper.toDTO(feePaymentRepository.save(e));
@@ -76,27 +105,44 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     @Override
     public FeePaymentDTO update(Long id, FeePaymentUpdateDTO dto) {
         FeePayment e = feePaymentRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
+                .orElseThrow(
+                        () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
         Household household = null;
         Fee fee = null;
-        if(dto.getHouseholdId() != null) 
+        if (dto.getHouseholdId() != null)
             household = householdRepository.findById(dto.getHouseholdId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
-        else throw new ApiException(ErrorCode.NULL_ERROR, "Trường bắt được không được để trống.");
+                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
+                            "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
         if (dto.getFeeId() != null)
             fee = feeRepository.findById(dto.getFeeId())
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
-        else throw new ApiException(ErrorCode.NULL_ERROR, "Trường bắt buộc không được để trống.");
-        if(household != null) e.setHousehold(household);
-        if(fee != null){
+                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
+                            "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
+        if (household != null)
+            e.setHousehold(household);
+        if (fee != null) {
             e.setFee(fee);
             e.setName(fee.getName());
         }
-        if (dto.getUsageAmount() != null) {
-            e.setUsageAmount(dto.getUsageAmount());
+        // tính usageAmount dựa trên FeeType
+        BigDecimal usageAmount = null;
+        FeeType feeType = fee.getType();
+        if (feeType == FeeType.MANAGEMENT_FEE || feeType == FeeType.SERVICE_FEE) {
+            usageAmount = BigDecimal.valueOf(household.getArea());
+        } else if (feeType == FeeType.GUI_XE_MAY) {
+            usageAmount = BigDecimal.valueOf(household.getBikeCount());
+        } else if (feeType == FeeType.GUI_XE_O_TO) {
+            usageAmount = BigDecimal.valueOf(household.getCarCount());
+        } else if (dto.getUsageAmount() != null) {
+            usageAmount = dto.getUsageAmount(); // loại khác thì dung usageAmount từ dto
+        } else {
+            usageAmount = e.getUsageAmount(); // nếu dto ko có usageAmount thì giữ nguyên
         }
+        e.setUsageAmount(usageAmount);
         if (dto.getBillingMonth() != null) {
             e.setBillingMonth(dto.getBillingMonth());
+        }
+        if (dto.getBillingYear() != null) {
+            e.setBillingYear(dto.getBillingYear());
         }
         if (dto.getStartDate() != null) {
             e.setStartDate(dto.getStartDate());
@@ -110,14 +156,17 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         if (dto.getPaid() != null) {
             e.setPaid(dto.getPaid());
             if (dto.getPaid()) {
-                    if (dto.getPaidDate() == null) 
-                        e.setPaidDate(LocalDate.now());
-                    else e.setPaidDate(dto.getPaidDate());
+                if (dto.getPaidDate() == null)
+                    e.setPaidDate(LocalDate.now());
+                else
+                    e.setPaidDate(dto.getPaidDate());
             } else {
                 e.setPaidDate(null);
             }
         }
-        BigDecimal usageAmount = (dto.getUsageAmount() != null ? dto.getUsageAmount() : e.getUsageAmount());
+        if (e.getPaid() == true) {
+            checkAllFeePaymentPaid(e, e.getHousehold());
+        }
         BigDecimal volutaryAmount = dto.getVoluntaryAmount();
         BigDecimal amount = calculationService.calculateFee(fee, usageAmount, volutaryAmount);
         e.setAmount(amount);
@@ -127,16 +176,18 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     @Override
     public FeePaymentDTO findById(Long id) {
         FeePayment feePayment = feePaymentRepository.findById(id)
-                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
+                .orElseThrow(
+                        () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
         return feePaymentMapper.toDTO(feePayment);
     }
 
     @Override
-    public List<FeePaymentDTO> findAll(){
+    public List<FeePaymentDTO> findAll() {
         return feePaymentRepository.findAll().stream()
                 .map(feePaymentMapper::toDTO)
                 .toList();
     }
+
     @Override
     public void delete(Long id) {
         if (!feePaymentRepository.existsById(id)) {
@@ -203,5 +254,19 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                 .map(feePaymentMapper::toDTO)
                 .toList();
     }
-}
 
+    public void checkAllFeePaymentPaid(FeePayment payment, Household household) {
+        // Kiểm tra tất cả khoản phí cùng tháng của hộ
+        Integer month = payment.getBillingMonth();
+        Integer year = payment.getBillingYear();
+        boolean allPaid = feePaymentRepository.findByHouseholdAndBillingMonthAndBillingYear(household, month, year)
+                .stream()
+                .allMatch(fp -> fp.getPaid().equals(true));
+
+        if (allPaid) {
+            List<FeePayment> payments = feePaymentRepository.findByHouseholdAndBillingMonthAndBillingYear(household,
+                    month, year);
+            receiptService.sendReceipt(household, month, year, payments);
+        }
+    }
+}
