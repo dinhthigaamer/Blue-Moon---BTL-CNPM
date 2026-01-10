@@ -3,6 +3,7 @@ package com.example.project.resident.service;
 import com.example.project.resident.dto.ResidentCreateDTO;
 import com.example.project.resident.dto.ResidentDTO;
 import com.example.project.resident.dto.ResidentUpdateDTO;
+import com.example.project.resident.entity.Gender;
 import com.example.project.resident.entity.ResidenceStatus;
 
 import java.time.LocalDate;
@@ -12,7 +13,7 @@ public interface ResidentService {
     List<ResidentDTO> findAll(
             Long id,
             Long householdId,
-            Integer roomNumber,
+            String roomNumber,
             String fullName,
             String phone,
             String email,
@@ -21,6 +22,7 @@ public interface ResidentService {
             String religion,
             String ethnicity,
             String occupation,
+            Gender gender,
             ResidenceStatus residenceStatus,
             Integer carCount,
             Integer bikeCount

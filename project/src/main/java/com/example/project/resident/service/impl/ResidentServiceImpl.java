@@ -8,6 +8,7 @@ import com.example.project.resident.dto.ResidentCreateDTO;
 import com.example.project.resident.dto.ResidentDTO;
 import com.example.project.resident.dto.ResidentUpdateDTO;
 import com.example.project.resident.entity.Resident;
+import com.example.project.resident.entity.Gender;
 import com.example.project.resident.entity.ResidenceStatus;
 import com.example.project.resident.mapper.ResidentMapper;
 import com.example.project.resident.service.ResidentService;
@@ -42,7 +43,7 @@ public class ResidentServiceImpl implements ResidentService {
     public List<ResidentDTO> findAll(
             Long id,
             Long householdId,
-            Integer roomNumber,
+            String roomNumber,
             String fullName,
             String phone,
             String email,
@@ -51,6 +52,7 @@ public class ResidentServiceImpl implements ResidentService {
             String religion,
             String ethnicity,
             String occupation,
+            Gender gender,
             ResidenceStatus residenceStatus,
             Integer carCount,
             Integer bikeCount
@@ -90,6 +92,9 @@ public class ResidentServiceImpl implements ResidentService {
             }
             if (occupation != null && !occupation.isBlank()) {
                 predicates.add(cb.like(cb.lower(root.get("occupation")), "%" + occupation.toLowerCase() + "%"));
+            }
+            if (gender != null) {
+                predicates.add(cb.equal(root.get("gender"), gender));
             }
             if (residenceStatus != null) {
                 predicates.add(cb.equal(root.get("residenceStatus"), residenceStatus));

@@ -29,6 +29,9 @@ public class Resident extends BaseEntity {
     private String occupation;
 
     @Enumerated(EnumType.STRING)
+    private Gender gender;
+
+    @Enumerated(EnumType.STRING)
     private ResidenceStatus residenceStatus;
 
     private Integer carCount = 0;
@@ -116,6 +119,14 @@ public class Resident extends BaseEntity {
 
     public void setOccupation(String occupation) {
         this.occupation = occupation;
+    }
+
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
     }
 
     public ResidenceStatus getResidenceStatus() {

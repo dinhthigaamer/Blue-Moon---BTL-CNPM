@@ -1,5 +1,6 @@
 package com.example.project.resident.dto;
 
+import com.example.project.resident.entity.Gender;
 import com.example.project.resident.entity.ResidenceStatus;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotBlank;
@@ -22,11 +23,12 @@ public class ResidentCreateDTO {
     private String religion;
     private String ethnicity;
     private String occupation;
+    private Gender gender;
     private ResidenceStatus residenceStatus;
     private Integer carCount;
     private Integer bikeCount;
-    @NotNull(message = "HouseholdId là bắt buộc")
-    private Long householdId; // bắt buộc
+    @NotNull(message = "RoomNumber là bắt buộc")
+    private String roomNumber; // bắt buộc
 
     public String getFullName() {
         return fullName;
@@ -92,6 +94,14 @@ public class ResidentCreateDTO {
         this.occupation = occupation;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     public ResidenceStatus getResidenceStatus() {
         return residenceStatus;
     }
@@ -116,12 +126,12 @@ public class ResidentCreateDTO {
         this.bikeCount = bikeCount;
     }
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
 }

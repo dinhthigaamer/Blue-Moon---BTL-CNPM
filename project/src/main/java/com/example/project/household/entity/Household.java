@@ -15,7 +15,7 @@ import java.util.*;
 public class Household extends BaseEntity {
 
     @Column(unique = true, nullable = false)
-    private Integer roomNumber;
+    private String roomNumber;
     private String ownerName;
     @Column(length = 12)
     private String ownerCccd;
@@ -31,11 +31,11 @@ public class Household extends BaseEntity {
     @OneToMany(mappedBy = "household", fetch = FetchType.LAZY)
     private List<Resident> residents = new ArrayList<>();
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 

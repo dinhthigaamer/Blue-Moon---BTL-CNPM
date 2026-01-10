@@ -7,7 +7,7 @@ import java.util.List;
 public class HouseholdDTO {
 
     private Long id;
-    private Integer roomNumber;
+    private String roomNumber;
     private String ownerName;
     private String ownerCccd;
     @Schema(description = "Diện tích căn hộ (m2)")
@@ -26,11 +26,11 @@ public class HouseholdDTO {
         this.id = id;
     }
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 

@@ -1,5 +1,6 @@
 package com.example.project.resident.dto;
 
+import com.example.project.resident.entity.Gender;
 import com.example.project.resident.entity.ResidenceStatus;
 
 
@@ -16,12 +17,13 @@ public class ResidentDTO {
     private String religion;
     private String ethnicity;
     private String occupation;
+    private Gender gender;
     private ResidenceStatus residenceStatus;
     private Integer carCount;
     private Integer bikeCount;
 
     private Long householdId;
-    private Integer roomNumber;
+    private String roomNumber;
 
     public Long getId() {
         return id;
@@ -95,6 +97,14 @@ public class ResidentDTO {
         this.occupation = occupation;
     }
 
+    public Gender getGender() {
+        return gender;
+    }
+
+    public void setGender(Gender gender) {
+        this.gender = gender;
+    }
+
     public ResidenceStatus getResidenceStatus() {
         return residenceStatus;
     }
@@ -127,11 +137,11 @@ public class ResidentDTO {
         this.householdId = householdId;
     }
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
