@@ -5,6 +5,7 @@ import com.example.project.resident.dto.ResidentCreateDTO;
 import com.example.project.resident.dto.ResidentDTO;
 import com.example.project.resident.dto.ResidentUpdateDTO;
 import com.example.project.resident.service.ResidentService;
+import com.example.project.resident.entity.Gender;
 import com.example.project.resident.entity.ResidenceStatus;
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
@@ -35,10 +36,12 @@ public class ResidentController {
             @RequestParam(required = false) String religion,
             @RequestParam(required = false) String ethnicity,
             @RequestParam(required = false) String occupation,
+            @RequestParam(required = false) String gender,
             @RequestParam(required = false) ResidenceStatus residenceStatus,
             @RequestParam(required = false) Integer carCount,
             @RequestParam(required = false) Integer bikeCount
     ) {
+        Gender parsedGender = gender != null ? Gender.fromValue(gender) : null;
         return ApiResponse.ok(residentService.findAll(
                 id,
                 householdId,
@@ -51,6 +54,7 @@ public class ResidentController {
                 religion,
                 ethnicity,
                 occupation,
+                parsedGender,
                 residenceStatus,
                 carCount,
                 bikeCount

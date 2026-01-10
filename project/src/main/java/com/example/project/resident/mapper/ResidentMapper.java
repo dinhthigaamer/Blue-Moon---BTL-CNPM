@@ -30,6 +30,7 @@ public class ResidentMapper {
         dto.setReligion(entity.getReligion());
         dto.setEthnicity(entity.getEthnicity());
         dto.setOccupation(entity.getOccupation());
+        dto.setGender(entity.getGender());
         dto.setResidenceStatus(entity.getResidenceStatus());
         dto.setCarCount(entity.getCarCount());
         dto.setBikeCount(entity.getBikeCount());
@@ -51,6 +52,7 @@ public class ResidentMapper {
         r.setReligion(dto.getReligion());
         r.setEthnicity(dto.getEthnicity());
         r.setOccupation(dto.getOccupation());
+        r.setGender(dto.getGender());
         r.setResidenceStatus(dto.getResidenceStatus());
         r.setCarCount(dto.getCarCount() == null ? 0 : dto.getCarCount());
         r.setBikeCount(dto.getBikeCount() == null ? 0 : dto.getBikeCount());
@@ -74,6 +76,7 @@ public class ResidentMapper {
         if (dto.getReligion() != null) entity.setReligion(dto.getReligion());
         if (dto.getEthnicity() != null) entity.setEthnicity(dto.getEthnicity());
         if (dto.getOccupation() != null) entity.setOccupation(dto.getOccupation());
+        if (dto.getGender() != null) entity.setGender(dto.getGender());
         if (dto.getResidenceStatus() != null) entity.setResidenceStatus(dto.getResidenceStatus());
         if (dto.getCarCount() != null) entity.setCarCount(dto.getCarCount());
         if (dto.getBikeCount() != null) entity.setBikeCount(dto.getBikeCount());
