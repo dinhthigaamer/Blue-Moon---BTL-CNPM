@@ -7,6 +7,7 @@ export default function Taskbar({ collapsed, toggle, namePage, setNamePage }) {
     { label: "Cư dân", path: "/cu_dan" },
     { label: "Khoản thu", path: "/khoan_thu" },
     { label: "Tra cứu - Thống kê", path: "/tra_cuu" },
+    { label: "Quản lý tài khoản", path: "/quan_ly_tai_khoan" }
   ];
 
   return (

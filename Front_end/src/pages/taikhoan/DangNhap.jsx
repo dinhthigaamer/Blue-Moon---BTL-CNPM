@@ -19,8 +19,6 @@ export default function DangNhap({ account, setAccount }) {
         try {
             const response = await authAPI.login(form);
 
-            console.log(response);
-
             if (response.data.message === "Login success") {
                 localStorage.setItem("accessToken", response.data.data.token);
 
