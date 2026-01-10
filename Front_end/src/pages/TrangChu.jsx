@@ -51,18 +51,7 @@ export default function TrangChu() {
         <p>{latestNotice}</p>
       </div>
 
-      {/* Số dân & Số phòng */}
-      <div className="grid grid-cols-2 gap-6 mb-8">
-        <div className="bg-white shadow rounded p-6 text-center">
-          <h2 className="text-xl font-semibold mb-2"> Số dân</h2>
-          <p className="text-3xl text-green-600">{residentsCount}</p>
-        </div>
-        <div className="bg-white shadow rounded p-6 text-center">
-          <h2 className="text-xl font-semibold mb-2"> Số phòng</h2>
-          <p className="text-3xl text-blue-600">{roomCount}</p>
-        </div>
-      </div>
-
+      
       {/* Tin tức */}
       <h2 className="text-2xl font-bold mb-4"> Tin tức mới nhất</h2>
       <div className="bg-gray-100 p-4 rounded shadow text-center">

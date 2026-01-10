@@ -1,6 +1,22 @@
 import React, { useState } from "react";
-import { getMonthlyRevenue, getFeeSummary, getVoluntarySummary, getResidentsCount } from "../api/feeService";
+import {
+  getMonthlyRevenue,
+  getFeeSummary,
+  getVoluntarySummary,
+  getResidentsCount
+} from "../api/feeService";
 
+// Button tái sử dụng
+function Button({ children, ...props }) {
+  return (
+    <button
+      {...props}
+      className="bg-teal-500 hover:bg-teal-600 text-white px-4 py-2 rounded transition-colors"
+    >
+      {children}
+    </button>
+  );
+}
 
 export default function TraCuu() {
   const [year, setYear] = useState("");
@@ -30,7 +46,7 @@ export default function TraCuu() {
 
   return (
     <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4"> Tra cứu & Thống kê</h1>
+      <h1 className="text-2xl font-bold mb-4">Thống kê</h1>
 
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div>
@@ -63,30 +79,10 @@ export default function TraCuu() {
       </div>
 
       <div className="space-x-2 mb-6">
-        <button
-          onClick={handleMonthlyRevenue}
-          className="bg-blue-500 text-white px-4 py-2 rounded"
-        >
-          Thống kê doanh thu tháng
-        </button>
-        <button
-          onClick={handleFeeSummary}
-          className="bg-green-500 text-white px-4 py-2 rounded"
-        >
-          Thống kê theo loại phí
-        </button>
-        <button
-          onClick={handleVoluntarySummary}
-          className="bg-purple-500 text-white px-4 py-2 rounded"
-        >
-          Thống kê khoản tự nguyện
-        </button>
-        <button
-          onClick={handleResidentsCount}
-          className="bg-orange-500 text-white px-4 py-2 rounded"
-        >
-          Tổng số cư dân
-        </button>
+        <Button onClick={handleMonthlyRevenue}>Thống kê doanh thu tháng</Button>
+        <Button onClick={handleFeeSummary}>Thống kê theo loại phí</Button>
+        <Button onClick={handleVoluntarySummary}>Thống kê khoản tự nguyện</Button>
+        <Button onClick={handleResidentsCount}>Tổng số cư dân</Button>
       </div>
 
       {/* Hiển thị kết quả */}
