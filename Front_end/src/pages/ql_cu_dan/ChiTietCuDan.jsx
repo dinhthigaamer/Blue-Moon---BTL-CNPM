@@ -10,12 +10,13 @@ export default function ChiTietCuDan() {
 
     const infor = [
         { label: "Phòng", key: "roomNumber" },
-        { label: "Họ và tên", key: "fullName", "disabled": true },
+        { label: "Họ và tên", key: "fullName" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
-        { label: "Số căn cước", key: "cccd", "disabled": true },
-        { label: "Ngày sinh", key: "dateOfBirth", type: "date", "disabled": true },
+        { label: "Số căn cước", key: "cccd" },
+        { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
-        { label: "Số phương tiện", key: "vehicleCount", type: "number" },
+        { label: "Số xe máy", key: "bikeCount", type: "number" },
+        { label: "Số xe ô tô", key: "carCount", type: "number" },
         { label: "Dân tộc", key: "ethnicity" },
         { label: "Tôn giáo", key: "religion" },
         { label: "Nghề nghiệp", key: "occupation" }
@@ -70,7 +71,7 @@ export default function ChiTietCuDan() {
             <div className="max-w-3xl">
                 {/* QUAY LẠI */}
                 <button
-                    onClick={() => navigate(-1)}
+                    onClick={() => navigate("/cu_dan")}
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
@@ -120,7 +121,7 @@ export default function ChiTietCuDan() {
 function Info({ label, value }) {
     // console.log(label, value)
     return (
-        <div>
+        <div key={label}>
             <p className="text-sm text-gray-500">{label}</p>
             <p className="font-medium">{value}</p>
         </div>

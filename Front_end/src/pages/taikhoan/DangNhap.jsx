@@ -18,7 +18,7 @@ export default function DangNhap({ account, setAccount }) {
 
         try {
             const response = await authAPI.login(form);
-
+            console.log(response);
             if (response.data.message === "Login success") {
                 localStorage.setItem("accessToken", response.data.data.token);
 
@@ -36,17 +36,19 @@ export default function DangNhap({ account, setAccount }) {
                 setErrorPass("");
                 navigate("/");
             }
-            else if (response.data.errorCode === "AUTH_USER_NOT_FOUND") {
+        } catch (error) {
+            console.log(error);
+            if (error.data.errorCode === "AUTH_USER_NOT_FOUND") {
                 setErrorUserName("Tên đăng nhập không tồn tại");
                 return;
             }
-            else {
+            else if (error.data.errorCode === "GLOBAL_ERROR") {
                 setErrorPass("Mật khẩu sai !");
                 return;
+            } else {
+                console.log(error);
+                alert("Đăng nhập thất bại, vui lòng thử lại !");
             }
-        } catch (error) {
-            console.log(error.response?.data);
-            alert("Đăng nhập thất bại, vui lòng thử lại !");
         }
     };
 

@@ -8,6 +8,7 @@ import CanHo from "./pages/ql_can_ho/CanHo";
 import CuDan from "./pages/ql_cu_dan/CuDan";
 import ChiTietCuDan from "./pages/ql_cu_dan/ChiTietCuDan";
 import SuaCuDan from "./pages/ql_cu_dan/SuaCuDan";
+import ThemCuDan from "./pages/ql_cu_dan/ThemCuDan";
 
 import ChiTietCanHo from "./pages/ql_can_ho/ChiTietCanHo";
 import KhoanThu from "./pages/KhoanThu";
@@ -62,6 +63,7 @@ export default function App() {
         <Route path="/cu_dan" element={<CuDan />} />
         <Route path="/cu_dan/:id" element={<ChiTietCuDan />} />
         <Route path="/cu_dan/:id/edit" element={<SuaCuDan />} />
+        <Route path="/cu_dan/add" element={<ThemCuDan />} />
 
         <Route path="/khoan_thu" element={<KhoanThu />} />
         <Route path="/khoan_thu/tao" element={<TaoKhoanThu />} />

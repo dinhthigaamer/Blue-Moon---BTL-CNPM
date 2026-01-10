@@ -34,7 +34,8 @@ export default function CuDan() {
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
-        { label: "Số phương tiện", key: "vehicleCount", type: "number" },
+        { label: "Số xe máy", key: "bikeCount", type: "number" },
+        { label: "Số xe ô tô", key: "carCount", type: "number" },
         { label: "Dân tộc", key: "ethnicity" },
         { label: "Tôn giáo", key: "religion" },
         { label: "Nghề nghiệp", key: "occupation" }
@@ -91,7 +92,7 @@ export default function CuDan() {
 
             <button
                 className="w-1/4 bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded transition-colors"
-                onClick={() => { setIsOpen(true); }}
+                onClick={() => { navigate("add") }}
             >
                 Thêm cư dân
             </button>

@@ -9,6 +9,7 @@ authAPI.register = async function (user) {
 };
 
 authAPI.login = async function (user) {
+    console.log(user);
     return axiosClient.post("/auth/login", user);
 };
 

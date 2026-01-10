@@ -3,7 +3,7 @@ import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
 
-export default function SuaCuDan() {
+export default function ThemCuDan() {
     const { id } = useParams();
     const navigate = useNavigate();
 
@@ -47,7 +47,7 @@ export default function SuaCuDan() {
         fetchUser();
     }, []);
 
-    handleConfirm = async () => {
+    const handleConfirm = async () => {
 
     }
 
@@ -71,7 +71,7 @@ export default function SuaCuDan() {
                     <div className="flex justify-end gap-4 mt-4">
                         <button
                             type="button"
-                            onClick={() => navigate(-1)}
+                            onClick={() => navigate(`/cu_dan/${id}`)}
                             className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400"
                         >
                             Hủy
@@ -107,6 +107,7 @@ function Input({ label, ...props }) {
         <div>
             <p className="text-sm text-gray-500 mb-1">{label}</p>
             <input
+                required
                 {...props}
                 className="w-full border px-3 py-2 rounded"
             />
