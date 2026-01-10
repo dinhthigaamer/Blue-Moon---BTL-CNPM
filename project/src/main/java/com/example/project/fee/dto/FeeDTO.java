@@ -10,6 +10,7 @@ public class FeeDTO {
     private BigDecimal defaultAmount;
     private BigDecimal pricePerUnit;
     private String note;
+    
 
     public String getName() {
         return name;

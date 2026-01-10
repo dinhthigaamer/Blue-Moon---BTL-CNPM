@@ -15,6 +15,8 @@ import KhoanThu from "./pages/KhoanThu";
 import TaoKhoanThu from "./pages/TaoKhoanThu";
 import TraCuu from "./pages/TraCuu";
 import QLTaiKhoan from "./pages/taikhoan/QLTaiKhoan";
+import QuanLyLoaiPhi from "./pages/QuanLyLoaiPhi";   // 👈 thêm import
+
 // Tài khoản
 import TaiKhoan from "./pages/taikhoan/TaiKhoan";
 import DangNhap from "./pages/taikhoan/DangNhap";
@@ -27,11 +29,10 @@ export default function App() {
     role: "Admin",
   });
 
-  const [namePage, setNamePage] = useState("Trang chủ")
+  const [namePage, setNamePage] = useState("Trang chủ");
 
   useEffect(() => {
     const savedUser = localStorage.getItem("user");
-
     if (savedUser) {
       setAccount(JSON.parse(savedUser));
     }
@@ -48,9 +49,16 @@ export default function App() {
       <Route path="/quen_mat_khau" element={<QuenMatKhau />} />
 
       {/* Main pages – CÓ layout */}
-      <Route element={<MainLayout account={account} setAccount={setAccount}
-        namePage={namePage} setNamePage={setNamePage}
-      />}>
+      <Route
+        element={
+          <MainLayout
+            account={account}
+            setAccount={setAccount}
+            namePage={namePage}
+            setNamePage={setNamePage}
+          />
+        }
+      >
         <Route path="/" element={<TrangChu />} />
         <Route path="/tai_khoan" element={<TaiKhoan />} />
         <Route path="/quan_ly_tai_khoan" element={<QLTaiKhoan />} />
@@ -68,7 +76,8 @@ export default function App() {
         <Route path="/khoan_thu" element={<KhoanThu />} />
         <Route path="/khoan_thu/tao" element={<TaoKhoanThu />} />
         <Route path="/tra_cuu" element={<TraCuu />} />
+        <Route path="/loai_phi" element={<QuanLyLoaiPhi />} /> {/* 👈 thêm route */}
       </Route>
-    </Routes >
+    </Routes>
   );
 }
