@@ -11,7 +11,8 @@ import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryOutDT
 import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;  
+import org.springframework.web.bind.annotation.RestController;
+import com.example.project.statistics.dto.ResidentAndHouseholdCountDTO;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
@@ -35,7 +36,7 @@ public class StatisticController {
     }
 
     @GetMapping("/residents")
-    public ApiResponse<Long> countResidents() {
+    public ApiResponse<ResidentAndHouseholdCountDTO> countResidents() {
         return ApiResponse.ok(statisticService.countResidents());
     }
 
@@ -44,16 +45,14 @@ public class StatisticController {
             @Valid @RequestBody FeeSummaryInDTO dto) {
 
         return ApiResponse.ok(
-                statisticService.statisticFeeSummary(dto)
-        );
+                statisticService.statisticFeeSummary(dto));
     }
+
     @GetMapping("/voluntary-summary")
     public ApiResponse<VoluntarySummaryOutDTO> getVoluntarySummary(
             @Valid @RequestBody VoluntarySummaryInDTO dto) {
 
         return ApiResponse.ok(
-                statisticService.statisticVoluntary(dto)
-        );
+                statisticService.statisticVoluntary(dto));
     }
 }
-

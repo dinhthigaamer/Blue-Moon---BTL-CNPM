@@ -6,7 +6,6 @@ import com.example.project.FeePayment.dto.FeePaymentDTO;
 import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
 import com.example.project.FeePayment.service.FeePaymentServiceImpl;
 import com.example.project.common.response.ApiResponse;
-import jakarta.validation.Valid;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -16,41 +15,44 @@ import java.util.List;
 public class FeePaymentController {
 
     private final FeePaymentServiceImpl feePaymentService;
-    
 
     public FeePaymentController(FeePaymentServiceImpl feePaymentService) {
         this.feePaymentService = feePaymentService;
     }
+
     @PostMapping
     public ApiResponse<FeePaymentDTO> createFeePayment(
             @RequestBody FeePaymentCreateDTO dto) {
         FeePaymentDTO result = feePaymentService.create(dto);
         return ApiResponse.ok(result, "Tạo mới phiếu thu phí thành công");
     }
+
     @PutMapping("/{id}")
     public ApiResponse<FeePaymentDTO> updateFeePayment(
             @PathVariable Long id,
             @RequestBody FeePaymentUpdateDTO dto) {
         return ApiResponse.ok(
-                feePaymentService.update(id, dto), "Cập nhật phiếu thu phí thành công"
-        );
+                feePaymentService.update(id, dto), "Cập nhật phiếu thu phí thành công");
     }
+
     @GetMapping("/")
-    public ApiResponse<List<FeePaymentDTO>> getAll(){
+    public ApiResponse<List<FeePaymentDTO>> getAll() {
         return ApiResponse.ok(
-                feePaymentService.findAll()
-        );
+                feePaymentService.findAll());
     }
+
     @GetMapping("/search")
     public ApiResponse<List<FeePaymentDTO>> searchFeePayments(FeePaymentSearchRequest req) {
         List<FeePaymentDTO> results = feePaymentService.search(req);
         return ApiResponse.ok(results);
     }
+
     @GetMapping("/search/{id}")
     public ApiResponse<FeePaymentDTO> getById(@PathVariable Long id) {
         return ApiResponse.ok(
                 feePaymentService.findById(id));
     }
+
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteFeePayment(@PathVariable Long id) {
         feePaymentService.delete(id);

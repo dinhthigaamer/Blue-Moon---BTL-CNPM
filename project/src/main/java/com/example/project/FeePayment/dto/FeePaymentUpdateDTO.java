@@ -3,10 +3,9 @@ package com.example.project.FeePayment.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
-
 //dto này để câp nhật bản ghi
 public class FeePaymentUpdateDTO {
-    private Long householdId;
+    private String roomNumber;
     private Long feeId;
     private BigDecimal usageAmount;
     private BigDecimal voluntaryAmount;
@@ -18,12 +17,12 @@ public class FeePaymentUpdateDTO {
     private Boolean paid;
     private LocalDate paidDate;
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public Long getFeeId() {
@@ -105,6 +104,5 @@ public class FeePaymentUpdateDTO {
     public void setPaidDate(LocalDate paidDate) {
         this.paidDate = paidDate;
     }
-
 
 }

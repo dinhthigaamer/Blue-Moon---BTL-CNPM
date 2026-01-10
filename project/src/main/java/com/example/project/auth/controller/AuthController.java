@@ -23,12 +23,12 @@ public class AuthController {
 
     @PostMapping("/register")
     public ApiResponse<UserDTO> register(@RequestBody RegisterRequestDTO request) {
-        return ApiResponse.ok(authService.register(request), "Register success");
+        return ApiResponse.ok(authService.register(request), "Đăng ký thành công");
     }
 
     @PostMapping("/login")
     public ApiResponse<AuthResponse> login(@RequestBody LoginRequestDTO request) {
-        return ApiResponse.ok(authService.login(request), "Login success");
+        return ApiResponse.ok(authService.login(request), "Đăng nhập thành công");
     }
 
     @GetMapping("/me")
@@ -38,13 +38,13 @@ public class AuthController {
 
     @PutMapping("/me")
     public ApiResponse<UserDTO> updateMe(@RequestBody UserUpdateDTO request) {
-        return ApiResponse.ok(authService.updateCurrentUser(request), "Update success");
+        return ApiResponse.ok(authService.updateCurrentUser(request), "Cập nhật thành công");
     }
 
     @PostMapping("/forgot-password/request-otp")
     public ApiResponse<Object> requestOtp(@RequestBody ForgotPasswordRequestOTPDTO req) {
         authService.requestForgotPasswordOtp(req.getEmail());
-        return ApiResponse.ok(null, "OTP sent to email");
+        return ApiResponse.ok(null, "OTP đã gửi đến email");
     }
 
     @PostMapping("/forgot-password/confirm")
@@ -54,7 +54,7 @@ public class AuthController {
                 req.getOtp(),
                 req.getNewPassword()
         );
-        return ApiResponse.ok(null, "Password reset success");
+        return ApiResponse.ok(null, "Đặt lại mật khẩu thành công");
     }
 
 }

@@ -11,7 +11,6 @@ import jakarta.mail.MessagingException;
 import jakarta.mail.internet.MimeMessage;
 
 import org.springframework.beans.factory.annotation.Value;
-import org.springframework.mail.MailException;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Service;
@@ -80,9 +79,9 @@ public class ReceiptService {
             helper.setText(sb.toString(), true); // true = HTML content
             mailSender.send(message);
         } catch (MessagingException e) {
-            throw new ApiException(ErrorCode.MAIL_FORMAT_ERROR, "Mail format error");
+            throw new ApiException(ErrorCode.MAIL_FORMAT_ERROR, "Lỗi định dạng email");
         } catch (Exception e) {
-            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Send mail failed");
+            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Gửi email thất bại");
         }
     }
 }

@@ -1,15 +1,13 @@
 package com.example.project.FeePayment.dto;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
 
-
 //dto này để tạo mới bản ghi
 
 public class FeePaymentCreateDTO {
-    private Long householdId;
+    private String roomNumber;
     private Long feeId;
     private BigDecimal usageAmount;
     private BigDecimal voluntaryAmount;
@@ -19,12 +17,12 @@ public class FeePaymentCreateDTO {
     private LocalDate dueDate;
     private Boolean mandatory;
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public Long getFeeId() {
@@ -90,6 +88,5 @@ public class FeePaymentCreateDTO {
     public void setMandatory(Boolean mandatory) {
         this.mandatory = mandatory;
     }
-
 
 }

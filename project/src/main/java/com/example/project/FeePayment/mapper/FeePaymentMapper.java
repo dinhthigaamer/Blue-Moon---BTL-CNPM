@@ -5,16 +5,14 @@ import com.example.project.FeePayment.entity.FeePayment;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 
-
 @Component
 @RequiredArgsConstructor
 public class FeePaymentMapper {
 
-    //chuyển từ entity sang dto hiển thị ra ngoài
+    // chuyển từ entity sang dto hiển thị ra ngoài
     public FeePaymentDTO toDTO(FeePayment e) {
         FeePaymentDTO dto = new FeePaymentDTO();
         dto.setId(e.getId());
-        dto.setHouseholdId(e.getHousehold().getId());
         dto.setRoomNumber(e.getHousehold().getRoomNumber());
         dto.setFeeId(e.getFee().getId());
         dto.setName(e.getName());
@@ -29,4 +27,3 @@ public class FeePaymentMapper {
         return dto;
     }
 }
-

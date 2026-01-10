@@ -49,9 +49,9 @@ public class FeePaymentServiceImpl implements FeePaymentService {
     @Override
     public FeePaymentDTO create(FeePaymentCreateDTO dto) {
         FeePayment e = new FeePayment();
-        Household household = householdRepository.findById(dto.getHouseholdId())
+        Household household = householdRepository.findByRoomNumber(dto.getRoomNumber())
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
-                        "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
+                        "Hô dân có phòng số " + dto.getRoomNumber() + " không tồn tại."));
         Fee fee = feeRepository.findById(dto.getFeeId())
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
                         "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
@@ -109,10 +109,10 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                         () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
         Household household = null;
         Fee fee = null;
-        if (dto.getHouseholdId() != null)
-            household = householdRepository.findById(dto.getHouseholdId())
+        if (dto.getRoomNumber() != null)
+            household = householdRepository.findByRoomNumber(dto.getRoomNumber())
                     .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
-                            "Hô dân có ID " + dto.getHouseholdId() + " không tồn tại."));
+                            "Hô dân có phòng số " + dto.getRoomNumber() + " không tồn tại."));
         if (dto.getFeeId() != null)
             fee = feeRepository.findById(dto.getFeeId())
                     .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
@@ -201,9 +201,9 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         Specification<FeePayment> spec = (root, query, cb) -> {
             List<Predicate> predicates = new ArrayList<>();
 
-            // 1. Lọc theo Household ID
-            if (req.getHouseholdId() != null) {
-                predicates.add(cb.equal(root.get("household").get("id"), req.getHouseholdId()));
+            // 1. Lọc theo Room Number
+            if (req.getRoomNumber() != null) {
+                predicates.add(cb.equal(root.get("household").get("roomNumber"), req.getRoomNumber()));
             }
 
             // 2. Lọc theo Fee ID

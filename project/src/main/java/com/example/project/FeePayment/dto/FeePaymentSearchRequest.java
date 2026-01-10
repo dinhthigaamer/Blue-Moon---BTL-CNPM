@@ -1,8 +1,9 @@
 package com.example.project.FeePayment.dto;
+
 import java.time.LocalDate;
 
 public class FeePaymentSearchRequest {
-    private Long householdId;
+    private String roomNumber;
     private Long feeId;
     private Integer billingYear;
     private Integer billingMonth;
@@ -13,12 +14,12 @@ public class FeePaymentSearchRequest {
     private Boolean mandatory;
     private Boolean paid;
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
     public Long getFeeId() {
@@ -94,4 +95,3 @@ public class FeePaymentSearchRequest {
     }
 
 }
-

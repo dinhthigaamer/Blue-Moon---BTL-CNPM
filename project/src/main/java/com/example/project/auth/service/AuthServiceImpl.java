@@ -63,7 +63,7 @@ public class AuthServiceImpl implements AuthService {
             String token = tokenProvider.generateToken(authentication);
 
             User user = authRepository.findByUsername(request.getUsername())
-                    .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
+                    .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "Người dùng không tồn tại"));
 
             UserDTO userDTO = userMapper.toDTO(user);
             return new AuthResponse(token, userDTO);
@@ -80,19 +80,19 @@ public class AuthServiceImpl implements AuthService {
     public UserDTO register(RegisterRequestDTO request) {
 
         if (authRepository.existsByUsername(request.getUsername())) {
-            throw new ApiException(ErrorCode.AUTH_USERNAME_EXISTED, "Username is already taken");
+            throw new ApiException(ErrorCode.AUTH_USERNAME_EXISTED, "Tên đăng nhập đã được sử dụng");
         }
 
         if (authRepository.existsByEmail(request.getEmail())) {
-            throw new ApiException(ErrorCode.AUTH_EMAIL_EXISTED, "Email is already used");
+            throw new ApiException(ErrorCode.AUTH_EMAIL_EXISTED, "Email đã được sử dụng");
         }
 
         if (request.getPhone() != null && authRepository.existsByPhone(request.getPhone())) {
-            throw new ApiException(ErrorCode.AUTH_PHONE_EXISTED, "Phone is already used");
+            throw new ApiException(ErrorCode.AUTH_PHONE_EXISTED, "Số điện thoại đã được sử dụng");
         }
 
         if (request.getCccd() != null && authRepository.existsByCccd(request.getCccd())) {
-            throw new ApiException(ErrorCode.AUTH_CCCD_EXISTED, "CCCD is already used");
+            throw new ApiException(ErrorCode.AUTH_CCCD_EXISTED, "CCCD đã được sử dụng");
         }
 
         User user = userMapper.toEntity(request);
@@ -107,7 +107,7 @@ public class AuthServiceImpl implements AuthService {
     public UserDTO getCurrentUser() {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
         User user = authRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "Người dùng không tồn tại"));
         return userMapper.toDTO(user);
     }
 
@@ -117,18 +117,18 @@ public class AuthServiceImpl implements AuthService {
         String username = SecurityContextHolder.getContext().getAuthentication().getName();
 
         User user = authRepository.findByUsername(username)
-                .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
+                .orElseThrow(() -> new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "Người dùng không tồn tại"));
 
         if (request.getPhone() != null && !request.getPhone().equals(user.getPhone())) {
             if (authRepository.existsByPhone(request.getPhone())) {
-                throw new ApiException(ErrorCode.AUTH_PHONE_EXISTED, "Phone is already used");
+                throw new ApiException(ErrorCode.AUTH_PHONE_EXISTED, "Số điện thoại đã được sử dụng");
             }
             user.setPhone(request.getPhone());
         }
 
         if (request.getCccd() != null && !request.getCccd().equals(user.getCccd())) {
             if (authRepository.existsByCccd(request.getCccd())) {
-                throw new ApiException(ErrorCode.AUTH_CCCD_EXISTED, "CCCD is already used");
+                throw new ApiException(ErrorCode.AUTH_CCCD_EXISTED, "CCCD đã được sử dụng");
             }
             user.setCccd(request.getCccd());
         }
@@ -142,11 +142,11 @@ public class AuthServiceImpl implements AuthService {
         if (hasOldPassword || hasNewPassword) {
 
             if (!hasOldPassword || !hasNewPassword) {
-                throw new ApiException(ErrorCode.BAD_REQUEST, "Must provide both oldPassword and newPassword");
+                throw new ApiException(ErrorCode.BAD_REQUEST, "Phải cung cấp cả mật khẩu cũ và mật khẩu mới");
             }
 
             if (!passwordEncoder.matches(request.getOldPassword(), user.getPassword())) {
-                throw new ApiException(ErrorCode.AUTH_INVALID_PASSWORD, "Old password is incorrect");
+                throw new ApiException(ErrorCode.AUTH_INVALID_PASSWORD, "Mật khẩu cũ không đúng");
             }
 
             user.setPassword(passwordEncoder.encode(request.getNewPassword()));
@@ -160,7 +160,7 @@ public class AuthServiceImpl implements AuthService {
     public void requestForgotPasswordOtp(String email) {
 
         if (email == null || email.isBlank()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "Email is required");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Email là bắt buộc");
         }
 
         User user = authRepository.findByEmail(email)
@@ -186,35 +186,35 @@ public class AuthServiceImpl implements AuthService {
     public void confirmForgotPassword(String email, String otp, String newPassword) {
 
         if (email == null || email.isBlank()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "Email is required");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Email là bắt buộc");
         }
         if (otp == null || otp.isBlank()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "OTP is required");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "OTP là bắt buộc");
         }
         if (newPassword == null || newPassword.isBlank()) {
-            throw new ApiException(ErrorCode.BAD_REQUEST, "New password is required");
+            throw new ApiException(ErrorCode.BAD_REQUEST, "Mật khẩu mới là bắt buộc");
         }
 
         PasswordResetOtp last =
                 passwordResetOtpRepository.findTopByEmailOrderByIdDesc(email)
                         .orElseThrow(() ->
-                                new ApiException(ErrorCode.AUTH_OTP_NOT_FOUND, "OTP not found"));
+                                new ApiException(ErrorCode.AUTH_OTP_NOT_FOUND, "OTP không tìm thấy"));
 
         if (last.isUsed()) {
-            throw new ApiException(ErrorCode.AUTH_OTP_INVALID, "OTP already used");
+            throw new ApiException(ErrorCode.AUTH_OTP_INVALID, "OTP đã được sử dụng");
         }
 
         if (LocalDateTime.now().isAfter(last.getExpiresAt())) {
-            throw new ApiException(ErrorCode.AUTH_OTP_EXPIRED, "OTP expired");
+            throw new ApiException(ErrorCode.AUTH_OTP_EXPIRED, "OTP đã hết hạn");
         }
 
         if (!last.getOtp().equals(otp)) {
-            throw new ApiException(ErrorCode.AUTH_OTP_INVALID, "OTP invalid");
+            throw new ApiException(ErrorCode.AUTH_OTP_INVALID, "OTP không hợp lệ");
         }
 
         User user = authRepository.findByEmail(email)
                 .orElseThrow(() ->
-                        new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "User not found"));
+                        new ApiException(ErrorCode.AUTH_USER_NOT_FOUND, "Người dùng không tồn tại"));
 
         user.setPassword(passwordEncoder.encode(newPassword));
         authRepository.save(user);

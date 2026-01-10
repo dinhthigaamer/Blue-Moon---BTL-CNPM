@@ -1,6 +1,5 @@
 package com.example.project.FeePayment.dto;
 
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
@@ -8,7 +7,6 @@ import java.time.LocalDate;
 
 public class FeePaymentDTO {
     private Long id;
-    private Long householdId;
     private String roomNumber;
     private Long feeId;
     private String name;
@@ -28,14 +26,6 @@ public class FeePaymentDTO {
 
     public void setId(Long id) {
         this.id = id;
-    }
-
-    public Long getHouseholdId() {
-        return householdId;
-    }
-
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
     }
 
     public String getRoomNumber() {
@@ -133,6 +123,5 @@ public class FeePaymentDTO {
     public void setPaidDate(LocalDate paidDate) {
         this.paidDate = paidDate;
     }
-
 
 }

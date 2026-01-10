@@ -16,9 +16,10 @@ import com.example.project.statistics.dto.FeeSummary.FeeSummaryInDTO;
 import com.example.project.statistics.dto.FeeSummary.FeeSummaryOutDTO;
 import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueInDTO;
 import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueOutDTO;
+import com.example.project.household.repository.HouseholdRepository;
+import com.example.project.statistics.dto.ResidentAndHouseholdCountDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryInDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryOutDTO;
-
 
 @Service
 
@@ -26,27 +27,31 @@ public class StatisticServiceImpl implements StatisticServer {
     private final FeePaymentService feepaymentService;
     private final FeeRepository feeRepository;
     private final ResidentRepository residentRepository;
+    private final HouseholdRepository householdRepository;
 
-    
     public StatisticServiceImpl(FeePaymentService feepaymentService, FeeRepository feeRepository,
-            ResidentRepository residentRepository) {
+            ResidentRepository residentRepository, HouseholdRepository householdRepository) {
         this.feepaymentService = feepaymentService;
         this.feeRepository = feeRepository;
         this.residentRepository = residentRepository;
+        this.householdRepository = householdRepository;
     }
+
     public BigDecimal sumField(List<FeePaymentDTO> payments, Function<FeePaymentDTO, BigDecimal> mapper) {
-    return payments.stream()
-               .map(mapper)
-               .reduce(BigDecimal.ZERO, BigDecimal::add);
+        return payments.stream()
+                .map(mapper)
+                .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
-    public FeeSummaryOutDTO statisticFeeSummary(FeeSummaryInDTO dto){
-        //lấy và tính toán các trường cần thiết để trả về
+
+    public FeeSummaryOutDTO statisticFeeSummary(FeeSummaryInDTO dto) {
+        // lấy và tính toán các trường cần thiết để trả về
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
         Long feeId = dto.getFeeId();
         Integer year = dto.getYear();
         Integer month = dto.getMonth();
         Fee fee = feeRepository.findById(feeId)
-                    .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + feeId + " không tồn tại"));
+                .orElseThrow(
+                        () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + feeId + " không tồn tại"));
         String name = fee.getName();
         searchRequest.setFeeId(feeId);
         searchRequest.setBillingYear(year);
@@ -55,7 +60,7 @@ public class StatisticServiceImpl implements StatisticServer {
         List<FeePaymentDTO> payments = feepaymentService.search(searchRequest);
         BigDecimal total = sumField(payments, FeePaymentDTO::getAmount);
 
-        //thiết lập dto trả về
+        // thiết lập dto trả về
         FeeSummaryOutDTO result = new FeeSummaryOutDTO();
         result.setTotal(total);
         result.setFee_id(feeId);
@@ -64,8 +69,9 @@ public class StatisticServiceImpl implements StatisticServer {
         result.setMonth(month);
         return result;
     }
-    public MonthlyRevenueOutDTO statisticMonthlyRevenue(MonthlyRevenueInDTO dto){
-        //lấy và tính toán các trường cần thiết cho dto trả về
+
+    public MonthlyRevenueOutDTO statisticMonthlyRevenue(MonthlyRevenueInDTO dto) {
+        // lấy và tính toán các trường cần thiết cho dto trả về
         Integer year = dto.getYear();
         Integer month = dto.getMonth();
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
@@ -74,7 +80,7 @@ public class StatisticServiceImpl implements StatisticServer {
         searchRequest.setPaid(true);
         List<FeePaymentDTO> mandatoryPayments = feepaymentService.search(searchRequest);
         BigDecimal total = sumField(mandatoryPayments, FeePaymentDTO::getAmount);
-        //thiết lập dto trả về
+        // thiết lập dto trả về
         MonthlyRevenueOutDTO result = new MonthlyRevenueOutDTO();
         result.setTotal(total);
         result.setYear(year);
@@ -82,8 +88,8 @@ public class StatisticServiceImpl implements StatisticServer {
         return result;
     }
 
-    public VoluntarySummaryOutDTO statisticVoluntary(VoluntarySummaryInDTO dto){
-        //lấy và tính toán các trường cần thiết cho dto trả về
+    public VoluntarySummaryOutDTO statisticVoluntary(VoluntarySummaryInDTO dto) {
+        // lấy và tính toán các trường cần thiết cho dto trả về
         Integer year = dto.getYear();
         Integer month = dto.getMonth();
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
@@ -93,20 +99,18 @@ public class StatisticServiceImpl implements StatisticServer {
         searchRequest.setPaid(true);
         List<FeePaymentDTO> mandatoryPayments = feepaymentService.search(searchRequest);
         BigDecimal total = sumField(mandatoryPayments, FeePaymentDTO::getAmount);
-        //thiết lập dto trả về
+        // thiết lập dto trả về
         VoluntarySummaryOutDTO result = new VoluntarySummaryOutDTO();
         result.setTotal(total);
         result.setYear(year);
         result.setMonth(month);
         return result;
     }
-    public Long countResidents(){
-        return residentRepository.count();
+
+    public ResidentAndHouseholdCountDTO countResidents() {
+        Long residentCount = residentRepository.count();
+        Long householdCount = householdRepository.countByIsVacantFalse();
+        return new ResidentAndHouseholdCountDTO(residentCount, householdCount);
     }
 
-
-
-
-
 }
-

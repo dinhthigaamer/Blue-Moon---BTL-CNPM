@@ -40,11 +40,11 @@ public class GmailOtpMailService {
             mailSender.send(message);
 
         } catch (MessagingException e) {
-            throw new ApiException(ErrorCode.MAIL_FORMAT_ERROR, "Mail format error");
+            throw new ApiException(ErrorCode.MAIL_FORMAT_ERROR, "Lỗi định dạng email");
         } catch (MailException e) {
-            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Send mail failed");
+            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Gửi email thất bại");
         } catch (Exception e) {
-            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Send mail failed");
+            throw new ApiException(ErrorCode.MAIL_SEND_FAILED, "Gửi email thất bại");
         }
     }
 
