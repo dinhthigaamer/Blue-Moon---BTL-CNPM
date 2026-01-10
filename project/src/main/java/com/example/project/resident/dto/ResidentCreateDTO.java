@@ -27,8 +27,8 @@ public class ResidentCreateDTO {
     private ResidenceStatus residenceStatus;
     private Integer carCount;
     private Integer bikeCount;
-    @NotNull(message = "HouseholdId là bắt buộc")
-    private Long householdId; // bắt buộc
+    @NotNull(message = "RoomNumber là bắt buộc")
+    private String roomNumber; // bắt buộc
 
     public String getFullName() {
         return fullName;
@@ -126,12 +126,12 @@ public class ResidentCreateDTO {
         this.bikeCount = bikeCount;
     }
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
 }

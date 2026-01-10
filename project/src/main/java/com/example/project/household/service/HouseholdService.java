@@ -10,7 +10,7 @@ public interface HouseholdService {
 
     List<HouseholdDTO> findAll(
             Long id,
-            Integer roomNumber,
+            String roomNumber,
             String ownerName,
             Double area,
             Integer residentCount,
@@ -20,10 +20,13 @@ public interface HouseholdService {
     );
 
     HouseholdDTO findById(Long id);
+    HouseholdDTO findByRoomNumber(String roomNumber);
 
     HouseholdDTO create(HouseholdCreateDTO dto);
 
     HouseholdDTO update(Long id, HouseholdUpdateDTO dto);
+    HouseholdDTO updateByRoomNumber(String roomNumber, HouseholdUpdateDTO dto);
 
     void delete(Long id);
+    void deleteByRoomNumber(String roomNumber);
 }

@@ -23,7 +23,7 @@ public class ResidentDTO {
     private Integer bikeCount;
 
     private Long householdId;
-    private Integer roomNumber;
+    private String roomNumber;
 
     public Long getId() {
         return id;
@@ -137,11 +137,11 @@ public class ResidentDTO {
         this.householdId = householdId;
     }
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 

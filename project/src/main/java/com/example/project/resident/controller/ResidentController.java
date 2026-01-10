@@ -27,7 +27,7 @@ public class ResidentController {
     public ApiResponse<List<ResidentDTO>> getAll(
             @RequestParam(required = false) Long id,
             @RequestParam(required = false) Long householdId,
-            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) String roomNumber,
             @RequestParam(required = false) String fullName,
             @RequestParam(required = false) String phone,
             @RequestParam(required = false) String email,

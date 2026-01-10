@@ -43,7 +43,7 @@ public class ResidentServiceImpl implements ResidentService {
     public List<ResidentDTO> findAll(
             Long id,
             Long householdId,
-            Integer roomNumber,
+            String roomNumber,
             String fullName,
             String phone,
             String email,

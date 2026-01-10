@@ -9,7 +9,7 @@ import java.time.LocalDate;
 public class FeePaymentDTO {
     private Long id;
     private Long householdId;
-    private Integer roomNumber;
+    private String roomNumber;
     private Long feeId;
     private String name;
     private BigDecimal usageAmount;
@@ -38,11 +38,11 @@ public class FeePaymentDTO {
         this.householdId = householdId;
     }
 
-    public Integer getRoomNumber() {
+    public String getRoomNumber() {
         return roomNumber;
     }
 
-    public void setRoomNumber(Integer roomNumber) {
+    public void setRoomNumber(String roomNumber) {
         this.roomNumber = roomNumber;
     }
 
@@ -136,4 +136,3 @@ public class FeePaymentDTO {
 
 
 }
-

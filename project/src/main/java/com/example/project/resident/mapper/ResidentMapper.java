@@ -57,10 +57,10 @@ public class ResidentMapper {
         r.setCarCount(dto.getCarCount() == null ? 0 : dto.getCarCount());
         r.setBikeCount(dto.getBikeCount() == null ? 0 : dto.getBikeCount());
 
-        Household household = householdRepository.findById(dto.getHouseholdId())
+        Household household = householdRepository.findByRoomNumber(dto.getRoomNumber())
                 .orElseThrow(() -> new ApiException(
                         ErrorCode.NOT_FOUND,
-                        "Hộ dân có ID " + dto.getHouseholdId() + " không tồn tại"
+                        "Hộ dân có roomNumber " + dto.getRoomNumber() + " không tồn tại"
                 ));
         r.setHousehold(household);
 
@@ -81,11 +81,11 @@ public class ResidentMapper {
         if (dto.getCarCount() != null) entity.setCarCount(dto.getCarCount());
         if (dto.getBikeCount() != null) entity.setBikeCount(dto.getBikeCount());
 
-        if (dto.getHouseholdId() != null) {
-            Household household = householdRepository.findById(dto.getHouseholdId())
+        if (dto.getRoomNumber() != null) {
+            Household household = householdRepository.findByRoomNumber(dto.getRoomNumber())
                     .orElseThrow(() -> new ApiException(
                             ErrorCode.NOT_FOUND,
-                            "Hộ dân có ID " + dto.getHouseholdId() + " không tồn tại"
+                            "Hộ dân có roomNumber " + dto.getRoomNumber() + " không tồn tại"
                     ));
             entity.setHousehold(household);
         }

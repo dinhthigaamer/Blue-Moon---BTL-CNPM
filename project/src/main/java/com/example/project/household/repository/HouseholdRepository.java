@@ -8,5 +8,5 @@ import java.util.Optional;
 
 public interface HouseholdRepository extends JpaRepository<Household, Long>, JpaSpecificationExecutor<Household> {
 
-    Optional<Household> findByRoomNumber(Integer roomNumber);
+    Optional<Household> findByRoomNumber(String roomNumber);
 }

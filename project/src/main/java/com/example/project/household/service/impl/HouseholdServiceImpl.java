@@ -29,7 +29,7 @@ public class HouseholdServiceImpl implements HouseholdService {
     @Override
     public List<HouseholdDTO> findAll(
             Long id,
-            Integer roomNumber,
+            String roomNumber,
             String ownerName,
             Double area,
             Integer residentCount,
@@ -82,6 +82,14 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
+    public HouseholdDTO findByRoomNumber(String roomNumber) {
+        Household household = householdRepository.findByRoomNumber(roomNumber)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có roomNumber " + roomNumber + " không tồn tại"));
+
+        return householdMapper.toDTO(household);
+    }
+
+    @Override
     public HouseholdDTO create(HouseholdCreateDTO dto) {
         Household household = householdMapper.toEntity(dto);
         Household saved = householdRepository.save(household);
@@ -100,9 +108,28 @@ public class HouseholdServiceImpl implements HouseholdService {
     }
 
     @Override
+    public HouseholdDTO updateByRoomNumber(String roomNumber, HouseholdUpdateDTO dto) {
+        Household household = householdRepository.findByRoomNumber(roomNumber)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có roomNumber " + roomNumber + " không tồn tại"));
+
+        householdMapper.updateEntity(dto, household);
+        Household updated = householdRepository.save(household);
+
+        return householdMapper.toDTO(updated);
+    }
+
+    @Override
     public void delete(Long id) {
         Household household = householdRepository.findById(id)
                 .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có ID " + id + " không tồn tại"));
+
+        householdRepository.delete(household);
+    }
+
+    @Override
+    public void deleteByRoomNumber(String roomNumber) {
+        Household household = householdRepository.findByRoomNumber(roomNumber)
+                .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND, "Hộ dân có roomNumber " + roomNumber + " không tồn tại"));
 
         householdRepository.delete(household);
     }

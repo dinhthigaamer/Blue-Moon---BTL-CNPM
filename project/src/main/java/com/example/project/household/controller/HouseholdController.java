@@ -27,7 +27,7 @@ public class HouseholdController {
     @GetMapping
     public ApiResponse<List<HouseholdDTO>> getAll(
             @RequestParam(required = false) Long id,
-            @RequestParam(required = false) Integer roomNumber,
+            @RequestParam(required = false) String roomNumber,
             @RequestParam(required = false) String ownerName,
             @Parameter(description = "Diện tích căn hộ (m2)")
             @RequestParam(required = false) Double area,
@@ -61,6 +61,16 @@ public class HouseholdController {
     }
 
     /**
+     * GET /api/households/by-room/{roomNumber}
+     */
+    @GetMapping("/by-room/{roomNumber}")
+    public ApiResponse<HouseholdDTO> getByRoomNumber(@PathVariable String roomNumber) {
+        return ApiResponse.ok(
+                householdService.findByRoomNumber(roomNumber)
+        );
+    }
+
+    /**
      * POST /api/households
      */
     @PostMapping
@@ -86,11 +96,33 @@ public class HouseholdController {
     }
 
     /**
+     * PUT /api/households/by-room/{roomNumber}
+     */
+    @PutMapping("/by-room/{roomNumber}")
+    public ApiResponse<HouseholdDTO> updateByRoomNumber(
+            @PathVariable String roomNumber,
+            @RequestBody HouseholdUpdateDTO dto
+    ) {
+        return ApiResponse.ok(
+                householdService.updateByRoomNumber(roomNumber, dto), "Hộ dân được cập nhật thành công"
+        );
+    }
+
+    /**
      * DELETE /api/households/{id}
      */
     @DeleteMapping("/{id}")
     public ApiResponse<Void> delete(@PathVariable Long id) {
         householdService.delete(id);
+        return ApiResponse.ok(null, "Hộ dân được xoá thành công");
+    }
+
+    /**
+     * DELETE /api/households/by-room/{roomNumber}
+     */
+    @DeleteMapping("/by-room/{roomNumber}")
+    public ApiResponse<Void> deleteByRoomNumber(@PathVariable String roomNumber) {
+        householdService.deleteByRoomNumber(roomNumber);
         return ApiResponse.ok(null, "Hộ dân được xoá thành công");
     }
 }

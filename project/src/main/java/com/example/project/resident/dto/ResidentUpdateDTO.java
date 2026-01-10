@@ -24,7 +24,7 @@ public class ResidentUpdateDTO {
     private ResidenceStatus residenceStatus;
     private Integer carCount;
     private Integer bikeCount;
-    private Long householdId; // optional: đổi hộ khẩu (chuyển phòng)
+    private String roomNumber; // optional: đổi hộ khẩu (chuyển phòng)
 
     public String getFullName() {
         return fullName;
@@ -122,12 +122,12 @@ public class ResidentUpdateDTO {
         this.bikeCount = bikeCount;
     }
 
-    public Long getHouseholdId() {
-        return householdId;
+    public String getRoomNumber() {
+        return roomNumber;
     }
 
-    public void setHouseholdId(Long householdId) {
-        this.householdId = householdId;
+    public void setRoomNumber(String roomNumber) {
+        this.roomNumber = roomNumber;
     }
 
 
