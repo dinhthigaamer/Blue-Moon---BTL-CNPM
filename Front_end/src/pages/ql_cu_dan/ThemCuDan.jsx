@@ -4,7 +4,6 @@ import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
 
 export default function ThemCuDan() {
-    const { id } = useParams();
     const navigate = useNavigate();
 
     const [confirm, setConfirm] = useState({
@@ -13,11 +12,25 @@ export default function ThemCuDan() {
         user: null
     });
 
-    const [cuDan, setCuDan] = useState({});
+    const [cuDan, setCuDan] = useState({
+        "householdId": "",
+        "fullName": "",
+        "email": "",
+        "phone": "",
+        "cccd": "",
+        "dateOfBirth": "",
+        "residenceStatus": "",
+        "bikeCount": "",
+        "carCount": "",
+        "ethnicity": "",
+        "religion": "",
+        "occupation": ""
+    });
 
     const infor = [
-        { label: "Phòng", key: "roomNumber" },
+        { label: "Phòng", key: "householdId" },
         { label: "Họ và tên", key: "fullName" },
+        { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
@@ -33,30 +46,51 @@ export default function ThemCuDan() {
         setCuDan({ ...cuDan, [e.target.name]: e.target.value });
     }
 
-    useEffect(() => {
-        const fetchUser = async () => {
-            try {
-                const response = await residentAPI.getDetailById(id);
-                console.log(response);
-                setCuDan(response.data.data)
-            } catch (error) {
+    const handleSubmit = async (e) => {
+        e.preventDefault();
 
+        try {
+            const response = await residentAPI.createRes(cuDan);
+
+            console.log(response);
+            alert("Đã thêm thành công !");
+            navigate("/cu_dan");
+        } catch (error) {
+            console.log(error);
+            if (error.response.data.errorCode === "VALIDATION_ERROR") {
+                alert("Mã căn cước hoặc email không hợp lệ");
             }
-        };
-
-        fetchUser();
-    }, []);
-
-    const handleConfirm = async () => {
-
+            else if (error.response.data.errorCode === "NOT_FOUND") {
+                alert("Số phòng không hợp lệ");
+            }
+            else if (error.response.data.errorCode === "NOT_FOUND") {
+                alert("Số phòng không hợp lệ");
+            }
+            else if (error.response.data.errorCode === "BAD_REQUEST") {
+                alert("Dữ liệu đầu vào thiếu thông tin");
+            }
+            else {
+                alert("Đã xảy ra lỗi, vui lòng thử lại");
+            }
+        }
     }
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-4xl">
-                <h1 className="text-2xl font-semibold mb-6">Chỉnh sửa cư dân</h1>
+                <button
+                    onClick={() => navigate("/cu_dan")}
+                    className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+                >
+                    <span className="text-xl mr-2">←</span>
+                    Quay lại danh sách cư dân
+                </button>
+                <h1 className="text-2xl font-semibold mb-6">Thêm cư dân mới</h1>
 
-                <form className="space-y-6 overflow-y-auto">
+                <form
+                    onSubmit={handleSubmit}
+                    className="space-y-6 overflow-y-auto"
+                >
                     {infor.map((item, index) => (
                         <Input
                             key={index}
@@ -71,16 +105,13 @@ export default function ThemCuDan() {
                     <div className="flex justify-end gap-4 mt-4">
                         <button
                             type="button"
-                            onClick={() => navigate(`/cu_dan/${id}`)}
+                            onClick={() => navigate(`/cu_dan`)}
                             className="px-6 py-2 bg-gray-300 rounded hover:bg-gray-400"
                         >
                             Hủy
                         </button>
                         <button
-                            type="button"
-                            onClick={() =>
-                                setConfirm({ open: true, action: "update", username: cuDan.fullName })
-                            }
+                            type="submit"
                             className="px-6 py-2 bg-green-500 text-white rounded hover:bg-green-600"
                         >
                             Lưu
@@ -88,16 +119,6 @@ export default function ThemCuDan() {
                     </div>
                 </form>
             </div>
-
-            {confirm.open && (
-                <ConfirmModal
-                    open={confirm.open}
-                    title="Xác nhận"
-                    message={`Bạn có chắc muốn lưu thay đổi cho ${confirm.username}?`}
-                    onConfirm={handleConfirm}
-                    onClose={() => setConfirm({ open: false })}
-                />
-            )}
         </div>
     );
 }

@@ -1,16 +1,22 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import residentAPI from "../../api/residentAPI";
+import ConfirmModal from "../../components/ConfirmModal";
 
 export default function ChiTietCuDan() {
     const { id } = useParams();
     const navigate = useNavigate();
 
-    const [editing, setEditing] = useState(false);
+    const [confirm, setConfirm] = useState({
+        open: false,
+        action: null, // "change" | "add"
+        user: null
+    });
 
     const infor = [
-        { label: "Phòng", key: "roomNumber" },
+        { label: "Phòng", key: "householdId" },
         { label: "Họ và tên", key: "fullName" },
+        { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
@@ -43,28 +49,17 @@ export default function ChiTietCuDan() {
         fetchUser();
     }, []);
 
-    const handleChange = (e) => {
-        const { name, value } = e.target;
-        setCuDan((prev) => ({ ...prev, [name]: value }));
+    const handleConfirm = () => {
+        try {
+            const response = residentAPI.deleteRes(id);
+
+            alert("Đã xoá thành công");
+            setConfirm({ open: false });
+            navigate("/cu_dan");
+        } catch (error) {
+            alert("Xoá không thành công");
+        }
     };
-
-    const handleSave = (e) => {
-        e.preventDefault();
-        setEditing(false);
-        alert("Cập nhật cư dân thành công (demo)");
-        // TODO: gọi API update
-    };
-
-    const handleDelete = () => {
-        const ok = confirm("Bạn có chắc chắn muốn xóa cư dân này?");
-        if (!ok) return;
-
-        alert("Đã xóa cư dân (demo)");
-        // TODO: gọi API delete
-        navigate("/cu_dan");
-    };
-
-    // console.log(cuDan["phone"])
 
     return (
         <div className="px-6 py-6 bg-gray-100 min-h-screen">
@@ -85,17 +80,15 @@ export default function ChiTietCuDan() {
                         </h1>
                     </div>
 
-                    {/* XEM THÔNG TIN */}
-                    {!editing && (
-                        <div className="space-y-4">
-                            {
-                                infor.map((item, index) => {
-                                    // console.log(item.key, cuDan[item.key] || "Không có");
-                                    return (<Info label={item.label} value={cuDan[item.key] || null} />);
-                                })
-                            }
-                        </div>
-                    )}
+
+                    <div className="space-y-4">
+                        {
+                            infor.map((item, index) => {
+                                // console.log(item.key, cuDan[item.key] || "Không có");
+                                return (<Info label={item.label} value={cuDan[item.key] || null} />);
+                            })
+                        }
+                    </div>
 
                     <div className="flex justify-end gap-4 mt-6">
                         <button
@@ -106,7 +99,7 @@ export default function ChiTietCuDan() {
                         </button>
 
                         <button
-                            onClick={handleDelete}
+                            onClick={() => setConfirm({ open: true, action: "del", user: id })}
                             className="px-4 py-2 bg-red-500 text-white rounded hover:bg-red-600"
                         >
                             Xóa
@@ -114,6 +107,16 @@ export default function ChiTietCuDan() {
                     </div>
                 </div>
             </div>
+
+            {confirm.open && (
+                <ConfirmModal
+                    open={confirm.open}
+                    title="Xác nhận"
+                    message={`Bạn có chắc muốn xoá cư dân này ?`}
+                    onConfirm={handleConfirm}
+                    onClose={() => setConfirm({ open: false })}
+                />
+            )}
         </div>
     );
 }

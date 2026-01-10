@@ -16,11 +16,12 @@ export default function SuaCuDan() {
     const [cuDan, setCuDan] = useState({});
 
     const infor = [
-        { label: "Phòng", key: "roomNumber" },
-        { label: "Họ và tên", key: "fullName" },
+        { label: "Phòng", key: "householdId", },
+        { label: "Họ và tên", key: "fullName", "disabled": true },
+        { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
-        { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
+        { label: "Ngày sinh", key: "dateOfBirth", type: "date", "disabled": true },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
@@ -47,13 +48,27 @@ export default function SuaCuDan() {
         fetchUser();
     }, []);
 
-    handleConfirm = async () => {
-
+    const handleConfirm = async () => {
+        try {
+            const { id, roomNumber, ...cuDanNoId } = cuDan;
+            console.log(cuDan);
+            residentAPI.updateRes(id, cuDanNoId);
+        } catch (error) {
+            console.log(error);
+            alert("Cập nhật thất bại");
+        }
     }
 
     return (
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-4xl">
+                <button
+                    onClick={() => navigate("/cu_dan")}
+                    className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
+                >
+                    <span className="text-xl mr-2">←</span>
+                    Quay lại danh sách cư dân
+                </button>
                 <h1 className="text-2xl font-semibold mb-6">Chỉnh sửa cư dân</h1>
 
                 <form className="space-y-6 overflow-y-auto">
@@ -64,6 +79,7 @@ export default function SuaCuDan() {
                             name={item.key}
                             type={item.type || "text"}
                             placeholder={cuDan[item.key] || ""}
+                            disabled={item.disabled ? true : false}
                             onChange={handleChange}
                         />
                     ))}
@@ -103,10 +119,12 @@ export default function SuaCuDan() {
 }
 
 function Input({ label, ...props }) {
+    console.log(props);
     return (
         <div>
             <p className="text-sm text-gray-500 mb-1">{label}</p>
             <input
+                disabled={props["disabled"]}
                 {...props}
                 className="w-full border px-3 py-2 rounded"
             />
