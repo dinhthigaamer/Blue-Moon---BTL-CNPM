@@ -4,7 +4,7 @@ import java.math.BigDecimal;
 import com.example.project.fee.entity.FeeType;
 
 public class FeeDTO {
-    //private Long id;
+    private Long id;
     private String name;
     private FeeType type;
     private BigDecimal defaultAmount;
@@ -49,6 +49,14 @@ public class FeeDTO {
 
     public void setNote(String note) {
         this.note = note;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
     }
 
 }
