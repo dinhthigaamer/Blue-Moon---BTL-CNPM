@@ -7,7 +7,7 @@ export default function TaiKhoan() {
     const [user, setUser] = useState({
         username: "",
         password: "",
-        fullname: "", email: "", phone: "",
+        fullName: "", email: "", phone: "",
         cccd: "",
         role: ""
     });
@@ -65,21 +65,35 @@ export default function TaiKhoan() {
         e.preventDefault();
 
         try {
-            const response = await authAPI.updateMe({ ...user, ...password });
+            const payload = {
+                email: user.email,
+                phone: user.phone,
+            };
 
-            if (response.data.success === true) {
+            const response = await authAPI.updateMe(payload);
+            
+
+            if (response.data?.success === true) {
                 alert("Cập nhật thành công");
+                setEditing(false);
                 navigate("/tai_khoan");
+                return;
             }
+
         } catch (e) {
-            if (e.response.data.errorCode === "AUTH_PHONE_EXISTED") {
+            const code = e?.response?.data?.errorCode;
+
+            if (code === "AUTH_PHONE_EXISTED") {
                 alert("Số điện thoại đã được sử dụng");
+                return;
             }
-            else if (e.response.data.errorCode === "AUTH_CCCD_EXISTED") {
+            else if (code === "AUTH_CCCD_EXISTED") {
                 alert("Số căn cước đã được sử dụng");
+                return;
             }
-            else if (e.response.data.errorCode === "AUTH_USER_NOT_FOUND") {
+            else if (code === "AUTH_USER_NOT_FOUND") {
                 alert("Không tìm thấy tài khoản");
+                return;
             }
             else
                 alert("Đã xảy ra lỗi, vui lòng thử lại !");
@@ -93,32 +107,45 @@ export default function TaiKhoan() {
 
     const handlePasswordSubmit = async (e) => {
         e.preventDefault();
-        if (password.newPass !== password.confirm) {
+
+        if (password.newPassword !== password.confirm) {
             alert("Mật khẩu xác nhận không khớp");
             return;
         }
 
         try {
-            const response = await authAPI.updateMe({ ...user, ...password });
+            const payload = {
+            oldPassword: password.oldPassword,
+            newPassword: password.newPassword,
+            };
 
-            if (response.data.success === true) {
+            const response = await authAPI.updateMe(payload);
+
+            if (response.data?.success === true) {
                 alert("Cập nhật thành công");
+                setShowPasswordForm(false);
+                setPassword({ oldPassword: "", newPassword: "", confirm: "" });
                 navigate("/tai_khoan");
+                return;
             }
-        } catch (e) {
-            if (e.response.data.errorCode === "AUTH_INVALID_PASSWORD") {
-                alert("Mật khẩu sai");
-            }
-            else if (e.response.data.errorCode === "AUTH_USER_NOT_FOUND") {
-                alert("Không tìm thấy tài khoản");
-            }
-            else
-                alert("Đã xảy ra lỗi, vui lòng thử lại !");
-        };
 
-        setShowPasswordForm(false);
-        setPassword({ current: "", newPass: "", confirm: "" });
+            alert(response.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!");
+        } catch (e) {
+            const code = e?.response?.data?.errorCode;
+
+            if (code === "AUTH_INVALID_PASSWORD") {
+                alert("Mật khẩu hiện tại sai");
+                return;
+            }
+            if (code === "AUTH_USER_NOT_FOUND") {
+                alert("Không tìm thấy tài khoản");
+                return;
+            }
+
+            alert(e?.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại!");
+        }
     };
+
 
     return (
         <div className="px-6 py-6 bg-gray-100 min-h-screen">
@@ -139,7 +166,7 @@ export default function TaiKhoan() {
 
                             <div>
                                 <p className="text-sm text-gray-500">Họ và tên</p>
-                                <p className="font-medium">{user.fullname}</p>
+                                <p className="font-medium">{user.fullName}</p>
                             </div>
 
                             <div>
@@ -204,22 +231,6 @@ export default function TaiKhoan() {
                                 placeholder="Số điện thoại"
                                 required
                             />
-
-                            <p className="text-sm text-gray-500">Vai trò</p>
-                            <select name="role"
-                                className="w-full px-4 py-2
-                                    border rounded
-                                    bg-white
-                                    focus:outline-none
-                                    focus:ring-2 focus:ring-teal-400
-                                    "
-                                onChange={handleChange}
-                                required
-                            >
-                                {["ADMIN", "ACCOUNTANT"].map((item, index) => (
-                                    <option value={item}>{role[item]}</option>
-                                ))}
-                            </select>
 
                             <div className="flex justify-end gap-2">
                                 <button

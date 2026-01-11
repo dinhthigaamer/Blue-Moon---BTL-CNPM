@@ -43,26 +43,25 @@ export default function QLTaiKhoan() {
 
 
     useEffect(() => {
-        const getAccounts = async function () {
+        const getAccounts = async () => {
             try {
                 const response = await authAPI.getListAccount();
+                console.log("API RESPONSE:", response);
 
-                if (response.data.success === true) {
-                    setData(response.data.data);
-                    setDataById(data.reduce((acc, item) => {
-                        acc[item.id] = item;
-                        return acc;
-                    }, {}));
-
-                    console.log("Fetch data thành công");
+                if (response?.data?.success) {
+                    setData(response.data.data || []);
+                } else {
+                    console.warn("API trả về success = false");
                 }
             } catch (error) {
+                console.error("LỖI FETCH ACCOUNT:", error);
                 alert("Đã xảy ra lỗi, vui lòng thử lại");
             }
-        }
+        };
 
         getAccounts();
     }, []);
+
 
     const handleChange = (e) => {
         const { name, value } = e.target;
@@ -102,14 +101,15 @@ export default function QLTaiKhoan() {
     };
 
     const handleConfirm = async (id) => {
-        if (confirm.action === "reject") {
-            rejectAccount(id);
-        } else {
-            approveAccount(id);
+        try {
+            if (confirm.action === "reject") await rejectAccount(id);
+            else await approveAccount(id);
+        } finally {
+            setConfirm({ open: false, action: null, user: null });
+            setIsOpen(false); 
         }
+    };
 
-        setConfirm({ open: false }); setIsOpen(true);
-    }
 
     return (
         <div className="min-h-screen flex flex-col space-y-4">
