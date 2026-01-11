@@ -4,7 +4,7 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonValue;
 
 public enum ResidenceStatus {
-    NONE("Không"),
+    PERMANENT_RESIDENCE("Thường trú"),
     TEMPORARY_RESIDENCE("Tạm trú"),
     TEMPORARY_ABSENCE("Tạm vắng");
 
