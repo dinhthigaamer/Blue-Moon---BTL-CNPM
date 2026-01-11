@@ -16,7 +16,7 @@ export default function DangKy() {
         username: "",
         password: "",
         confirmPassword: "",
-        fullname: "", email: "", phone: "",
+        fullName: "", email: "", phone: "",
         cccd: "",
         role: "ADMIN"
     });
@@ -59,7 +59,7 @@ export default function DangKy() {
         if (form.phone.length != 10) {
             setErrorPhone("Số điện thoại ko hợp lệ");
         } else {
-            const hasNonDigit = /[^0-9]/.test(form.cccd)
+            const hasNonDigit = /[^0-9]/.test(form.phone)
 
             if (hasNonDigit)
                 setErrorPhone("Số căn cước không hợp lệ")
@@ -86,10 +86,21 @@ export default function DangKy() {
         // Gọi API đăng ký
         try {
             console.log(form);
-            const response = await authAPI.register(form);
+            const payload = {
+                username: form.username,
+                password: form.password,
+                fullName: form.fullName,
+                email: form.email,
+                phone: form.phone,
+                cccd: form.cccd,
+                role: form.role, 
+            };
+
+            const response = await authAPI.register(payload);
+            const res = response?.data;
 
             // Đăng ký thành công -> về trang đăng nhập
-            if (response.data.message == "Register success") {
+            if (res?.success === true) {
                 alert("Đăng ký thành công, vui lòng đợi ban quản trị chung cư xét duyệt");
 
                 setError("");
@@ -99,15 +110,15 @@ export default function DangKy() {
 
                 navigate("/dang_nhap");
             }
-            else if (response.data.errorCode === "AUTH_USERNAME_EXISTED") {
+            else if (res?.errorCode === "AUTH_USERNAME_EXISTED") {
                 setErrorUserName("Tên đăng nhập đã được sử dụng");
                 return;
             }
-            else if (response.data.errorCode === "AUTH_PHONE_EXISTED") {
+            else if (res?.errorCode === "AUTH_PHONE_EXISTED") {
                 setErrorPhone("Số điện thoại đã được sử dụng");
                 return;
             }
-            else if (response.data.errorCode === "AUTH_CCCD_EXISTED") {
+            else if (res?.errorCode === "AUTH_CCCD_EXISTED") {
                 setErrorCccd("Số căn cước đã được sử dụng");
                 return;
             }
@@ -116,9 +127,13 @@ export default function DangKy() {
                 return;
             }
         } catch (e) {
-            console.log(e);
-            alert("Đăng ký thất bại, vui lòng kiểm tra lại kết nối");
+            console.log("REGISTER ERROR:", e);
+            console.log("status:", e?.response?.status);
+            console.log("data:", e?.response?.data);
+
+            alert(e?.response?.data?.message || "Đăng ký thất bại, vui lòng kiểm tra lại");
         }
+
     };
 
     return (
@@ -137,9 +152,9 @@ export default function DangKy() {
                     <span>Họ và tên <span className="text-red-300">*</span></span>
                     <input
                         type="text"
-                        name="fullname"
+                        name="fullName"
                         placeholder="Họ và tên đầy đủ"
-                        value={form.fullname}
+                        value={form.fullName}
                         onChange={handleChange}
                         required
                         className="w-full px-4 py-2 border rounded focus:outline-none focus:ring-2 focus:ring-teal-400"
