@@ -19,39 +19,67 @@ export default function DangNhap({ account, setAccount }) {
 
         try {
             const response = await authAPI.login(form);
-            console.log(response);
-            if (response.data.message === "Login success") {
-                localStorage.setItem("accessToken", response.data.data.token);
+            console.log("LOGIN RESPONSE DATA:", response?.data);
 
+            if (response.data?.success === true) {
+                const token = response.data?.data?.token;
+                const user = response.data?.data?.user;
+
+                if (!token || !user) {
+                    alert("Login thành công nhưng thiếu token/user trong response");
+                    return;
+                }
+
+                localStorage.setItem("accessToken", token);
                 localStorage.setItem("user", JSON.stringify({
-                    name: response.data.data.user.username,
-                    role: response.data.data.user.role
+                    name: user.username,
+                    role: user.role,
                 }));
 
-                setAccount({
-                    "name": response.data.data.user.username,
-                    "role": response.data.data.user.role
-                });
+                setAccount({ name: user.username, role: user.role });
 
                 setErrorUserName("");
                 setErrorPass("");
-                navigate("/");
+
+                navigate("/", { replace: true });
+                return;
             }
-        } catch (error) {
-            console.log(error);
-            if (error.data.errorCode === "AUTH_USER_NOT_FOUND") {
+
+            // success=false nhưng vẫn 200
+            const code = response.data?.errorCode;
+            if (code === "AUTH_USER_NOT_FOUND") {
                 setErrorUserName("Tên đăng nhập không tồn tại");
+                setErrorPass("");
                 return;
             }
-            else if (error.data.errorCode === "GLOBAL_ERROR") {
-                setErrorPass("Mật khẩu sai !");
+            if (code === "GLOBAL_ERROR" || code === "AUTH_INVALID_PASSWORD") {
+                setErrorPass("Mật khẩu sai!");
+                setErrorUserName("");
                 return;
-            } else {
-                console.log(error);
-                alert("Đăng nhập thất bại, vui lòng thử lại !");
             }
+
+            alert(response.data?.message || "Đăng nhập thất bại!");
+        } catch (error) {
+            console.log("LOGIN ERROR:", error);
+            console.log("status:", error?.response?.status);
+            console.log("data:", error?.response?.data);
+
+            const code = error?.response?.data?.errorCode;
+            if (code === "AUTH_USER_NOT_FOUND") {
+                setErrorUserName("Tên đăng nhập không tồn tại");
+                setErrorPass("");
+                return;
+            }
+            if (code === "GLOBAL_ERROR" || code === "AUTH_INVALID_PASSWORD") {
+                setErrorPass("Mật khẩu sai!");
+                setErrorUserName("");
+                return;
+            }
+
+            alert(error?.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại!");
         }
-    };
+};
+
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
