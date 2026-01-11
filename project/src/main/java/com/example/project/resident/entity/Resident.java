@@ -145,5 +145,4 @@ public class Resident extends BaseEntity {
         this.household = household;
     }
 
-
 }

@@ -7,6 +7,7 @@ import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
 import com.example.project.FeePayment.service.FeePaymentServiceImpl;
 import com.example.project.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
+import jakarta.validation.Valid;
 import java.util.List;
 
 @RestController
@@ -22,7 +23,7 @@ public class FeePaymentController {
 
     @PostMapping
     public ApiResponse<FeePaymentDTO> createFeePayment(
-            @RequestBody FeePaymentCreateDTO dto) {
+            @Valid @RequestBody FeePaymentCreateDTO dto) {
         FeePaymentDTO result = feePaymentService.create(dto);
         return ApiResponse.ok(result, "Tạo mới phiếu thu phí thành công");
     }

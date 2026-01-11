@@ -57,12 +57,15 @@ public class GlobalExceptionHandler {
                         ErrorCode.INVALID_JSON_FORMAT.name()));
     }
 
+    // chưa cần thiết lớp này lắm vì mình sẽ cố gắng quy định ràng buộc ở DTO và bắt
+    // lỗi MethodArgumentNotValidException
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(ConstraintViolationException ex) {
         // Lấy tất cả các vi phạm và nối lại thành chuỗi message
         String combinedMessage = ex.getConstraintViolations()
                 .stream()
-                .map(violation -> violation.getPropertyPath() + ": " + violation.getMessage())
+                .map(violation -> violation.getPropertyPath() + ": " +
+                        violation.getMessage())
                 .collect(Collectors.joining("; "));
 
         return ResponseEntity

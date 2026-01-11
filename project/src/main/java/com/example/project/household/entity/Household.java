@@ -4,7 +4,6 @@ import com.example.project.common.base.BaseEntity;
 import com.example.project.resident.entity.Resident;
 import com.example.project.FeePayment.entity.FeePayment;
 import jakarta.persistence.*;
-import lombok.Data;
 import lombok.EqualsAndHashCode;
 
 import java.util.*;
@@ -24,7 +23,7 @@ public class Household extends BaseEntity {
     private Integer carCount;
     private Integer bikeCount;
     private Boolean isVacant;
-    
+
     @OneToMany(mappedBy = "household", fetch = FetchType.LAZY)
     private List<FeePayment> roomFeesPayments = new ArrayList<>();
 

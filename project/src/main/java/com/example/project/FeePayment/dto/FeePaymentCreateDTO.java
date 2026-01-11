@@ -7,11 +7,15 @@ import jakarta.validation.constraints.NotNull;
 //dto này để tạo mới bản ghi
 
 public class FeePaymentCreateDTO {
+    @NotNull(message = "số phòng không được để trống")
     private String roomNumber;
+    @NotNull(message = "feeId không được để trống")
     private Long feeId;
     private BigDecimal usageAmount;
     private BigDecimal voluntaryAmount;
+    @NotNull(message = "năm thu không được để trống")
     private Integer billingYear;
+    @NotNull(message = "tháng thu không được để trống")
     private Integer billingMonth;
     private LocalDate startDate;
     private LocalDate dueDate;
