@@ -38,7 +38,7 @@ authAPI.approveAccount = async function (id) {
 };
 
 authAPI.rejectAccount = async function (id) {
-    return axiosClient.patch(`/admin/users/${id}/reject`);
+    return axiosClient.delete(`/admin/users/${id}/reject`);
 };
 
 export default authAPI;
