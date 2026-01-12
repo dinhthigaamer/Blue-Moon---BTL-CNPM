@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-
 import java.time.LocalDate;
-
 
 public class ResidentCreateDTO {
     @NotBlank(message = "Họ tên là bắt buộc")
@@ -25,7 +23,9 @@ public class ResidentCreateDTO {
     private String occupation;
     private Gender gender;
     private ResidenceStatus residenceStatus;
+    @NotNull(message = "Số lượng xe ô tô là bắt buộc")
     private Integer carCount;
+    @NotNull(message = "Số lượng xe máy là bắt buộc")
     private Integer bikeCount;
     @NotNull(message = "RoomNumber là bắt buộc")
     private String roomNumber; // bắt buộc
