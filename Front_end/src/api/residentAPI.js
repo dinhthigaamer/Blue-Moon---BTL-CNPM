@@ -18,4 +18,12 @@ residentAPI.update = async function (resident) {
     return axiosClient.get(`/residents/${resident.id}`, resident);
 };
 
+residentAPI.deleteRes = async function (id) {
+    return axiosClient.delete(`/residents/${id}`)
+};
+
+residentAPI.updateRes = async function (id, resident) {
+    return axiosClient.put(`/residents/${id}`, resident);
+};
+
 export default residentAPI;

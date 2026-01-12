@@ -5,6 +5,9 @@ import MainLayout from "./MainLayout";
 // pages
 import TrangChu from "./pages/TrangChu";
 import CanHo from "./pages/ql_can_ho/CanHo";
+import SuaCanHo from "./pages/ql_can_ho/SuaCanHo";
+import ThemCanHo from "./pages/ql_can_ho/ThemCanHo";
+
 import CuDan from "./pages/ql_cu_dan/CuDan";
 import ChiTietCuDan from "./pages/ql_cu_dan/ChiTietCuDan";
 import SuaCuDan from "./pages/ql_cu_dan/SuaCuDan";
@@ -63,10 +66,10 @@ export default function App() {
         <Route path="/tai_khoan" element={<TaiKhoan />} />
         <Route path="/quan_ly_tai_khoan" element={<QLTaiKhoan />} />
 
-        <Route path="/can_ho">
-          <Route index element={<CanHo />} />
-          <Route path=":id" element={<ChiTietCanHo />} />
-        </Route>
+        <Route path="/can_ho" element={<CanHo />} />
+        <Route path="/can_ho/:id" element={<ChiTietCanHo />} />
+        <Route path="/can_ho/:id/edit" element={<SuaCanHo />} />
+        <Route path="/can_ho/add" element={<ThemCanHo />} />
 
         <Route path="/cu_dan" element={<CuDan />} />
         <Route path="/cu_dan/:id" element={<ChiTietCuDan />} />

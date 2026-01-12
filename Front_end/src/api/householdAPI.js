@@ -14,8 +14,12 @@ householdAPI.getDetailById = async function (id) {
     return axiosClient.get(`/households/${id}`);
 };
 
-householdAPI.update = async function (user) {
-    return axiosClient.put(`/households/${user.id}`, user);
+householdAPI.update = async function (id, user) {
+    return axiosClient.put(`/households/${id}`, user);
+};
+
+householdAPI.deleteHouse = async function (id) {
+    return axiosClient.delete(`/households/${id}`);
 };
 
 export default householdAPI;

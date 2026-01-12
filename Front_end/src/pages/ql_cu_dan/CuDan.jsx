@@ -8,7 +8,7 @@ export default function CuDan() {
     const navigate = useNavigate();
 
     const [cuDan, setCuDan] = useState({
-        roomNumber: "",
+        householdId: "",
         fullName: "",
         phone: "",
         cccd: "",
@@ -22,14 +22,15 @@ export default function CuDan() {
 
     const columns = [
         { label: "Họ và tên", key: "fullName" },
-        { label: "Phòng", key: "roomNumber" },
+        { label: "Phòng", key: "householdId" },
         { label: "Ngày sinh", key: "dateOfBirth" },
         { label: "Số căn cước", key: "cccd" },
     ];
 
     const infor = [
-        { label: "Phòng", key: "roomNumber" },
+        { label: "Phòng", key: "householdId" },
         { label: "Họ và tên", key: "fullName" },
+        { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
