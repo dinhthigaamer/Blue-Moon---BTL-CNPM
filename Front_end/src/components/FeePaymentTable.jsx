@@ -21,7 +21,7 @@ export default function FeePaymentTable({ payments, onEdit, onDelete, onDetail }
     <table className="table-auto w-full border-collapse border border-gray-300 mt-4 bg-white">
       <thead>
         <tr className="bg-gray-100">
-          <th className="border px-4 py-2">Hộ dân</th>
+          <th className="border px-4 py-2">Số căn hộ</th>
           <th className="border px-4 py-2">Loại phí</th>
           <th className="border px-4 py-2">Tháng/Năm</th>
           <th className="border px-4 py-2">Số tiền</th>
@@ -32,10 +32,11 @@ export default function FeePaymentTable({ payments, onEdit, onDelete, onDetail }
       <tbody>
         {payments.map((p) => (
           <tr key={p.id}>
-            <td className="border px-4 py-2">{p.householdId}</td>
+            {/* Đổi householdId -> roomNumber */}
+            <td className="border px-4 py-2">{p.roomNumber}</td>
             <td className="border px-4 py-2">{p.name}</td>
             <td className="border px-4 py-2">
-              {p.billingMonth}/{p.billingYear}
+              {p.billingMonth ? p.billingMonth : "?"}/{p.billingYear ? p.billingYear : "?"}
             </td>
             <td className="border px-4 py-2">
               {p.amount ? p.amount.toLocaleString() : 0} đ
@@ -54,6 +55,8 @@ export default function FeePaymentTable({ payments, onEdit, onDelete, onDetail }
                   Xóa
                 </Button>
               )}
+              {
+              }
             </td>
           </tr>
         ))}

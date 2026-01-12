@@ -13,7 +13,7 @@ import { useNavigate } from "react-router-dom";
 export default function KhoanThu() {
   const [payments, setPayments] = useState([]);
   const [filters, setFilters] = useState({
-    householdId: "",
+    roomNumber: "",
     feeId: "",
     billingYear: "",
     billingMonth: ""
@@ -47,7 +47,7 @@ export default function KhoanThu() {
   // Lọc phiếu thu theo filters
   const handleSearch = async () => {
     const params = {};
-    if (filters.householdId) params.householdId = filters.householdId;
+    if (filters.roomNumber) params.roomNumber = filters.roomNumber;
     if (filters.feeId) params.feeId = filters.feeId;
     if (filters.billingYear) params.billingYear = filters.billingYear;
     if (filters.billingMonth) params.billingMonth = filters.billingMonth;
@@ -116,10 +116,10 @@ export default function KhoanThu() {
       {/* Form lọc */}
       <div className="grid grid-cols-5 gap-4 mb-4 items-end">
         <input
-          placeholder="Mã hộ dân"
+          placeholder="Số căn hộ"
           className="border px-2 py-1"
-          value={filters.householdId}
-          onChange={(e) => setFilters({ ...filters, householdId: e.target.value })}
+          value={filters.roomNumber}
+          onChange={(e) => setFilters({ ...filters, roomNumber: e.target.value })}
         />
         <input
           placeholder="Loại phí ID"
@@ -140,7 +140,6 @@ export default function KhoanThu() {
           onChange={(e) => setFilters({ ...filters, billingMonth: e.target.value })}
         />
         <Button onClick={handleSearch}>Lọc</Button>
-
       </div>
 
       {/* Bảng danh sách phiếu thu */}
@@ -152,149 +151,144 @@ export default function KhoanThu() {
       />
 
       {/* Form chỉnh sửa phiếu thu */}
-      {editingPayment && (
-        <div className="mt-6 border p-6 rounded bg-white shadow">
-          <h2 className="text-xl font-bold mb-4">Chỉnh sửa phiếu thu</h2>
+      {/* Form chỉnh sửa phiếu thu */}
+{editingPayment && (
+  <div className="mt-6 border p-6 rounded bg-white shadow">
+    <h2 className="text-xl font-bold mb-4">Chỉnh sửa phiếu thu</h2>
 
-          <div className="grid grid-cols-2 gap-4">
-            <InputField
-              label="Hộ dân"
-              value={editingPayment.householdId}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  householdId: e.target.value
-                })
-              }
-            />
-            <InputField
-              label="Loại phí"
-              value={editingPayment.feeId}
-              onChange={(e) =>
-                setEditingPayment({ ...editingPayment, feeId: e.target.value })
-              }
-            />
-            <InputField
-              label="Tháng"
-              type="number"
-              value={editingPayment.billingMonth}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  billingMonth: Number(e.target.value)
-                })
-              }
-            />
-            <InputField
-              label="Năm"
-              type="number"
-              value={editingPayment.billingYear}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  billingYear: Number(e.target.value)
-                })
-              }
-            />
-            <InputField
-              label="Mức sử dụng"
-              type="number"
-              value={editingPayment.usageAmount || ""}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  usageAmount: Number(e.target.value)
-                })
-              }
-            />
-            <InputField
-              label="Khoản tự nguyện"
-              type="number"
-              value={editingPayment.voluntaryAmount || ""}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  voluntaryAmount: Number(e.target.value)
-                })
-              }
-            />
-            <InputField
-              label="Ngày bắt đầu"
-              type="date"
-              value={editingPayment.startDate || ""}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  startDate: e.target.value
-                })
-              }
-            />
-            <InputField
-              label="Hạn nộp"
-              type="date"
-              value={editingPayment.dueDate || ""}
-              onChange={(e) =>
-                setEditingPayment({
-                  ...editingPayment,
-                  dueDate: e.target.value
-                })
-              }
-            />
-            <div>
-              <label className="block font-medium mb-1">Trạng thái</label>
-              <select
-                className="border px-3 py-2 w-full rounded"
-                value={editingPayment.paid ? "true" : "false"}
-                onChange={(e) =>
-                  setEditingPayment({
-                    ...editingPayment,
-                    paid: e.target.value === "true"
-                  })
-                }
-              >
-                <option value="false">Chưa nộp</option>
-                <option value="true">Đã nộp</option>
-              </select>
-            </div>
-            {editingPayment.paid && (
-              <InputField
-                label="Ngày nộp"
-                type="date"
-                value={editingPayment.paidDate || ""}
-                onChange={(e) =>
-                  setEditingPayment({
-                    ...editingPayment,
-                    paidDate: e.target.value
-                  })
-                }
-              />
-            )}
-          </div>
-
-          <div className="mt-6 space-x-2">
-            <Button onClick={handleUpdate}>Lưu thay đổi</Button>
-
-            <button
-              onClick={() => setEditingPayment(null)}
-              className="bg-gray-400 text-white px-4 py-2 rounded"
-            >
-              Hủy
-            </button>
-          </div>
-        </div>
+    <div className="grid grid-cols-2 gap-4">
+      <InputField
+        label="Số căn hộ"
+        value={editingPayment.roomNumber}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            roomNumber: e.target.value
+          })
+        }
+      />
+      <InputField
+        label="Loại phí"
+        value={editingPayment.feeId}
+        onChange={(e) =>
+          setEditingPayment({ ...editingPayment, feeId: e.target.value })
+        }
+      />
+      <InputField
+        label="Tháng"
+        type="number"
+        value={editingPayment.billingMonth}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            billingMonth: Number(e.target.value)
+          })
+        }
+      />
+      <InputField
+        label="Năm"
+        type="number"
+        value={editingPayment.billingYear}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            billingYear: Number(e.target.value)
+          })
+        }
+      />
+      <InputField
+        label="Mức sử dụng"
+        type="number"
+        value={editingPayment.usageAmount || ""}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            usageAmount: Number(e.target.value)
+          })
+        }
+      />
+      <InputField
+        label="Khoản tự nguyện"
+        type="number"
+        value={editingPayment.voluntaryAmount || ""}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            voluntaryAmount: Number(e.target.value)
+          })
+        }
+      />
+      <InputField
+        label="Ngày bắt đầu"
+        type="date"
+        value={editingPayment.startDate || ""}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            startDate: e.target.value
+          })
+        }
+      />
+      <InputField
+        label="Hạn nộp"
+        type="date"
+        value={editingPayment.dueDate || ""}
+        onChange={(e) =>
+          setEditingPayment({
+            ...editingPayment,
+            dueDate: e.target.value
+          })
+        }
+      />
+      <div>
+        <label className="block font-medium mb-1">Trạng thái</label>
+        <select
+          className="border px-3 py-2 w-full rounded"
+          value={editingPayment.paid ? "true" : "false"}
+          onChange={(e) =>
+            setEditingPayment({
+              ...editingPayment,
+              paid: e.target.value === "true"
+            })
+          }
+        >
+          <option value="false">Chưa nộp</option>
+          <option value="true">Đã nộp</option>
+        </select>
+      </div>
+      {editingPayment.paid && (
+        <InputField
+          label="Ngày nộp"
+          type="date"
+          value={editingPayment.paidDate || ""}
+          onChange={(e) =>
+            setEditingPayment({
+              ...editingPayment,
+              paidDate: e.target.value
+            })
+          }
+        />
       )}
+    </div>
+
+    <div className="mt-6 space-x-2">
+      <Button onClick={handleUpdate}>Lưu thay đổi</Button>
+      <button
+        onClick={() => setEditingPayment(null)}
+        className="bg-gray-400 text-white px-4 py-2 rounded"
+      >
+        Hủy
+      </button>
+    </div>
+  </div>
+)}
+
 
       {/* Nút tạo khoản thu và quản lý loại phí */}
       <div className="mt-6 space-x-2">
         <Button onClick={() => navigate("/khoan_thu/tao")}>Tạo khoản thu</Button>
-
-        <Button onClick={() => navigate("/loai_phi")}>
-  Quản lý loại phí
-</Button>
-
-
+        <Button onClick={() => navigate("/loai_phi")}>Quản lý loại phí</Button>
       </div>
-
     </div>
   );
 }
