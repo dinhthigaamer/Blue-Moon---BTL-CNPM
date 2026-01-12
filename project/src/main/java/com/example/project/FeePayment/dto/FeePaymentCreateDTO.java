@@ -19,6 +19,7 @@ public class FeePaymentCreateDTO {
     private Integer billingMonth;
     private LocalDate startDate;
     private LocalDate dueDate;
+    @NotNull(message = "Trường mandatory không được để trống")
     private Boolean mandatory;
 
     public String getRoomNumber() {

@@ -16,6 +16,7 @@ public class ResidentCreateDTO {
     @Email(message = "Email không hợp lệ")
     private String email;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải gồm đúng 12 chữ số")
+    @NotNull(message = "CCCD là bắt buộc")
     private String cccd;
     private LocalDate dateOfBirth;
     private String religion;
@@ -23,9 +24,7 @@ public class ResidentCreateDTO {
     private String occupation;
     private Gender gender;
     private ResidenceStatus residenceStatus;
-    @NotNull(message = "Số lượng xe ô tô là bắt buộc")
     private Integer carCount;
-    @NotNull(message = "Số lượng xe máy là bắt buộc")
     private Integer bikeCount;
     @NotNull(message = "RoomNumber là bắt buộc")
     private String roomNumber; // bắt buộc
