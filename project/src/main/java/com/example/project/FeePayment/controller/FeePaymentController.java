@@ -4,14 +4,13 @@ import com.example.project.FeePayment.dto.FeePaymentUpdateDTO;
 import com.example.project.FeePayment.dto.FeePaymentCreateDTO;
 import com.example.project.FeePayment.dto.FeePaymentDTO;
 import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
-import com.example.project.FeePayment.service.FeePaymentServiceImpl;
 import com.example.project.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
+import java.time.LocalDate;
 import java.util.List;
 import com.example.project.FeePayment.dto.OutstandingFeeDTO;
 import com.example.project.FeePayment.service.FeePaymentService;
-import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/fee-payments")
@@ -44,7 +43,28 @@ public class FeePaymentController {
     }
 
     @GetMapping("/search")
-    public ApiResponse<List<FeePaymentDTO>> searchFeePayments(FeePaymentSearchRequest req) {
+    public ApiResponse<List<FeePaymentDTO>> searchFeePayments(
+            @RequestParam(required = false) String roomNumber,
+            @RequestParam(required = false) Long feeId,
+            @RequestParam(required = false) Integer billingYear,
+            @RequestParam(required = false) Integer billingMonth,
+            @RequestParam(required = false) LocalDate startFrom,
+            @RequestParam(required = false) LocalDate startTo,
+            @RequestParam(required = false) LocalDate dueFrom,
+            @RequestParam(required = false) LocalDate dueTo,
+            @RequestParam(required = false) Boolean mandatory,
+            @RequestParam(required = false) Boolean paid) {
+        FeePaymentSearchRequest req = new FeePaymentSearchRequest();
+        req.setRoomNumber(roomNumber);
+        req.setFeeId(feeId);
+        req.setBillingYear(billingYear);
+        req.setBillingMonth(billingMonth);
+        req.setStartFrom(startFrom);
+        req.setStartTo(startTo);
+        req.setDueFrom(dueFrom);
+        req.setDueTo(dueTo);
+        req.setMandatory(mandatory);
+        req.setPaid(paid);
         List<FeePaymentDTO> results = feePaymentService.search(req);
         return ApiResponse.ok(results);
     }
