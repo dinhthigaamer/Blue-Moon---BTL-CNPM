@@ -108,19 +108,18 @@ public class FeePaymentServiceImpl implements FeePaymentService {
         FeePayment e = feePaymentRepository.findById(id)
                 .orElseThrow(
                         () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + id + " không tồn tại."));
-        Household household = null;
-        Fee fee = null;
-        if (dto.getRoomNumber() != null)
+        Household household = e.getHousehold();
+        Fee fee = e.getFee();
+        if (dto.getRoomNumber() != null) {
             household = householdRepository.findByRoomNumber(dto.getRoomNumber())
                     .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
                             "Hô dân có phòng số " + dto.getRoomNumber() + " không tồn tại."));
-        if (dto.getFeeId() != null)
+            e.setHousehold(household);
+        }
+        if (dto.getFeeId() != null) {
             fee = feeRepository.findById(dto.getFeeId())
                     .orElseThrow(() -> new ApiException(ErrorCode.NOT_FOUND,
                             "Loại phí có ID " + dto.getFeeId() + " không tồn tại."));
-        if (household != null)
-            e.setHousehold(household);
-        if (fee != null) {
             e.setFee(fee);
             e.setName(fee.getName());
         }
@@ -266,7 +265,10 @@ public class FeePaymentServiceImpl implements FeePaymentService {
 
         if (allPaid) {
             List<FeePayment> payments = feePaymentRepository.findByHouseholdAndBillingMonthAndBillingYear(household,
-                    month, year);
+                    month, year)
+                    .stream()
+                    .filter(fp -> Boolean.TRUE.equals(fp.getMandatory()))
+                    .toList();
             receiptService.sendReceipt(household, month, year, payments);
         }
     }

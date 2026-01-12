@@ -1,6 +1,8 @@
 package com.example.project.fee.controller;
+
 import com.example.project.common.response.ApiResponse;
 import com.example.project.fee.dto.FeeDTO;
+import com.example.project.fee.dto.FeeCreateDTO;
 import com.example.project.fee.service.FeeService;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -10,8 +12,6 @@ import java.util.List;
 public class FeeController {
 
     private final FeeService feeService;
-
-    
 
     public FeeController(FeeService feeService) {
         this.feeService = feeService;
@@ -33,17 +33,16 @@ public class FeeController {
     }
 
     @PostMapping
-    public ApiResponse<FeeDTO> createFee(@RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.create(dto), "Phí loại"+ dto.getType() +"được tạo thành công");
+    public ApiResponse<FeeDTO> createFee(@RequestBody FeeCreateDTO dto) {
+        return ApiResponse.ok(feeService.create(dto), "Phí loại" + dto.getType() + "được tạo thành công");
     }
 
     @PutMapping("/id/{id}")
     public ApiResponse<FeeDTO> updateFee(
             @PathVariable Long id,
             @RequestBody FeeDTO dto) {
-        return ApiResponse.ok(feeService.update(id, dto), "Phí có id "+ id +"được cập nhật thành công");
+        return ApiResponse.ok(feeService.update(id, dto), "Phí có id " + id + "được cập nhật thành công");
     }
-
 
     @DeleteMapping("/{id}")
     public ApiResponse<Void> deleteFee(@PathVariable Long id) {

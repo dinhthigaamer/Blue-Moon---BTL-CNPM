@@ -51,20 +51,26 @@ public class ReceiptService {
         StringBuilder sb = new StringBuilder();
         sb.append("<h3>Biên lai phí tháng ").append(month).append("/").append(year).append("</h3>");
         sb.append("<table border='1' cellpadding='5' cellspacing='0'>");
-        sb.append("<tr><th>Loại phí</th><th>Lượng sử dụng</th><th>Số tiền (VND)</th></tr>");
+        sb.append("<tr><th>Loại phí</th><th>Lượng sử dụng</th><th>Đơn giá</th><th>Chú thích</th><th>Số tiền (VND)</th></tr>");
 
         BigDecimal total = BigDecimal.ZERO;
         for (FeePayment fp : payments) {
             sb.append("<tr>")
                     .append("<td>").append(fp.getName()).append("</td>")
                     .append("<td>").append(fp.getUsageAmount()).append("</td>")
+                    .append("<td>").append(fp.getFee().getPricePerUnit()).append("</td>")
+                    .append("<td>").append(fp.getFee().getNote()).append("</td>")
                     .append("<td>").append(fp.getAmount()).append("</td>")
                     .append("</tr>");
+            if (fp.getAmount() == null) {
+                throw new ApiException(ErrorCode.AMOUNT_NULL_ERROR,
+                        "Khoản thu có id " + fp.getId() + " đang rỗng trường Amount. Vui lòng thêm tổng tiền vào ");
+            }
             total = total.add(fp.getAmount());
         }
 
         sb.append("<tr>")
-                .append("<td colspan='2'><strong>Tổng cộng</strong></td>")
+                .append("<td colspan='4'><strong>Tổng cộng</strong></td>")
                 .append("<td><strong>").append(total).append("</strong></td>")
                 .append("</tr>");
         sb.append("</table>");

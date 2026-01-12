@@ -1,14 +1,15 @@
 //Temporarily not in used
 package com.example.project.fee.dto;
-import java.math.BigDecimal;
-import com.example.project.fee.entity.FeeType;  
 
+import java.math.BigDecimal;
+import com.example.project.fee.entity.FeeType;
 
 public class FeeCreateDTO {
     private String name;
     private FeeType type;
     private BigDecimal defaultAmount;
-    private Double area;
+    private BigDecimal pricePerUnit;
+    private String note;
 
     public String getName() {
         return name;
@@ -34,12 +35,20 @@ public class FeeCreateDTO {
         this.defaultAmount = defaultAmount;
     }
 
-    public Double getArea() {
-        return area;
+    public BigDecimal getPricePerUnit() {
+        return pricePerUnit;
     }
 
-    public void setArea(Double area) {
-        this.area = area;
+    public void setPricePerUnit(BigDecimal pricePerUnit) {
+        this.pricePerUnit = pricePerUnit;
+    }
+
+    public String getNote() {
+        return note;
+    }
+
+    public void setNote(String note) {
+        this.note = note;
     }
 
 }
