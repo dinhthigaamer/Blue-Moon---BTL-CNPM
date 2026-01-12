@@ -5,7 +5,8 @@ import com.example.project.common.response.ApiResponse;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.stream.Collectors;
-
+import java.util.Optional;
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -57,20 +58,30 @@ public class GlobalExceptionHandler {
                         ErrorCode.INVALID_JSON_FORMAT.name()));
     }
 
-    // chưa cần thiết lớp này lắm vì mình sẽ cố gắng quy định ràng buộc ở DTO và bắt
-    // lỗi MethodArgumentNotValidException
+    // --- Bean validation (JSR-303) ---
     @ExceptionHandler(ConstraintViolationException.class)
-    public ResponseEntity<ApiResponse<Void>> handleConstraintViolation(ConstraintViolationException ex) {
-        // Lấy tất cả các vi phạm và nối lại thành chuỗi message
+    public ResponseEntity<ApiResponse<Void>> handleBeanValidation(ConstraintViolationException ex) {
         String combinedMessage = ex.getConstraintViolations()
                 .stream()
-                .map(violation -> violation.getPropertyPath() + ": " +
-                        violation.getMessage())
+                .map(v -> v.getPropertyPath() + ": " + v.getMessage())
                 .collect(Collectors.joining("; "));
 
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.error("Vi phạm ràng buộc dữ liệu: " + combinedMessage,
+                        ErrorCode.CONSTRAINT_VIOLATION.name()));
+    }
+
+    // --- Database constraint violations (Spring) ---
+    @ExceptionHandler(DataIntegrityViolationException.class)
+    public ResponseEntity<ApiResponse<Void>> handleDataIntegrityViolation(DataIntegrityViolationException ex) {
+        String message = Optional.ofNullable(ex.getMostSpecificCause())
+                .map(Throwable::getMessage)
+                .orElse(ex.getMessage());
+
+        return ResponseEntity
+                .badRequest()
+                .body(ApiResponse.error("Vi phạm ràng buộc dữ liệu: " + message,
                         ErrorCode.CONSTRAINT_VIOLATION.name()));
     }
 

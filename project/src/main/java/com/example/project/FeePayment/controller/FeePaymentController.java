@@ -9,15 +9,16 @@ import com.example.project.common.response.ApiResponse;
 import org.springframework.web.bind.annotation.*;
 import jakarta.validation.Valid;
 import java.util.List;
+import com.example.project.FeePayment.dto.OutstandingFeeDTO;
+import com.example.project.FeePayment.service.FeePaymentService;
+import org.springframework.http.ResponseEntity;
 
 @RestController
 @RequestMapping("/api/fee-payments")
-
 public class FeePaymentController {
+    private final FeePaymentService feePaymentService;
 
-    private final FeePaymentServiceImpl feePaymentService;
-
-    public FeePaymentController(FeePaymentServiceImpl feePaymentService) {
+    public FeePaymentController(FeePaymentService feePaymentService) {
         this.feePaymentService = feePaymentService;
     }
 
@@ -58,5 +59,11 @@ public class FeePaymentController {
     public ApiResponse<Void> deleteFeePayment(@PathVariable Long id) {
         feePaymentService.delete(id);
         return ApiResponse.ok(null, "Phiếu thu phí đã được xoá thành công");
+    }
+
+    @GetMapping("/outstanding")
+    public ApiResponse<List<OutstandingFeeDTO>> getOutstandingFeesByHousehold() {
+        List<OutstandingFeeDTO> result = feePaymentService.getOutstandingFeesByHousehold();
+        return ApiResponse.ok(result);
     }
 }

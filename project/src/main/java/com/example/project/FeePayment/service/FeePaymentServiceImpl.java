@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ArrayList;
 import jakarta.persistence.criteria.Predicate;
 import org.springframework.data.jpa.domain.Specification;
+import com.example.project.FeePayment.dto.OutstandingFeeDTO;
 
 @Service
 public class FeePaymentServiceImpl implements FeePaymentService {
@@ -268,5 +269,10 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                     month, year);
             receiptService.sendReceipt(household, month, year, payments);
         }
+    }
+
+    @Override
+    public List<OutstandingFeeDTO> getOutstandingFeesByHousehold() {
+        return feePaymentRepository.findOutstandingFeesByHousehold();
     }
 }
