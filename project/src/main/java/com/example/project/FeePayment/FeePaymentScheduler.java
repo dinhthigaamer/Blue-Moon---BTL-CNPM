@@ -75,8 +75,10 @@ public class FeePaymentScheduler {
                     } else {
                         usageAmount = BigDecimal.ONE; // Fallback
                     }
+                    if (usageAmount.compareTo(BigDecimal.ZERO) <= 0) {
+                        continue;
+                    }
                     payment.setUsageAmount(usageAmount);
-
                     payment.setBillingYear(currentYear);
                     payment.setBillingMonth(currentMonth);
                     payment.setStartDate(now.withDayOfMonth(1));

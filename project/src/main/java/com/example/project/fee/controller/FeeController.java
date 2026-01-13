@@ -4,6 +4,9 @@ import com.example.project.common.response.ApiResponse;
 import com.example.project.fee.dto.FeeDTO;
 import com.example.project.fee.dto.FeeCreateDTO;
 import com.example.project.fee.service.FeeService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
@@ -33,14 +36,14 @@ public class FeeController {
     }
 
     @PostMapping
-    public ApiResponse<FeeDTO> createFee(@RequestBody FeeCreateDTO dto) {
+    public ApiResponse<FeeDTO> createFee(@Valid @RequestBody FeeCreateDTO dto) {
         return ApiResponse.ok(feeService.create(dto), "Phí loại" + dto.getType() + "được tạo thành công");
     }
 
     @PutMapping("/id/{id}")
     public ApiResponse<FeeDTO> updateFee(
             @PathVariable Long id,
-            @RequestBody FeeDTO dto) {
+            @RequestBody FeeCreateDTO dto) {
         return ApiResponse.ok(feeService.update(id, dto), "Phí có id " + id + "được cập nhật thành công");
     }
 

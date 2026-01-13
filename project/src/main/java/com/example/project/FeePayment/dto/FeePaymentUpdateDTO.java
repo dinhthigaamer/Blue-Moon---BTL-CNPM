@@ -3,11 +3,15 @@ package com.example.project.FeePayment.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 
+import jakarta.validation.constraints.PositiveOrZero;
+
 //dto này để câp nhật bản ghi
 public class FeePaymentUpdateDTO {
     private String roomNumber;
     private Long feeId;
+    @PositiveOrZero(message = "Trường mức sử dụng phải lớn hơn hoặc bằng 0")
     private BigDecimal usageAmount;
+    @PositiveOrZero(message = "Trường số tiền đóng góp phải lớn hơn hoặc bằng 0")
     private BigDecimal voluntaryAmount;
     private Integer billingYear;
     private Integer billingMonth;

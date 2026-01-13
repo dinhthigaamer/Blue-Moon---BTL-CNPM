@@ -47,12 +47,14 @@ public class GlobalExceptionHandler {
                 .body(new ApiResponse<>(
                         false,
                         errors,
-                        "Dữ liệu không hợp lệ",
+                        "Dữ liệu không hợp lệ, vui lòng check trường data để biết chi tiết.",
                         ErrorCode.VALIDATION_ERROR.name()));
     }
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ApiResponse<Object>> handleMessageNotReadable(HttpMessageNotReadableException ex) {
+        Throwable root = ex.getMostSpecificCause();
+        root.printStackTrace(); // 👈 DÒNG NÀY LÀ CHÌA KHOÁ
         return ResponseEntity
                 .badRequest()
                 .body(ApiResponse.error("Dữ liệu JSON có trường không hợp lệ hoặc sai kiểu dữ liệu.",
