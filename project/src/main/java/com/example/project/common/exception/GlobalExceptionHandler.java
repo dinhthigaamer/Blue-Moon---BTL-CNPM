@@ -14,6 +14,7 @@ import org.springframework.web.bind.MethodArgumentNotValidException;
 import jakarta.validation.ConstraintViolationException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 @RestControllerAdvice
 public class GlobalExceptionHandler {
@@ -56,6 +57,19 @@ public class GlobalExceptionHandler {
                 .badRequest()
                 .body(ApiResponse.error("Dữ liệu JSON có trường không hợp lệ hoặc sai kiểu dữ liệu.",
                         ErrorCode.INVALID_JSON_FORMAT.name()));
+    }
+
+    // Bắt lỗi sai kiểu param (Long, Integer, Enum, Date,...)
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<ApiResponse<Object>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        String paramName = ex.getName(); // tên param
+        String expectedType = ex.getRequiredType() != null ? ex.getRequiredType().getSimpleName() : "unknown";
+        Object value = ex.getValue(); // giá trị nhận được
+        String message = String.format(
+                "Parameter '%s' expects type '%s' but received value '%s'",
+                paramName, expectedType, value);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(ApiResponse.error(message,
+                ErrorCode.PARAM_TYPE_MISMATCH.name()));
     }
 
     // --- Bean validation (JSR-303) ---
