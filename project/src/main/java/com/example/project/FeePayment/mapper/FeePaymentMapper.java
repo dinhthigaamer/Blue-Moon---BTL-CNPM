@@ -18,6 +18,7 @@ public class FeePaymentMapper {
         dto.setName(e.getName());
         dto.setUsageAmount(e.getUsageAmount());
         dto.setAmount(e.getAmount());
+        dto.setBillingYear(e.getBillingYear());
         dto.setBillingMonth(e.getBillingMonth());
         dto.setStartDate(e.getStartDate());
         dto.setDueDate(e.getDueDate());

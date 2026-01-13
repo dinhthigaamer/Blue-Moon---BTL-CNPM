@@ -32,18 +32,23 @@ public class FeePaymentScheduler {
         this.calculationService = calculationService;
     }
 
-    @Scheduled(cron = "0 0 0 1 * ?") // Chạy vào 00:00 ngày 1 hàng tháng
+    @Scheduled(cron = "0 0 0 1 * ?") // Chạy vào lúc 00:00 ngày đầu tiên của mỗi tháng
+    // @Scheduled(cron = "0 0/1 * * * ?") // Chạy mỗi phút để test
     public void createMonthlyFeePayments() {
+        System.out.println("Scheduler started at: " + LocalDate.now() + " " + java.time.LocalTime.now());
         List<Household> households = householdRepository.findAll();
+        System.out.println("Found " + households.size() + " households");
         List<FeeType> fixedFeeTypes = Arrays.asList(FeeType.MANAGEMENT_FEE, FeeType.SERVICE_FEE, FeeType.GUI_XE_MAY,
                 FeeType.GUI_XE_O_TO);
         List<Fee> fixedFees = feeRepository.findAll().stream()
                 .filter(fee -> fixedFeeTypes.contains(fee.getType()))
                 .toList();
+        System.out.println("Found " + fixedFees.size() + " fixed fees");
 
         LocalDate now = LocalDate.now();
         int currentYear = now.getYear();
         int currentMonth = now.getMonthValue();
+        System.out.println("Current month/year: " + currentMonth + "/" + currentYear);
 
         for (Household household : households) {
             for (Fee fee : fixedFees) {
@@ -51,6 +56,8 @@ public class FeePaymentScheduler {
                 boolean exists = feePaymentRepository.existsByHouseholdAndFeeAndBillingYearAndBillingMonth(household,
                         fee, currentYear, currentMonth);
                 if (!exists) {
+                    System.out.println("Creating FeePayment for household " + household.getRoomNumber() + " and fee "
+                            + fee.getName());
                     FeePayment payment = new FeePayment();
                     payment.setHousehold(household);
                     payment.setFee(fee);
@@ -80,9 +87,16 @@ public class FeePaymentScheduler {
                     BigDecimal amount = calculationService.calculateFee(fee, usageAmount, null);
                     payment.setAmount(amount);
 
-                    feePaymentRepository.save(payment);
+                    if (amount.compareTo(BigDecimal.ZERO) > 0) {
+                        feePaymentRepository.save(payment);
+                        System.out.println("Saved FeePayment with amount: " + amount);
+                    } else {
+                        System.out.println("Amount is zero or negative for household " + household.getRoomNumber()
+                                + " and fee " + fee.getName() + ", skipping save");
+                    }
                 }
             }
         }
+        System.out.println("Scheduler finished");
     }
 }

@@ -7,9 +7,7 @@ import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
 
-
 import java.time.LocalDate;
-
 
 public class ResidentCreateDTO {
     @NotBlank(message = "Họ tên là bắt buộc")
@@ -18,6 +16,7 @@ public class ResidentCreateDTO {
     @Email(message = "Email không hợp lệ")
     private String email;
     @Pattern(regexp = "\\d{12}", message = "CCCD phải gồm đúng 12 chữ số")
+    @NotNull(message = "CCCD là bắt buộc")
     private String cccd;
     private LocalDate dateOfBirth;
     private String religion;

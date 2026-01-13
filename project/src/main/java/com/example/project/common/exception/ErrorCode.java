@@ -36,4 +36,7 @@ public enum ErrorCode {
     ACCOUNT_NOT_APPROVED,
     AUTH_INVALID_CREDENTIALS,
 
+    // FeePayment
+    AMOUNT_NULL_ERROR
+
 }
