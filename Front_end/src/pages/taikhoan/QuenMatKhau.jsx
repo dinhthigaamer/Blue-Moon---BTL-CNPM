@@ -4,12 +4,13 @@ import authAPI from "../../api/authAPI";
 
 export default function QuenMatKhau() {
     const navigate = useNavigate();
-    const [step, setStep] = useState(2);
+    const [step, setStep] = useState(1);
 
     const [email, setEmail] = useState("");
     const [otp, setOtp] = useState("");
     const [timeLeft, setTimeLeft] = useState(0);
 
+    const [resendCount, setResendCount] = useState(0);
     const [password, setPassword] = useState("");
     const [confirm, setConfirm] = useState("");
 
@@ -18,7 +19,7 @@ export default function QuenMatKhau() {
     // ⏱ Countdown OTP
     useEffect(() => {
         if (step !== 2) return;
-        setTimeLeft(60);
+        setTimeLeft(300);
 
         const timer = setInterval(() => {
             setTimeLeft(prev => {
@@ -31,26 +32,25 @@ export default function QuenMatKhau() {
         }, 1000);
 
         return () => clearInterval(timer);
-    }, [step]);
+    }, [step, resendCount]);
 
     // STEP 1: gửi OTP (demo)
     const sendOtp = async (e) => {
         e.preventDefault();
 
         try {
+            setStep(2);
+            setResendCount(c => c + 1);
             const response = await authAPI.requestOTP({ "email": email });
-
-            if (response.message === "OTP sent to email") {
-                setStep(2);
-            }
-            else if (response.errorCode === "AUTH_USER_NOT_FOUND") {
+        } catch (error) {
+            if (error?.response?.data?.errorCode === "AUTH_USER_NOT_FOUND") {
                 setError("Email không hợp lệ !");
             }
-            else if (response.errorCode === "GLOBAL_ERROR") {
+            else if (error?.response?.data?.errorCode === "GLOBAL_ERROR") {
                 alert("Đã xảy ra lỗi, vui lòng thử lại");
             }
-        } catch (error) {
-            alert("Đã xảy ra lỗi, vui lòng thử lại");
+            else
+                alert("Đã xảy ra lỗi, vui lòng thử lại");
         }
     };
 
@@ -59,47 +59,35 @@ export default function QuenMatKhau() {
         e.preventDefault();
 
         try {
-            const response = await authAPI.confirmOTP({
+            const payload = {
                 "email": email,
                 "otp": otp,
-                "password": password
-            });
+                "newPassword": password
+            }
 
-            if (response.message === "Password reset success") {
+            const response = await authAPI.confirmOTP(payload);
+
+            if (response?.data?.success === true) {
                 alert("Thay đổi mật khẩu thành công");
                 setError("");
                 navigate("/dang_nhap");
                 return;
             }
-            else if (response.errorCode === "AUTH_OTP_INVALID") {
+        } catch (error) {
+            if (error.response.data.errorCode === "AUTH_OTP_INVALID") {
                 setError("OTP không hợp lệ");
             }
-            else if (response.errorCode === "AUTH_OTP_EXPIRED") {
+            else if (error.response.data.errorCode === "AUTH_OTP_EXPIRED") {
                 setError("OTP đã hết hạn");
             }
-            else if (response.errorCode === "AUTH_USER_NOT_FOUND") {
+            else if (error.response.data.errorCode === "AUTH_USER_NOT_FOUND") {
                 setError("Tài khoản không hợp lệ");
             }
             else {
                 alert("Đã xảy ra lỗi, vui lòng thử lại");
             }
-        } catch (error) {
-            alert("Đã xảy ra lỗi, vui lòng thử lại !");
         }
     };
-
-    // // STEP 3: đổi mật khẩu
-    // const resetPassword = (e) => {
-    //     e.preventDefault();
-
-    //     if (password !== confirm) {
-    //         setError("Mật khẩu không khớp");
-    //         return;
-    //     }
-
-    //     console.log("Đổi mật khẩu cho:", email);
-    //     alert("Đổi mật khẩu thành công (demo)");
-    // };
 
     return (
         <div className="min-h-screen flex items-center justify-center bg-gray-100">
@@ -112,7 +100,7 @@ export default function QuenMatKhau() {
             >
                 <h2 className="text-xl font-bold text-center mb-4 text-gray-700">
                     {step === 1 && "Quên mật khẩu"}
-                    {step === 2 && "Nhập OTP"}
+                    {step === 2 && "Chúng tôi đã gửi mã OTP về gmail của bạn, vui lòng nhập mã để tiếp tục"}
                     {/* {step === 3 && "Đặt mật khẩu mới"} */}
                 </h2>
 

@@ -74,12 +74,12 @@ export default function DangKy() {
         e.preventDefault();
 
         if (error === "Mật khẩu không khớp") {
-            alert("Mật khẩu xác nhận không khớp!");
+            // alert("Mật khẩu xác nhận không khớp!");
             return;
         }
 
         if (errorCccd === "Số căn cước không hợp lệ") {
-            alert("Mã căn cước không hợp lệ!");
+            // alert("Mã căn cước không hợp lệ!");
             return;
         }
 
@@ -93,7 +93,7 @@ export default function DangKy() {
                 email: form.email,
                 phone: form.phone,
                 cccd: form.cccd,
-                role: form.role, 
+                role: form.role,
             };
 
             const response = await authAPI.register(payload);
@@ -110,22 +110,22 @@ export default function DangKy() {
 
                 navigate("/dang_nhap");
             }
-            else if (res?.errorCode === "AUTH_USERNAME_EXISTED") {
-                setErrorUserName("Tên đăng nhập đã được sử dụng");
-                return;
-            }
-            else if (res?.errorCode === "AUTH_PHONE_EXISTED") {
-                setErrorPhone("Số điện thoại đã được sử dụng");
-                return;
-            }
-            else if (res?.errorCode === "AUTH_CCCD_EXISTED") {
-                setErrorCccd("Số căn cước đã được sử dụng");
-                return;
-            }
-            else {
-                alert("Đăng ký thất bại, vui lòng thử lại !");
-                return;
-            }
+            // else if (res?.errorCode === "AUTH_USERNAME_EXISTED") {
+            //     setErrorUserName("Tên đăng nhập đã được sử dụng");
+            //     return;
+            // }
+            // else if (res?.errorCode === "AUTH_PHONE_EXISTED") {
+            //     setErrorPhone("Số điện thoại đã được sử dụng");
+            //     return;
+            // }
+            // else if (res?.errorCode === "AUTH_CCCD_EXISTED") {
+            //     setErrorCccd("Số căn cước đã được sử dụng");
+            //     return;
+            // }
+            // else {
+            //     alert("Đăng ký thất bại, vui lòng thử lại !");
+            //     return;
+            // }
         } catch (e) {
             console.log("REGISTER ERROR:", e);
             console.log("status:", e?.response?.status);

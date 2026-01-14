@@ -14,12 +14,13 @@ export default function ChiTietCuDan() {
     });
 
     const infor = [
-        { label: "Phòng", key: "householdId" },
+        { label: "Phòng", key: "roomNumber" },
         { label: "Họ và tên", key: "fullName" },
         { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
+        { label: "Giới tính", key: "gender" },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
@@ -122,12 +123,19 @@ export default function ChiTietCuDan() {
 }
 
 function Info({ label, value }) {
-    // console.log(label, value)
     return (
-        <div key={label}>
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className="font-medium">{value}</p>
+        <div className="grid grid-cols-3 gap-4 py-2">
+            <div className="text-sm text-gray-500">
+                {label}
+            </div>
+            <div className="col-span-2 text-sm font-medium text-gray-800">
+                {value || "-"}
+            </div>
         </div>
     );
 }
+
+
+
+
 

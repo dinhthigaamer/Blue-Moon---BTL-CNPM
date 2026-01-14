@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import householdAPI from "../../api/householdAPI";
 import ConfirmModal from "../../components/ConfirmModal";
+import MyTable from "../../components/MyTable";
 
 export default function ChiTietCanHo() {
     const { id } = useParams();
@@ -13,15 +14,28 @@ export default function ChiTietCanHo() {
         user: null
     });
 
+    const [openList, setOpenList] = useState(false);
+
     const infor = [
         { label: "Phòng", key: "roomNumber" },
         { label: "Chủ hộ", key: "ownerName" },
         { label: "CCCD của chủ hộ", key: "ownerCccd" },
-        { label: "Diện tích", key: "area" },
+        { label: "Diện tích(mét vuông)", key: "area" },
         { label: "Số người ở", key: "residentCount" },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
     ];
+
+    const [residentList, setResidentList] = useState([]);
+
+    const columns_canho = [
+        { label: "Họ và tên", key: "fullName" },
+        { label: "Ngày sinh", key: "dateOfBirth" },
+        { label: "Số căn cước", key: "cccd" },
+    ];
+    const clickRowHandler = (row) => {
+        navigate(`/cu_dan/${row.id}`);
+    };
 
     const [canHo, setCanHo] = useState({
         "roomNumber": "203",
@@ -37,8 +51,9 @@ export default function ChiTietCanHo() {
                 const { residents, ...responseNew } = response.data.data;
                 // console.log(response);
                 setCanHo(responseNew);
+                setResidentList(residents);
             } catch (error) {
-
+                alert("Đã xảy ra lỗi !");
             }
         };
 
@@ -105,6 +120,44 @@ export default function ChiTietCanHo() {
                 </div>
             </div>
 
+            <div
+                onClick={() => setOpenList(!openList)}
+                className="
+                flex
+                items-center
+                justify-between
+                cursor-pointer
+                select-none
+                bg-gray-100
+                px-4
+                py-3
+                rounded-lg
+                hover:bg-gray-200
+                transition
+            "
+            >
+                <span className="font-semibold">
+                    Xem danh sách cư dân
+                </span>
+
+                <span
+                    className={`
+            transition-transform
+            ${openList ? "rotate-180" : ""}
+        `}
+                >
+                    ▼
+                </span>
+            </div>
+
+            {openList && (
+                <MyTable
+                    columns={columns_canho}
+                    data={residentList}
+                    clickRowHandler={clickRowHandler}
+                />
+            )}
+
             {confirm.open && (
                 <ConfirmModal
                     open={confirm.open}
@@ -119,11 +172,14 @@ export default function ChiTietCanHo() {
 }
 
 function Info({ label, value }) {
-    // console.log(label, value)
     return (
-        <div key={label}>
-            <p className="text-sm text-gray-500">{label}</p>
-            <p className="font-medium">{value}</p>
+        <div className="grid grid-cols-3 gap-4 py-2">
+            <div className="text-sm text-gray-500">
+                {label}
+            </div>
+            <div className="col-span-2 text-sm font-medium text-gray-800">
+                {value || "-"}
+            </div>
         </div>
     );
 }

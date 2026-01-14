@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import householdAPI from "../../api/householdAPI";
+import Input from "../../components/Input";
 
 export default function SuaCanHo() {
     const { id } = useParams();
@@ -14,34 +15,76 @@ export default function SuaCanHo() {
     });
 
     const [canHo, setCanHo] = useState({});
-
-    const infor = [
-        { label: "Phòng", key: "roomNumber" },
-        { label: "Chủ hộ", key: "ownerName" },
-        { label: "CCCD của chủ hộ", key: "ownerCccd" },
-        { label: "Diện tích", key: "area" },
-        { label: "Số người ở", key: "residentCount" },
-        { label: "Số xe máy", key: "bikeCount", type: "number" },
-        { label: "Số xe ô tô", key: "carCount", type: "number" },
-    ];
-
-    const handleChange = (e) => {
-        setCuDan({ ...canHo, [e.target.name]: e.target.value });
-    }
+    const [residents, setResidents] = useState([]);
 
     useEffect(() => {
-        const fetchUser = async () => {
+        const fetchHousehold = async () => {
             try {
                 const response = await householdAPI.getDetailById(id);
-                // console.log(response);
-                setCanHo(response.data.data);
+                const { residents, ...responseNew } = response.data.data;
+                setCanHo(responseNew);
+                setResidents(residents);
             } catch (error) {
-
+                alert("Có lỗi xảy ra, vui lòng thử lại");
             }
         };
 
-        fetchUser();
+        fetchHousehold();
     }, []);
+
+    const infor = [
+        { label: "Phòng", key: "roomNumber" },
+        {
+            label: "Chủ hộ", key: "ownerId", type: "select", options: residents.map(r => ({
+                label: r.fullName,
+                value: r.id
+            })),
+        },
+        { label: "CCCD của chủ hộ", key: "ownerCccd", disabled: true },
+        { label: "Diện tích", key: "area" },
+        { label: "Số người ở", key: "residentCount" },
+        { label: "Số xe máy", key: "bikeCount", type: "number", disabled: true },
+        { label: "Số xe ô tô", key: "carCount", type: "number", disabled: true },
+    ];
+
+    const handleChange = (e) => {
+        const { name, value } = e.target;
+
+        // Nếu chọn chủ hộ
+        if (name === "ownerId") {
+            const selectedResident = residents.find(r => r.id == value);
+
+            setCanHo(prev => ({
+                ...prev,
+                ownerId: value,
+                ownerName: selectedResident?.fullName || "",
+                ownerCccd: selectedResident?.cccd || ""
+            }));
+            return;
+        }
+
+        // Các field khác
+        setCanHo(prev => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    useEffect(() => {
+        if (!residents || residents.length === 0) return;
+
+        setCanHo(prev => {
+            if (prev.ownerId) return prev; // không ghi đè khi đã có
+
+            return {
+                ...prev,
+                ownerId: residents[0].id,
+                ownerName: residents[0].fullName,
+                ownerCccd: residents[0].cccd
+            };
+        });
+    }, [residents]);
+
 
     const handleConfirm = async () => {
         try {
@@ -66,7 +109,7 @@ export default function SuaCanHo() {
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-4xl">
                 <button
-                    onClick={() => navigate("/cu_dan")}
+                    onClick={() => navigate("/can_ho")}
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
@@ -81,8 +124,9 @@ export default function SuaCanHo() {
                             label={item.label}
                             name={item.key}
                             type={item.type || "text"}
-                            placeholder={canHo[item.key] || ""}
-                            disabled={item.disabled ? true : false}
+                            options={item.options || []}
+                            value={canHo[item.key] ?? item?.options?.[0]?.value ?? ""}
+                            required={item.required}
                             onChange={handleChange}
                         />
                     ))}
@@ -117,20 +161,6 @@ export default function SuaCanHo() {
                     onClose={() => setConfirm({ open: false })}
                 />
             )}
-        </div>
-    );
-}
-
-function Input({ label, ...props }) {
-    console.log(props);
-    return (
-        <div>
-            <p className="text-sm text-gray-500 mb-1">{label}</p>
-            <input
-                disabled={props["disabled"]}
-                {...props}
-                className="w-full border px-3 py-2 rounded"
-            />
         </div>
     );
 }

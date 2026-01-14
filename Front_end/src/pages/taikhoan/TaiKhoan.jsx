@@ -1,9 +1,11 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useRef } from "react";
 import authAPI from "../../api/authAPI"
 import { useNavigate } from "react-router-dom";
 
 export default function TaiKhoan() {
     const navigate = useNavigate();
+    const ranRef = useRef(false);
+
     const [user, setUser] = useState({
         username: "",
         password: "",
@@ -18,6 +20,9 @@ export default function TaiKhoan() {
     };
 
     useEffect(() => {
+        if (ranRef.current === true) return;
+        ranRef.current = true;
+
         const fetchMe = async () => {
             try {
                 const response = await authAPI.getMe();
@@ -28,8 +33,8 @@ export default function TaiKhoan() {
                 }
             } catch (e) {
                 console.log(e);
-                alert("Đã xảy ra lỗi, vui lòng thử lại !");
                 navigate("/");
+                alert("fetch: Đã xảy ra lỗi, vui lòng thử lại !");
             }
         };
 
@@ -71,7 +76,7 @@ export default function TaiKhoan() {
             };
 
             const response = await authAPI.updateMe(payload);
-            
+
 
             if (response.data?.success === true) {
                 alert("Cập nhật thành công");
@@ -115,8 +120,8 @@ export default function TaiKhoan() {
 
         try {
             const payload = {
-            oldPassword: password.oldPassword,
-            newPassword: password.newPassword,
+                oldPassword: password.oldPassword,
+                newPassword: password.newPassword,
             };
 
             const response = await authAPI.updateMe(payload);

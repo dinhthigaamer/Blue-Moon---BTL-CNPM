@@ -26,4 +26,9 @@ residentAPI.updateRes = async function (id, resident) {
     return axiosClient.put(`/residents/${id}`, resident);
 };
 
+residentAPI.queryRes = async function (query) {
+    console.log(query);
+    return axiosClient.get(`/residents?${query}`);
+}
+
 export default residentAPI;

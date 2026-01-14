@@ -51,7 +51,7 @@ export default function TrangChu() {
         <p>{latestNotice}</p>
       </div>
 
-      
+
       {/* Tin tức */}
       <h2 className="text-2xl font-bold mb-4"> Tin tức mới nhất</h2>
       <div className="bg-gray-100 p-4 rounded shadow text-center">
@@ -60,11 +60,11 @@ export default function TrangChu() {
           target="_blank"
           rel="noopener noreferrer"
         >
-            <img
-                src={newsItems[currentIndex].image}
-                alt={newsItems[currentIndex].title}
-                className="w-full h-[400px] object-cover rounded mb-2"
-            />
+          <img
+            src={newsItems[currentIndex].image}
+            alt={newsItems[currentIndex].title}
+            className="w-full h-[400px] object-cover rounded mb-2"
+          />
           <h3 className="text-lg font-semibold">
             {newsItems[currentIndex].title}
           </h3>

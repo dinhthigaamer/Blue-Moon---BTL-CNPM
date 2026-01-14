@@ -22,18 +22,19 @@ export default function CuDan() {
 
     const columns = [
         { label: "Họ và tên", key: "fullName" },
-        { label: "Phòng", key: "householdId" },
+        { label: "Phòng", key: "roomNumber" },
         { label: "Ngày sinh", key: "dateOfBirth" },
         { label: "Số căn cước", key: "cccd" },
     ];
 
     const infor = [
-        { label: "Phòng", key: "householdId" },
+        { label: "Phòng", key: "roomNumber" },
         { label: "Họ và tên", key: "fullName" },
         { label: "Email", key: "email" },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd" },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
+        { label: "Giới tính", key: "gender" },
         { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
@@ -43,6 +44,46 @@ export default function CuDan() {
     ];
 
     const [data, setData] = useState([]);
+
+    const [search, setSearch] = useState("");
+    const [openFilter, setOpenFilter] = useState(false);
+
+    const [filters, setFilters] = useState({
+        residenceStatus: "",
+        carCount: ""
+    });
+
+    const handleFilterChange = (e) => {
+        const { name, value } = e.target;
+        setFilters((prev) => ({
+            ...prev,
+            [name]: value
+        }));
+    };
+
+    const buildQuery = () => {
+        const params = new URLSearchParams();
+
+        if (search) {
+            params.append("roomName", search);
+            // backend map keyword -> fullName OR roomNumber
+        }
+
+        Object.entries(filters).forEach(([key, value]) => {
+            if (value !== "") {
+                params.append(key, value);
+            }
+        });
+
+        return params.toString();
+    };
+
+    const fetchResidents = async () => {
+        const query = buildQuery();
+        const userList = await residentAPI.queryRes(query);
+        setData(userList.data.data);
+    };
+
 
     useEffect(() => {
         const getResidents = async function () {
@@ -81,33 +122,63 @@ export default function CuDan() {
     };
 
     return (
-        <div className="min-h-screen flex flex-col space-y-4 ">
+        <div className="min-h-screen flex flex-col space-y-4">
+
             <p className="font-semibold py-2">
                 Danh sách cư dân, bấm vào để xem chi tiết
             </p>
+
+            {/* 📋 TABLE */}
             <MyTable
                 columns={columns}
                 data={data}
                 clickRowHandler={clickRowHandler}
             />
 
+            {/* ➕ ADD BUTTON */}
             <button
-                className="w-1/4 bg-teal-400 hover:bg-teal-500 text-white font-semibold py-2 rounded transition-colors"
-                onClick={() => { navigate("add") }}
+                className="
+            w-1/4
+            bg-teal-400
+            hover:bg-teal-500
+            text-white
+            font-semibold
+            py-2
+            rounded
+            transition-colors
+        "
+                onClick={() => navigate("add")}
             >
                 Thêm cư dân
             </button>
         </div>
+
     );
 }
 
 function Input({ label, ...props }) {
     return (
-        <div>
-            <p className="text-sm text-gray-500 mb-1">{label}</p>
+        <div className="w-full">
+            {label && (
+                <label className="block text-sm font-medium text-gray-600 mb-1">
+                    {label}
+                </label>
+            )}
+
             <input
                 {...props}
-                className="w-full border px-3 py-2 rounded"
+                className="
+                    w-full
+                    rounded-lg
+                    border border-gray-300
+                    px-3 py-2
+                    text-sm
+                    outline-none
+                    transition
+                    focus:border-blue-500
+                    focus:ring-2
+                    focus:ring-blue-200
+                "
             />
         </div>
     );

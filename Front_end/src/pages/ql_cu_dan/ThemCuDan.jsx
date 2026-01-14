@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
+import Input from "../../components/Input";
 
 export default function ThemCuDan() {
     const navigate = useNavigate();
@@ -13,33 +14,32 @@ export default function ThemCuDan() {
     });
 
     const [cuDan, setCuDan] = useState({
-        "householdId": "",
-        "fullName": "",
-        "email": "",
-        "phone": "",
-        "cccd": "",
-        "dateOfBirth": "",
-        "residenceStatus": "",
-        "bikeCount": "",
-        "carCount": "",
-        "ethnicity": "",
-        "religion": "",
-        "occupation": ""
+        "bikeCount": 0,
+        "carCount": 0,
+        "residenceStatus": "Thường trú",
+        "gender": "Nam"
     });
 
     const infor = [
-        { label: "Phòng", key: "householdId" },
-        { label: "Họ và tên", key: "fullName" },
-        { label: "Email", key: "email" },
+        { label: "Phòng", key: "roomNumber", required: true },
+        { label: "Họ và tên", key: "fullName", required: true },
+        { label: "Email", key: "email", required: true },
         { label: "Số điện thoại", key: "phone", type: "tel" },
-        { label: "Số căn cước", key: "cccd" },
+        { label: "Số căn cước", key: "cccd", required: true },
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
-        { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
+        {
+            label: "Giới tính", key: "gender", type: "select",
+            options: [{ label: "Nam", value: 1 }, { label: "Nữ", value: 2 }, { label: "Khác", value: 3 }]
+        },
+        {
+            label: "Tạm trú/tạm vắng", key: "residenceStatus", type: "select",
+            options: [{ label: "Thường trú", value: 1 }, { label: "Tạm trú", value: 2 }, { label: "Tạm vắng", value: 3 }]
+        },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
         { label: "Dân tộc", key: "ethnicity" },
         { label: "Tôn giáo", key: "religion" },
-        { label: "Nghề nghiệp", key: "occupation" }
+        { label: "Nghề nghiệp", key: "occupation" },
     ];
 
     const handleChange = (e) => {
@@ -48,11 +48,12 @@ export default function ThemCuDan() {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+        console.log(cuDan);
 
         try {
             const response = await residentAPI.createRes(cuDan);
 
-            console.log(response);
+            console.log(cuDan);
             alert("Đã thêm thành công !");
             navigate("/cu_dan");
         } catch (error) {
@@ -97,7 +98,9 @@ export default function ThemCuDan() {
                             label={item.label}
                             name={item.key}
                             type={item.type || "text"}
-                            placeholder={cuDan[item.key] || ""}
+                            options={item.options || []}
+                            value={cuDan[item.key] ?? item?.options?.[0] ?? ""}
+                            required={item.required}
                             onChange={handleChange}
                         />
                     ))}
@@ -119,19 +122,6 @@ export default function ThemCuDan() {
                     </div>
                 </form>
             </div>
-        </div>
-    );
-}
-
-function Input({ label, ...props }) {
-    return (
-        <div>
-            <p className="text-sm text-gray-500 mb-1">{label}</p>
-            <input
-                required
-                {...props}
-                className="w-full border px-3 py-2 rounded"
-            />
         </div>
     );
 }

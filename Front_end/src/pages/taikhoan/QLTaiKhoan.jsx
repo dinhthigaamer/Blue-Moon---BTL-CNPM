@@ -10,9 +10,6 @@ export default function QLTaiKhoan() {
     const columns = [
         { label: "Username", key: "username" },
         { label: "Họ tên", key: "fullName" },
-        // { label: "Email", key: "email" },
-        // { label: "SĐT", key: "phone" },
-        // { label: "CCCD", key: "cccd" },
         { label: "Vai trò", key: "role" },
     ];
 
@@ -31,8 +28,7 @@ export default function QLTaiKhoan() {
         email: "",
         phone: "",
         cccd: "",
-        role: "",
-        enabled: false
+        role: ""
     });
 
     const [confirm, setConfirm] = useState({
@@ -83,7 +79,7 @@ export default function QLTaiKhoan() {
                 setData(prev => prev.filter(user => user.id !== id));
             }
         } catch (error) {
-            alert("Đã xảy ra lỗi, vui lòng thử lại !");
+            alert(error?.response?.data || "Đã xảy ra lỗi, vui lòng thử lại !");
         }
     };
 
@@ -96,7 +92,7 @@ export default function QLTaiKhoan() {
                 setData(prev => prev.filter(user => user.id !== id));
             }
         } catch (error) {
-            alert("Đã xảy ra lỗi, vui lòng thử lại !");
+            alert(error?.response?.data || "Đã xảy ra lỗi, vui lòng thử lại !");
         }
     };
 
@@ -106,7 +102,7 @@ export default function QLTaiKhoan() {
             else await approveAccount(id);
         } finally {
             setConfirm({ open: false, action: null, user: null });
-            setIsOpen(false); 
+            setIsOpen(false);
         }
     };
 

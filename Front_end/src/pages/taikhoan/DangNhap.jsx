@@ -9,7 +9,7 @@ export default function DangNhap({ account, setAccount }) {
     const [form, setForm] = useState({ username: "", password: "" });
     const navigate = useNavigate();
 
- 
+
     const handleChange = (e) => {
         setForm({ ...form, [e.target.name]: e.target.value });
     };
@@ -19,7 +19,7 @@ export default function DangNhap({ account, setAccount }) {
 
         try {
             const response = await authAPI.login(form);
-            console.log("LOGIN RESPONSE DATA:", response?.data);
+            // console.log("LOGIN RESPONSE DATA:", response?.data);
 
             if (response.data?.success === true) {
                 const token = response.data?.data?.token;
@@ -46,19 +46,19 @@ export default function DangNhap({ account, setAccount }) {
             }
 
             // success=false nhưng vẫn 200
-            const code = response.data?.errorCode;
-            if (code === "AUTH_USER_NOT_FOUND") {
-                setErrorUserName("Tên đăng nhập không tồn tại");
-                setErrorPass("");
-                return;
-            }
-            if (code === "GLOBAL_ERROR" || code === "AUTH_INVALID_PASSWORD") {
-                setErrorPass("Mật khẩu sai!");
-                setErrorUserName("");
-                return;
-            }
+            // const code = response.data?.errorCode;
+            // if (code === "AUTH_USER_NOT_FOUND") {
+            //     setErrorUserName("Tên đăng nhập không tồn tại");
+            //     setErrorPass("");
+            //     return;
+            // }
+            // if (code === "GLOBAL_ERROR" || code === "AUTH_INVALID_PASSWORD") {
+            //     setErrorPass("Mật khẩu sai!");
+            //     setErrorUserName("");
+            //     return;
+            // }
 
-            alert(response.data?.message || "Đăng nhập thất bại!");
+            // alert(response.data?.message || "Đăng nhập thất bại!");
         } catch (error) {
             console.log("LOGIN ERROR:", error);
             console.log("status:", error?.response?.status);
@@ -78,7 +78,7 @@ export default function DangNhap({ account, setAccount }) {
 
             alert(error?.response?.data?.message || "Đăng nhập thất bại, vui lòng thử lại!");
         }
-};
+    };
 
 
     return (

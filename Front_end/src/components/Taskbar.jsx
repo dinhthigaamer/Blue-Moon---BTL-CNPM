@@ -1,4 +1,6 @@
-import { NavLink } from "react-router-dom";
+import { NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function Taskbar({ collapsed, toggle, namePage, setNamePage }) {
   const menu = [
@@ -9,6 +11,17 @@ export default function Taskbar({ collapsed, toggle, namePage, setNamePage }) {
     { label: "Tra cứu - Thống kê", path: "/tra_cuu" },
     { label: "Quản lý tài khoản", path: "/quan_ly_tai_khoan" }
   ];
+
+  const [confirm, setConfirm] = useState(false);
+
+  const navigate = useNavigate();
+
+  const handleLogout = () => {
+    if (localStorage.getItem("accessToken")) {
+      localStorage.removeItem("accessToken");
+    }
+    navigate("/dang_nhap");
+  };
 
   return (
     <aside
@@ -60,9 +73,18 @@ export default function Taskbar({ collapsed, toggle, namePage, setNamePage }) {
       <button
         className={`absolute bottom-4 mx-4 text-gray-400 hover:text-red-400
           ${collapsed ? "hidden" : "block"}`}
+        onClick={() => setConfirm(true)}
       >
         Đăng xuất
       </button>
+
+      <ConfirmModal
+        open={confirm}
+        title="Xác nhận đăng xuất"
+        message="Bạn có muốn đăng xuất khỏi tài khoản ?"
+        onConfirm={handleLogout}
+        onClose={() => setConfirm(false)}
+      />
     </aside>
   );
 }

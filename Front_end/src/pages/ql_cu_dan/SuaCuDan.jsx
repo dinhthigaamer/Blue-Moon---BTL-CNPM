@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
+import Input from "../../components/Input";
 
 export default function SuaCuDan() {
     const { id } = useParams();
@@ -16,19 +17,27 @@ export default function SuaCuDan() {
     const [cuDan, setCuDan] = useState({});
 
     const infor = [
-        { label: "Phòng", key: "householdId", },
-        { label: "Họ và tên", key: "fullName", "disabled": true },
-        { label: "Email", key: "email" },
+        { label: "Phòng", key: "roomNumber", required: true },
+        { label: "Họ và tên", key: "fullName", required: true, disabled: true },
+        { label: "Email", key: "email", required: true },
         { label: "Số điện thoại", key: "phone", type: "tel" },
-        { label: "Số căn cước", key: "cccd" },
-        { label: "Ngày sinh", key: "dateOfBirth", type: "date", "disabled": true },
-        { label: "Tạm trú/tạm vắng", key: "residenceStatus" },
+        { label: "Số căn cước", key: "cccd", required: true, disabled: true },
+        { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
+        {
+            label: "Giới tính", key: "gender", type: "select",
+            options: [{ label: "Nam", id: 1 }, { label: "Nữ", id: 2 }, { label: "Khác", id: 3 }]
+        },
+        {
+            label: "Tạm trú/tạm vắng", key: "residenceStatus", type: "select",
+            options: [{ label: "Thường trú", id: 1 }, { label: "Tạm trú", id: 2 }, { label: "Tạm vắng", id: 3 }]
+        },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
         { label: "Dân tộc", key: "ethnicity" },
         { label: "Tôn giáo", key: "religion" },
-        { label: "Nghề nghiệp", key: "occupation" }
+        { label: "Nghề nghiệp", key: "occupation" },
     ];
+
 
     const handleChange = (e) => {
         setCuDan({ ...cuDan, [e.target.name]: e.target.value });
@@ -41,7 +50,7 @@ export default function SuaCuDan() {
                 console.log(response);
                 setCuDan(response.data.data)
             } catch (error) {
-
+                alert(error?.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại");
             }
         };
 
@@ -50,9 +59,25 @@ export default function SuaCuDan() {
 
     const handleConfirm = async () => {
         try {
-            const { id, roomNumber, ...cuDanNoId } = cuDan;
-            console.log(cuDan);
-            residentAPI.updateRes(id, cuDanNoId);
+            const id = cuDan["id"];
+
+            const payload = {
+                "roomNumber": cuDan["roomNumber"],
+                "phone": cuDan["phone"],
+                "email": cuDan["email"],
+                "carCount": cuDan["carCount"],
+                "bikeCount": cuDan["bikeCount"],
+                "ethnicity": cuDan["ethnicity"],
+                "religion": cuDan["religion"],
+                "dateOfBirth": cuDan["dateOfBirth"],
+                "occupation": cuDan["occupation"],
+                "residenceStatus": cuDan["residenceStatus"],
+                "gender": cuDan["gender"]
+            };
+
+            await residentAPI.updateRes(id, payload);
+            alert("Cập nhật thành công");
+            navigate(-1);
         } catch (error) {
             console.log(error);
             alert("Cập nhật thất bại");
@@ -78,8 +103,10 @@ export default function SuaCuDan() {
                             label={item.label}
                             name={item.key}
                             type={item.type || "text"}
-                            placeholder={cuDan[item.key] || ""}
-                            disabled={item.disabled ? true : false}
+                            options={item.options || []}
+                            value={cuDan[item.key] ?? item?.options?.[0] ?? ""}
+                            disabled={item.disabled}
+                            required={item.required}
                             onChange={handleChange}
                         />
                     ))}
@@ -118,16 +145,16 @@ export default function SuaCuDan() {
     );
 }
 
-function Input({ label, ...props }) {
-    console.log(props);
-    return (
-        <div>
-            <p className="text-sm text-gray-500 mb-1">{label}</p>
-            <input
-                disabled={props["disabled"]}
-                {...props}
-                className="w-full border px-3 py-2 rounded"
-            />
-        </div>
-    );
-}
+// function Input({ label, ...props }) {
+//     console.log(props);
+//     return (
+//         <div>
+//             <p className="text-sm text-gray-500 mb-1">{label}</p>
+//             <input
+//                 disabled={props["disabled"]}
+//                 {...props}
+//                 className="w-full border px-3 py-2 rounded"
+//             />
+//         </div>
+//     );
+// }

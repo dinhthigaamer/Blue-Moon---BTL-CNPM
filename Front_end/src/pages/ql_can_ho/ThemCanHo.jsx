@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import householdAPI from "../../api/householdAPI";
+import Input from "../../components/Input";
 
 export default function ThemCanHo() {
     const navigate = useNavigate();
@@ -15,13 +16,13 @@ export default function ThemCanHo() {
     const [canHo, setCanHo] = useState({});
 
     const infor = [
-        { label: "Phòng", key: "roomNumber" },
-        { label: "Chủ hộ", key: "ownerName" },
-        { label: "CCCD của chủ hộ", key: "ownerCccd" },
-        { label: "Diện tích", key: "area" },
-        { label: "Số người ở", key: "residentCount" },
-        { label: "Số xe máy", key: "bikeCount", type: "number" },
-        { label: "Số xe ô tô", key: "carCount", type: "number" },
+        { label: "Phòng", key: "roomNumber", required: true },
+        // { label: "Chủ hộ", key: "ownerName" },
+        // { label: "CCCD của chủ hộ", key: "ownerCccd" },
+        { label: "Diện tích", key: "area", required: true },
+        // { label: "Số người ở", key: "residentCount" },
+        // { label: "Số xe máy", key: "bikeCount", type: "number" },
+        // { label: "Số xe ô tô", key: "carCount", type: "number" },
     ];
 
     const handleChange = (e) => {
@@ -50,9 +51,9 @@ export default function ThemCanHo() {
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
-                    Quay lại danh sách cư dân
+                    Quay lại danh sách hộ dân
                 </button>
-                <h1 className="text-2xl font-semibold mb-6">Thêm cư dân mới</h1>
+                <h1 className="text-2xl font-semibold mb-6">Thêm hộ dân mới</h1>
 
                 <form
                     onSubmit={handleSubmit}
@@ -64,7 +65,9 @@ export default function ThemCanHo() {
                             label={item.label}
                             name={item.key}
                             type={item.type || "text"}
-                            placeholder={canHo[item.key] || ""}
+                            options={item.options || []}
+                            value={canHo[item.key] ?? item?.options?.[0] ?? ""}
+                            required={item.required}
                             onChange={handleChange}
                         />
                     ))}
@@ -86,18 +89,6 @@ export default function ThemCanHo() {
                     </div>
                 </form>
             </div>
-        </div>
-    );
-}
-
-function Input({ label, ...props }) {
-    return (
-        <div>
-            <p className="text-sm text-gray-500 mb-1">{label}</p>
-            <input
-                {...props}
-                className="w-full border px-3 py-2 rounded"
-            />
         </div>
     );
 }

@@ -1,13 +1,23 @@
 import logo from "../assets/Avatar.png"
 import { useState, useRef, useEffect } from "react";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useLocation } from "react-router-dom";
+import ConfirmModal from "../components/ConfirmModal";
 
 export default function HeaderPage({ account, setAccount, namePage, setNamePage }) {
     const [open, setOpen] = useState(false);
     const ref = useRef(null);
     const location = useLocation();
 
+    const [confirm, setConfirm] = useState(false);
+    const navigate = useNavigate();
+
+    const handleLogout = () => {
+        if (localStorage.getItem("accessToken")) {
+            localStorage.removeItem("accessToken");
+        }
+        navigate("/dang_nhap");
+    };
     const pageTitles = {
         "/": "Trang chủ",
         "/can_ho": "Căn hộ",
@@ -67,7 +77,9 @@ export default function HeaderPage({ account, setAccount, namePage, setNamePage 
                             >
                                 Trang cá nhân
                             </Link>
-                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500">
+                            <div className="px-4 py-2 hover:bg-gray-100 cursor-pointer text-red-500"
+                                onClick={() => setConfirm(true)}
+                            >
                                 Đăng xuất
                             </div>
                         </div>
@@ -75,6 +87,14 @@ export default function HeaderPage({ account, setAccount, namePage, setNamePage 
                 </div>
 
             </div>
+
+            <ConfirmModal
+                open={confirm}
+                title="Xác nhận đăng xuất"
+                message="Bạn có muốn đăng xuất khỏi tài khoản ?"
+                onConfirm={handleLogout}
+                onClose={() => setConfirm(false)}
+            />
         </header>
     );
 }

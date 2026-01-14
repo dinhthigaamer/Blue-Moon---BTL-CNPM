@@ -221,6 +221,8 @@ public class AuthServiceImpl implements AuthService {
 
         last.setUsed(true);
         passwordResetOtpRepository.save(last);
+
+        System.out.println("IMPT");
     }
 
 }
