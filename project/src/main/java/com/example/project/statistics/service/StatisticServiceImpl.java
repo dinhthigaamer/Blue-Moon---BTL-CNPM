@@ -12,14 +12,11 @@ import com.example.project.FeePayment.dto.FeePaymentSearchRequest;
 import com.example.project.FeePayment.service.FeePaymentService;
 import com.example.project.fee.repository.FeeRepository;
 import com.example.project.resident.repository.ResidentRepository;
-import com.example.project.statistics.dto.FeeSummary.FeeSummaryInDTO;
 import com.example.project.statistics.dto.FeeSummary.FeeSummaryOutDTO;
-import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueInDTO;
 import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueOutDTO;
-import com.example.project.household.repository.HouseholdRepository;
-import com.example.project.statistics.dto.ResidentAndHouseholdCountDTO;
-import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryInDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryOutDTO;
+import com.example.project.statistics.dto.ResidentAndHouseholdCountDTO;
+import com.example.project.household.repository.HouseholdRepository;
 
 @Service
 
@@ -43,12 +40,9 @@ public class StatisticServiceImpl implements StatisticServer {
                 .reduce(BigDecimal.ZERO, BigDecimal::add);
     }
 
-    public FeeSummaryOutDTO statisticFeeSummary(FeeSummaryInDTO dto) {
+    public FeeSummaryOutDTO statisticFeeSummary(Long feeId, Integer year, Integer month) {
         // lấy và tính toán các trường cần thiết để trả về
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
-        Long feeId = dto.getFeeId();
-        Integer year = dto.getYear();
-        Integer month = dto.getMonth();
         Fee fee = feeRepository.findById(feeId)
                 .orElseThrow(
                         () -> new ApiException(ErrorCode.NOT_FOUND, "Phiếu thu phí có ID " + feeId + " không tồn tại"));
@@ -70,10 +64,8 @@ public class StatisticServiceImpl implements StatisticServer {
         return result;
     }
 
-    public MonthlyRevenueOutDTO statisticMonthlyRevenue(MonthlyRevenueInDTO dto) {
+    public MonthlyRevenueOutDTO statisticMonthlyRevenue(Integer year, Integer month) {
         // lấy và tính toán các trường cần thiết cho dto trả về
-        Integer year = dto.getYear();
-        Integer month = dto.getMonth();
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
         searchRequest.setBillingYear(year);
         searchRequest.setBillingMonth(month);
@@ -88,10 +80,8 @@ public class StatisticServiceImpl implements StatisticServer {
         return result;
     }
 
-    public VoluntarySummaryOutDTO statisticVoluntary(VoluntarySummaryInDTO dto) {
+    public VoluntarySummaryOutDTO statisticVoluntary(Integer year, Integer month) {
         // lấy và tính toán các trường cần thiết cho dto trả về
-        Integer year = dto.getYear();
-        Integer month = dto.getMonth();
         FeePaymentSearchRequest searchRequest = new FeePaymentSearchRequest();
         searchRequest.setBillingYear(year);
         searchRequest.setBillingMonth(month);

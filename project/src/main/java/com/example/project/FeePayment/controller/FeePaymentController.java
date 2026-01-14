@@ -31,7 +31,7 @@ public class FeePaymentController {
     @PutMapping("/{id}")
     public ApiResponse<FeePaymentDTO> updateFeePayment(
             @PathVariable Long id,
-            @RequestBody FeePaymentUpdateDTO dto) {
+            @Valid @RequestBody FeePaymentUpdateDTO dto) {
         return ApiResponse.ok(
                 feePaymentService.update(id, dto), "Cập nhật phiếu thu phí thành công");
     }

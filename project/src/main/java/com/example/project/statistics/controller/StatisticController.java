@@ -2,21 +2,25 @@ package com.example.project.statistics.controller;
 
 import com.example.project.statistics.service.StatisticServiceImpl;
 import com.example.project.common.response.ApiResponse;
-import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueInDTO;
 import com.example.project.statistics.dto.MonthlyRevenue.MonthlyRevenueOutDTO;
-import com.example.project.statistics.dto.FeeSummary.FeeSummaryInDTO;
+
 import com.example.project.statistics.dto.FeeSummary.FeeSummaryOutDTO;
-import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryInDTO;
 import com.example.project.statistics.dto.VoluntarySummary.VoluntarySummaryOutDTO;
-import jakarta.validation.Valid;
+
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import com.example.project.statistics.dto.ResidentAndHouseholdCountDTO;
+import jakarta.validation.constraints.Max;
+import jakarta.validation.constraints.Min;
+import jakarta.validation.constraints.PositiveOrZero;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import io.swagger.v3.oas.annotations.parameters.RequestBody;
 
 @RestController
+@Validated
 @RequestMapping("/api/statistics")
 
 public class StatisticController {
@@ -29,10 +33,11 @@ public class StatisticController {
 
     @GetMapping("/monthly-revenue")
     public ApiResponse<MonthlyRevenueOutDTO> getMonthlyRevenue(
-            @Valid @RequestBody MonthlyRevenueInDTO dto) {
+            @RequestParam(required = false) @PositiveOrZero(message = "Năm thu phải >= 0") Integer year,
+            @RequestParam(required = false) @Min(value = 1, message = "Tháng thu phải từ 1 đến 12") @Max(value = 12, message = "Tháng thu phải từ 1 đến 12") Integer month) {
 
         return ApiResponse.ok(
-                statisticService.statisticMonthlyRevenue(dto));
+                statisticService.statisticMonthlyRevenue(year, month));
     }
 
     @GetMapping("/residents")
@@ -42,17 +47,20 @@ public class StatisticController {
 
     @GetMapping("/fee-summary")
     public ApiResponse<FeeSummaryOutDTO> getFeeSummary(
-            @Valid @RequestBody FeeSummaryInDTO dto) {
+            @RequestParam(required = false) @PositiveOrZero(message = "Năm thu phải >= 0") Integer year,
+            @RequestParam(required = false) @Min(value = 1, message = "Tháng thu phải từ 1 đến 12") @Max(value = 12, message = "Tháng thu phải từ 1 đến 12") Integer month,
+            @RequestParam(required = false) Long feeId) {
 
         return ApiResponse.ok(
-                statisticService.statisticFeeSummary(dto));
+                statisticService.statisticFeeSummary(feeId, year, month));
     }
 
     @GetMapping("/voluntary-summary")
     public ApiResponse<VoluntarySummaryOutDTO> getVoluntarySummary(
-            @Valid @RequestBody VoluntarySummaryInDTO dto) {
+            @RequestParam(required = false) @PositiveOrZero(message = "Năm thu phải >= 0") Integer year,
+            @RequestParam(required = false) @Min(value = 1, message = "Tháng thu phải từ 1 đến 12") @Max(value = 12, message = "Tháng thu phải từ 1 đến 12") Integer month) {
 
         return ApiResponse.ok(
-                statisticService.statisticVoluntary(dto));
+                statisticService.statisticVoluntary(year, month));
     }
 }

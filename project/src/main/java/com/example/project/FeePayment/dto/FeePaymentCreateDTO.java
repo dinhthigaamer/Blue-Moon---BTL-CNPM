@@ -3,6 +3,7 @@ package com.example.project.FeePayment.dto;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.PositiveOrZero;
 
 //dto này để tạo mới bản ghi
 
@@ -11,7 +12,9 @@ public class FeePaymentCreateDTO {
     private String roomNumber;
     @NotNull(message = "feeId không được để trống")
     private Long feeId;
+    @PositiveOrZero(message = "trường mức sử dụng phải lớn hơn hoặc bằng 0")
     private BigDecimal usageAmount;
+    @PositiveOrZero(message = "trường số tiền đóng góp phải lớn hơn hoặc bằng 0")
     private BigDecimal voluntaryAmount;
     @NotNull(message = "năm thu không được để trống")
     private Integer billingYear;

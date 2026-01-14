@@ -4,8 +4,13 @@ package com.example.project.fee.dto;
 import java.math.BigDecimal;
 import com.example.project.fee.entity.FeeType;
 
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+
 public class FeeCreateDTO {
+    @NotBlank(message = "Tên phí không được để trống")
     private String name;
+    @NotNull(message = "Loại phí không được để trống")
     private FeeType type;
     private BigDecimal defaultAmount;
     private BigDecimal pricePerUnit;

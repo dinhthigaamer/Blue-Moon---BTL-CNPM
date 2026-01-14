@@ -63,11 +63,9 @@ public class FeePaymentServiceImpl implements FeePaymentService {
             throw new ApiException(ErrorCode.BAD_REQUEST,
                     "Khoản thu phí cho hộ dân này với loại phí, năm và tháng đã tồn tại.");
         }
-
         e.setHousehold(household);
         e.setFee(fee);
         e.setName(fee.getName());
-
         // tính usageAmount dựa trên FeeType
         BigDecimal usageAmount;
         FeeType feeType = fee.getType();
@@ -77,11 +75,18 @@ public class FeePaymentServiceImpl implements FeePaymentService {
             usageAmount = BigDecimal.valueOf(household.getBikeCount());
         } else if (feeType == FeeType.GUI_XE_O_TO) {
             usageAmount = BigDecimal.valueOf(household.getCarCount());
+        } else if (feeType == FeeType.OPTIONAL) {
+            usageAmount = null; // loại tự nguyện không có usageAmount
         } else {
             usageAmount = dto.getUsageAmount(); // loại khác thì dung usageAmount từ dto
         }
         e.setUsageAmount(usageAmount);
-
+        if (e.getFee().getType() != FeeType.OPTIONAL) {
+            if (e.getUsageAmount() == null) {
+                throw new ApiException(ErrorCode.BAD_REQUEST,
+                        "Phải có trường mức sử dụng cho loại phí không phải tự nguyện!");
+            }
+        }
         e.setBillingYear(dto.getBillingYear());
         e.setBillingMonth(dto.getBillingMonth());
         e.setStartDate(dto.getStartDate());
@@ -94,13 +99,22 @@ public class FeePaymentServiceImpl implements FeePaymentService {
             e.setPaidDate(LocalDate.now());
         }
         BigDecimal voluntaryAmount = dto.getVoluntaryAmount();
-        if (e.getMandatory() == true && voluntaryAmount != null)
-            throw new ApiException(ErrorCode.BAD_REQUEST, "Khoản thu phí đóng góp tự nguyện không bắt buộc!");
-        if (e.getMandatory() == false && (voluntaryAmount == null || voluntaryAmount.compareTo(BigDecimal.ZERO) <= 0))
-            throw new ApiException(ErrorCode.BAD_REQUEST, "Khoản thu phí đóng góp tự nguyện phải lớn hơn 0!");
+        if (e.getMandatory() == true) {
+            if (voluntaryAmount != null) {
+                throw new ApiException(ErrorCode.BAD_REQUEST,
+                        "Không điền vào trường số tiền đóng góp nếu không phải loại tự nguyện!");
+            }
+        }
+        if (e.getMandatory() == false) {
+            if (voluntaryAmount == null || voluntaryAmount.compareTo(BigDecimal.ZERO) <= 0) {
+                throw new ApiException(ErrorCode.BAD_REQUEST,
+                        "Khoản thu phí đóng góp tự nguyện phải lớn hơn 0!");
+            }
+        }
         BigDecimal amount = calculationService.calculateFee(fee, usageAmount, voluntaryAmount);
         e.setAmount(amount);
-        return feePaymentMapper.toDTO(feePaymentRepository.save(e));
+        FeePayment saved = feePaymentRepository.save(e);
+        return feePaymentMapper.toDTO(saved);
     }
 
     @Override
@@ -134,12 +148,20 @@ public class FeePaymentServiceImpl implements FeePaymentService {
             usageAmount = BigDecimal.valueOf(household.getCarCount());
         } else if (dto.getUsageAmount() != null) {
             usageAmount = dto.getUsageAmount(); // loại khác thì dung usageAmount từ dto
+        } else if (feeType == FeeType.OPTIONAL) {
+            usageAmount = null; // loại tự nguyện không có usageAmount
         } else {
             usageAmount = e.getUsageAmount(); // nếu dto ko có usageAmount thì giữ nguyên
         }
         e.setUsageAmount(usageAmount);
         if (dto.getBillingMonth() != null) {
             e.setBillingMonth(dto.getBillingMonth());
+        }
+        if (e.getFee().getType() != FeeType.OPTIONAL) {
+            if (e.getUsageAmount() == null) {
+                throw new ApiException(ErrorCode.BAD_REQUEST,
+                        "Phải có trường mức sử dụng cho loại phí không phải tự nguyện!");
+            }
         }
         if (dto.getBillingYear() != null) {
             e.setBillingYear(dto.getBillingYear());
@@ -164,13 +186,14 @@ public class FeePaymentServiceImpl implements FeePaymentService {
                 e.setPaidDate(null);
             }
         }
-        if (e.getPaid() == true) {
-            checkAllFeePaymentPaid(e, e.getHousehold());
-        }
         BigDecimal volutaryAmount = dto.getVoluntaryAmount();
         BigDecimal amount = calculationService.calculateFee(fee, usageAmount, volutaryAmount);
         e.setAmount(amount);
-        return feePaymentMapper.toDTO(feePaymentRepository.save(e));
+        FeePayment saved = feePaymentRepository.save(e);
+        if (saved.getPaid() == true) {
+            checkAllFeePaymentPaid(saved, saved.getHousehold());
+        }
+        return feePaymentMapper.toDTO(saved);
     }
 
     @Override
