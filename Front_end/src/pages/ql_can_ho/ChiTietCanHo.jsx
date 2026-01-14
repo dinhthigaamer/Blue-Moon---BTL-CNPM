@@ -3,6 +3,7 @@ import { useState, useEffect } from "react";
 import householdAPI from "../../api/householdAPI";
 import ConfirmModal from "../../components/ConfirmModal";
 import MyTable from "../../components/MyTable";
+import dateNomalizer from "../../utils/date_normalizer";
 
 export default function ChiTietCanHo() {
     const { id } = useParams();
@@ -51,7 +52,11 @@ export default function ChiTietCanHo() {
                 const { residents, ...responseNew } = response.data.data;
                 // console.log(response);
                 setCanHo(responseNew);
-                setResidentList(residents);
+                setResidentList(residents.map((r, idx) => ({
+                    ...r,
+                    dateOfBirth: dateNomalizer.normalizeDate(r.dateOfBirth)
+                })));
+                console.log("Danh sách cư dân: ", residents);
             } catch (error) {
                 alert("Đã xảy ra lỗi !");
             }
@@ -59,19 +64,6 @@ export default function ChiTietCanHo() {
 
         fetchUser();
     }, []);
-
-    const handleConfirm = () => {
-        try {
-            const response = householdAPI.deleteHouse(id);
-
-            alert("Đã xoá thành công");
-            setConfirm({ open: false });
-            navigate("/can_ho");
-        } catch (error) {
-            console.log(error);
-            alert("Xoá không thành công");
-        }
-    };
 
     return (
         <div className="px-6 py-6 bg-gray-100 min-h-screen">

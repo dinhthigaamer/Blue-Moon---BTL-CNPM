@@ -34,6 +34,17 @@ export default function QuenMatKhau() {
         return () => clearInterval(timer);
     }, [step, resendCount]);
 
+    {/*Kiểm tra mật khẩu có trùng khớp*/ }
+    useEffect(() => {
+        if (!password) return;
+
+        if (password !== confirm) {
+            setError("Mật khẩu không khớp");
+        } else {
+            setError("");
+        }
+    }, [password, confirm]);
+
     // STEP 1: gửi OTP (demo)
     const sendOtp = async (e) => {
         e.preventDefault();

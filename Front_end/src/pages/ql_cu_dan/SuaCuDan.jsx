@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
 import Input from "../../components/Input";
+import dateNormalizer from "../../utils/date_normalizer";
 
 export default function SuaCuDan() {
     const { id } = useParams();
@@ -25,11 +26,11 @@ export default function SuaCuDan() {
         { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
         {
             label: "Giới tính", key: "gender", type: "select",
-            options: [{ label: "Nam", id: 1 }, { label: "Nữ", id: 2 }, { label: "Khác", id: 3 }]
+            options: [{ label: "Nam", value: 1 }, { label: "Nữ", value: 2 }, { label: "Khác", value: 3 }]
         },
         {
             label: "Tạm trú/tạm vắng", key: "residenceStatus", type: "select",
-            options: [{ label: "Thường trú", id: 1 }, { label: "Tạm trú", id: 2 }, { label: "Tạm vắng", id: 3 }]
+            options: [{ label: "Thường trú", value: 1 }, { label: "Tạm trú", value: 2 }, { label: "Tạm vắng", value: 3 }]
         },
         { label: "Số xe máy", key: "bikeCount", type: "number" },
         { label: "Số xe ô tô", key: "carCount", type: "number" },
@@ -48,7 +49,11 @@ export default function SuaCuDan() {
             try {
                 const response = await residentAPI.getDetailById(id);
                 console.log(response);
-                setCuDan(response.data.data)
+                const residents = response.data.data;
+                setCuDan({
+                    ...residents,
+                    dateOfBirth: dateNormalizer.normalizeDate(residents.dateOfBirth)
+                });
             } catch (error) {
                 alert(error?.response?.data?.message || "Đã xảy ra lỗi, vui lòng thử lại");
             }
@@ -69,7 +74,7 @@ export default function SuaCuDan() {
                 "bikeCount": cuDan["bikeCount"],
                 "ethnicity": cuDan["ethnicity"],
                 "religion": cuDan["religion"],
-                "dateOfBirth": cuDan["dateOfBirth"],
+                // "dateOfBirth": cuDan["dateOfBirth"],
                 "occupation": cuDan["occupation"],
                 "residenceStatus": cuDan["residenceStatus"],
                 "gender": cuDan["gender"]

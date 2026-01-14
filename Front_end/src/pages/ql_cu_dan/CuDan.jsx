@@ -3,6 +3,7 @@ import { useState, useEffect } from 'react'
 import MyTable from '../../components/MyTable';
 import residentAPI from "../../api/residentAPI";
 import ConfirmModal from "../../components/ConfirmModal";
+import dateNormalizer from "../../utils/date_normalizer";
 
 export default function CuDan() {
     const navigate = useNavigate();
@@ -91,7 +92,12 @@ export default function CuDan() {
                 const response = await residentAPI.getResident();
 
                 if (response.data.success === true) {
-                    setData(response.data.data);
+                    const residents = response.data.data;
+                    setData(residents.map((r, idx) => ({
+                        ...r,
+                        dateOfBirth: dateNormalizer.normalizeDate(r.dateOfBirth)
+                    })));
+
 
                     console.log("Fetch data thành công");
                 }

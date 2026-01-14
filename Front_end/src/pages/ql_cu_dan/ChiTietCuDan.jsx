@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import residentAPI from "../../api/residentAPI";
 import ConfirmModal from "../../components/ConfirmModal";
+import dateNormalizer from "../../utils/date_normalizer";
 
 export default function ChiTietCuDan() {
     const { id } = useParams();
@@ -41,7 +42,11 @@ export default function ChiTietCuDan() {
             try {
                 const response = await residentAPI.getDetailById(id);
                 console.log(response);
-                setCuDan(response.data.data)
+                const residents = response.data.data;
+                setCuDan({
+                    ...residents,
+                    dateOfBirth: dateNormalizer.normalizeDate(residents.dateOfBirth)
+                });
             } catch (error) {
 
             }

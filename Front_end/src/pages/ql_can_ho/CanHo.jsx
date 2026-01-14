@@ -18,8 +18,9 @@ export default function CanHo() {
         { label: "Số phòng", key: "roomNumber" },
         { label: "Chủ sở hữu", key: "ownerName" },
         { label: "Số người", key: "residentCount" },
-        { label: "Số phương tiện", key: "vehicleCount" },
-        { label: "Tình trạng: ", key: "isVacant" }
+        { label: "Số xe máy", key: "bikeCount" },
+        { label: "Số ô tô", key: "carCount" }
+        // { label: "Tình trạng: ", key: "isVacant" }
     ]
 
     const [data, setData] = useState([]);

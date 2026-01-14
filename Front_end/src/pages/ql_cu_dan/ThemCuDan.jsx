@@ -26,7 +26,7 @@ export default function ThemCuDan() {
         { label: "Email", key: "email", required: true },
         { label: "Số điện thoại", key: "phone", type: "tel" },
         { label: "Số căn cước", key: "cccd", required: true },
-        { label: "Ngày sinh", key: "dateOfBirth", type: "date" },
+        { label: "Ngày sinh", key: "dateOfBirth", type: "date", required: true },
         {
             label: "Giới tính", key: "gender", type: "select",
             options: [{ label: "Nam", value: 1 }, { label: "Nữ", value: 2 }, { label: "Khác", value: 3 }]
