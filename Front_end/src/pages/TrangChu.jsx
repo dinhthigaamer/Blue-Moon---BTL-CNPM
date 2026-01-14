@@ -56,7 +56,7 @@ export default function TrangChu() {
   return (
     <div className="p-6">
       {/* Header */}
-      <h1 className="text-3xl font-bold mb-6 text-center">Trang chủ</h1>
+      <h1 className="text-3xl font-bold mb-6 ">Welcome to Bluemoon</h1>
 
       {/* Thông báo */}
       <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
