@@ -47,44 +47,51 @@ export default function CuDan() {
     const [data, setData] = useState([]);
 
     const [search, setSearch] = useState("");
-    const [openFilter, setOpenFilter] = useState(false);
-
-    const [filters, setFilters] = useState({
-        residenceStatus: "",
-        carCount: ""
-    });
-
-    const handleFilterChange = (e) => {
-        const { name, value } = e.target;
-        setFilters((prev) => ({
-            ...prev,
-            [name]: value
-        }));
-    };
 
     const buildQuery = () => {
         const params = new URLSearchParams();
 
         if (search) {
-            params.append("roomName", search);
+            const hasNumber = (str) => /\d/.test(str);
+
+            if (hasNumber(search)) {
+                params.append("roomNumber", search.trim());
+            } else
+                params.append("fullName", search.trim());
             // backend map keyword -> fullName OR roomNumber
         }
 
-        Object.entries(filters).forEach(([key, value]) => {
-            if (value !== "") {
-                params.append(key, value);
-            }
-        });
+        // Object.entries(filters).forEach(([key, value]) => {
+        //     if (value !== "") {
+        //         params.append(key, value);
+        //     }
+        // });
 
         return params.toString();
     };
 
     const fetchResidents = async () => {
-        const query = buildQuery();
-        const userList = await residentAPI.queryRes(query);
-        setData(userList.data.data);
+        try {
+            const query = buildQuery();
+            const userList = await residentAPI.queryRes(query);
+            const residentList = userList.data.data;
+            setData(residentList.map((r, idx) => ({
+                ...r,
+                dateOfBirth: dateNormalizer.normalizeDate(r.dateOfBirth)
+            })));
+        } catch (error) {
+            console.error(error);
+        }
     };
 
+    useEffect(() => {
+        // if (!search) return;
+        const timer = setTimeout(() => {
+            fetchResidents();
+        }, 3500); // 5 giây
+
+        return () => clearTimeout(timer); // huỷ nếu gõ tiếp
+    }, [search]);
 
     useEffect(() => {
         const getResidents = async function () {
@@ -113,8 +120,6 @@ export default function CuDan() {
         navigate(`${row.id}`);
     };
 
-    console.log(clickRowHandler);
-
     const handleConfirm = async () => {
         try {
             await residentAPI.createRes(cuDan);
@@ -123,13 +128,33 @@ export default function CuDan() {
             alert("Thêm cư dân thành cồng");
 
         } catch (error) {
-
+            alert("Thêm thất bại");
         }
     };
 
     return (
         <div className="min-h-screen flex flex-col space-y-4">
+            <p className="font-semibold py-2">
+                Danh sách cư dân, bấm vào để xem chi tiết
+            </p>
 
+            {/* 🔍 SEARCH */}
+            <input
+                type="text"
+                placeholder="Tìm theo tên hoặc số phòng..."
+                value={search}
+                onChange={(e) => setSearch(e.target.value)}
+                className="
+            w-1/3
+            px-3 py-2
+            border
+            rounded-lg
+            text-sm
+            outline-none
+            focus:ring-2
+            focus:ring-teal-300
+        "
+            />
             <p className="font-semibold py-2">
                 Danh sách cư dân, bấm vào để xem chi tiết
             </p>
