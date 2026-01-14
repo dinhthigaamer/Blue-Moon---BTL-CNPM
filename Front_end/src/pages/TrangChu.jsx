@@ -1,14 +1,27 @@
 import React, { useState, useEffect } from "react";
+import { getResidentsCount } from "../api/feeService"; // gọi API cư dân
 
 export default function TrangChu() {
-  const [residentsCount] = useState(1);
-  const [roomCount] = useState(1);
+  const [residentsCount, setResidentsCount] = useState(0);
+  const [roomCount, setRoomCount] = useState(0);
 
   // Thông báo mới nhất
   const [latestNotice, setLatestNotice] = useState("");
 
   useEffect(() => {
     setLatestNotice("🔔 Chung cư sẽ bảo trì thang máy từ ngày 5/1 đến 7/1.");
+
+    // gọi API lấy tổng số cư dân và hộ
+    const fetchResidents = async () => {
+      try {
+        const data = await getResidentsCount();
+        setResidentsCount(data.residentCount);
+        setRoomCount(data.householdCount);
+      } catch (err) {
+        console.error("Error fetching residents count:", err);
+      }
+    };
+    fetchResidents();
   }, []);
 
   // Tin tức + ảnh (ảnh local trong public/images)
@@ -43,7 +56,7 @@ export default function TrangChu() {
   return (
     <div className="p-6">
       {/* Header */}
-      <h1 className="text-3xl font-bold mb-6 text-center"> Trang chủ</h1>
+      <h1 className="text-3xl font-bold mb-6 text-center">Trang chủ</h1>
 
       {/* Thông báo */}
       <div className="bg-yellow-100 border-l-4 border-yellow-500 text-yellow-700 p-4 mb-6">
@@ -51,9 +64,20 @@ export default function TrangChu() {
         <p>{latestNotice}</p>
       </div>
 
+      {/* Tổng số cư dân và hộ */}
+      <div className="grid grid-cols-2 gap-6 mb-8">
+        <div className="bg-white shadow rounded-lg p-6 text-center">
+          <h2 className="text-xl font-semibold text-teal-600">Tổng số cư dân</h2>
+          <p className="text-2xl font-bold">{residentsCount}</p>
+        </div>
+        <div className="bg-white shadow rounded-lg p-6 text-center">
+          <h2 className="text-xl font-semibold text-teal-600">Tổng số hộ</h2>
+          <p className="text-2xl font-bold">{roomCount}</p>
+        </div>
+      </div>
 
       {/* Tin tức */}
-      <h2 className="text-2xl font-bold mb-4"> Tin tức mới nhất</h2>
+      <h2 className="text-2xl font-bold mb-4">Tin tức mới nhất</h2>
       <div className="bg-gray-100 p-4 rounded shadow text-center">
         <a
           href={newsItems[currentIndex].link}
