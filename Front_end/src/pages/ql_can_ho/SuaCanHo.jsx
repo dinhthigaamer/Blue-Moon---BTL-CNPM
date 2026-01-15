@@ -109,11 +109,11 @@ export default function SuaCanHo() {
         <div className="min-h-screen bg-gray-100 flex flex-col items-center py-10 px-4">
             <div className="bg-white rounded-lg shadow-md p-8 w-full max-w-4xl">
                 <button
-                    onClick={() => navigate("/can_ho")}
+                    onClick={() => navigate(-1)}
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
-                    Quay lại danh sách căn hộ
+                    Quay lại
                 </button>
                 <h1 className="text-2xl font-semibold mb-6">Chỉnh sửa căn hộ</h1>
 

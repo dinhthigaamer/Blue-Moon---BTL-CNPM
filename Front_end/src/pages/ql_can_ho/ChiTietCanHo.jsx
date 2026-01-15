@@ -65,16 +65,28 @@ export default function ChiTietCanHo() {
         fetchUser();
     }, []);
 
+    const handleConfirm = () => {
+        try {
+            const response = householdAPI.deleteHouse(id);
+
+            alert("Đã xoá thành công");
+            setConfirm({ open: false });
+            navigate("/can_ho");
+        } catch (error) {
+            alert("Xoá không thành công");
+        }
+    };
+
     return (
         <div className="px-6 py-6 bg-gray-100 min-h-screen">
             <div className="max-w-3xl">
                 {/* QUAY LẠI */}
                 <button
-                    onClick={() => navigate("/can_ho")}
+                    onClick={() => navigate(-1)}
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
-                    Quay lại danh sách căn hộ
+                    Quay lại
                 </button>
 
                 <div className="bg-white rounded-lg shadow p-6">

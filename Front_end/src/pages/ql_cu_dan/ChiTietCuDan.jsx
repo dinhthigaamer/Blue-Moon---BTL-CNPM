@@ -72,11 +72,11 @@ export default function ChiTietCuDan() {
             <div className="max-w-3xl">
                 {/* QUAY LẠI */}
                 <button
-                    onClick={() => navigate("/cu_dan")}
+                    onClick={() => navigate(-1)}
                     className="flex items-center text-gray-600 hover:text-gray-900 mb-4"
                 >
                     <span className="text-xl mr-2">←</span>
-                    Quay lại danh sách cư dân
+                    Quay lại
                 </button>
 
                 <div className="bg-white rounded-lg shadow p-6">
