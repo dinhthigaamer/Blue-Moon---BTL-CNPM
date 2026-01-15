@@ -77,17 +77,17 @@ export default function ChiTietCanHo() {
         fetchUser();
     }, []);
 
-    const handleConfirm = () => {
-        try {
-            const response = householdAPI.deleteHouse(id);
+    // const handleConfirm = () => {
+    //     try {
+    //         const response = householdAPI.deleteHouse(id);
 
-            alert("Đã xoá thành công");
-            setConfirm({ open: false });
-            navigate("/can_ho");
-        } catch (error) {
-            alert("Xoá không thành công");
-        }
-    };
+    //         alert("Đã xoá thành công");
+    //         setConfirm({ open: false });
+    //         navigate("/can_ho");
+    //     } catch (error) {
+    //         alert("Xoá không thành công");
+    //     }
+    // };
 
     return (
         <div className="px-6 py-6 bg-gray-100 min-h-screen">

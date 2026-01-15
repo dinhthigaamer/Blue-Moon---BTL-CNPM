@@ -2,6 +2,7 @@ import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from 'react'
 import ConfirmModal from "../../components/ConfirmModal";
 import residentAPI from "../../api/residentAPI";
+import householdAPI from "../../api/householdAPI";
 import Input from "../../components/Input";
 
 export default function ThemCuDan() {
@@ -46,23 +47,44 @@ export default function ThemCuDan() {
         setCuDan({ ...cuDan, [e.target.name]: e.target.value });
     }
 
+    // Khi thêm cư dân mới vào căn hộ đang trống, tự chuyển thành chủ phòng
+    const updateRoomVacant = async (roomNumber) => {
+        try {
+            const response = await householdAPI.getDetailByRoomNumber(roomNumber);
+            console.log(response);
+            const room = response.data.data;
+
+            if (room.residents.length == 1) {
+                const body = {
+                    "ownerName": cuDan["fullName"],
+                    "ownerCccd": cuDan["cccd"],
+                    "area": room["area"],
+                    "isVacant": false
+                };
+                await householdAPI.update(room["id"], body);
+                // alert("Đã thêm vào phòng");
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Thêm vào phòng thất bại");
+        }
+    }
+
     const handleSubmit = async (e) => {
         e.preventDefault();
         console.log(cuDan);
 
         try {
             const response = await residentAPI.createRes(cuDan);
+            await updateRoomVacant(cuDan["roomNumber"]);
 
             console.log(cuDan);
-            alert("Đã thêm thành công !");
+            alert("Đã thêm thành công!");
             navigate("/cu_dan");
         } catch (error) {
             console.log(error);
             if (error.response.data.errorCode === "VALIDATION_ERROR") {
                 alert("Mã căn cước hoặc email không hợp lệ");
-            }
-            else if (error.response.data.errorCode === "NOT_FOUND") {
-                alert("Số phòng không hợp lệ");
             }
             else if (error.response.data.errorCode === "NOT_FOUND") {
                 alert("Số phòng không hợp lệ");

@@ -1,6 +1,7 @@
 import { useParams, useNavigate } from "react-router-dom";
 import { useState, useEffect } from "react";
 import residentAPI from "../../api/residentAPI";
+import householdAPI from "../../api/householdAPI";
 import ConfirmModal from "../../components/ConfirmModal";
 import dateNormalizer from "../../utils/date_normalizer";
 
@@ -55,9 +56,43 @@ export default function ChiTietCuDan() {
         fetchUser();
     }, []);
 
-    const handleConfirm = () => {
+    // Sau khi xoá hết cư dân, cập nhật phòng về isVacant(trống)
+    // Nếu xoá đúng chủ phòng thì gán cho người gần nhất
+    const updateRoomVacant = async (roomNumber) => {
         try {
-            const response = residentAPI.deleteRes(id);
+            const response = await householdAPI.getDetailByRoomNumber(roomNumber);
+            console.log(response);
+            const room = response.data.data;
+
+            if (room.residents.length == 0) {
+                const body = {
+                    "ownerName": "",
+                    "ownerCccd": "",
+                    "area": room["area"],
+                    "isVacant": true
+                };
+                await householdAPI.update(room["id"], body);
+                // alert("Đã thêm vào phòng");
+            } else if (room["ownerCccd"] === cuDan["cccd"]) {
+                const newHost = (room.residents[0]["cccd"] === cuDan["cccd"]) ? 1 : 0;
+                const body = {
+                    "ownerName": room.residents[newHost]["fullName"],
+                    "ownerCccd": room.residents[newHost]["cccd"],
+                    "area": room["area"],
+                    "isVacant": false
+                };
+                await householdAPI.update(room["id"], body);
+            }
+        } catch (error) {
+            console.log(error);
+            alert("Đã xảy ra lỗi");
+        }
+    }
+
+    const handleConfirm = async () => {
+        try {
+            const response = await residentAPI.deleteRes(id);
+            await updateRoomVacant(cuDan["roomNumber"]);
 
             alert("Đã xoá thành công");
             setConfirm({ open: false });
