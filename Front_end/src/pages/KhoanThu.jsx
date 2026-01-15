@@ -10,6 +10,18 @@ import {
 import FeePaymentTable from "../components/FeePaymentTable";
 import { useNavigate } from "react-router-dom";
 
+const toDateString = (d) => {
+  if (!d) return null;
+
+  // Trường hợp backend trả về dạng [yyyy, mm, dd]
+  if (Array.isArray(d)) {
+    const [y, m, day] = d;
+    return `${y}-${String(m).padStart(2, "0")}-${String(day).padStart(2, "0")}`;
+  }
+
+  // Đã là string yyyy-MM-dd
+  return d;
+};
 export default function KhoanThu() {
   const [payments, setPayments] = useState([]);
   const [filters, setFilters] = useState({
@@ -44,18 +56,38 @@ export default function KhoanThu() {
     loadPayments();
   }, []);
 
-  // Lọc phiếu thu theo filters
-  const handleSearch = async () => {
-    const params = {};
-    if (filters.roomNumber) params.roomNumber = filters.roomNumber;
-    if (filters.feeId) params.feeId = filters.feeId;
-    if (filters.billingYear) params.billingYear = filters.billingYear;
-    if (filters.billingMonth) params.billingMonth = filters.billingMonth;
+  // Tim kiem/ loc phieu thu
+ const handleSearch = async () => {
+  const params = {};
 
-    const res = await searchFeePayments(params);
-    if (res.success) setPayments(res.data);
-    else alert("Lỗi khi lọc phiếu thu: " + res.message);
-  };
+  if (filters.roomNumber) params.roomNumber = filters.roomNumber.trim();
+  if (filters.feeId) params.feeId = Number(filters.feeId);
+  if (filters.billingYear) params.billingYear = Number(filters.billingYear);
+  if (filters.billingMonth) params.billingMonth = Number(filters.billingMonth);
+
+  if (filters.startFrom) params.startFrom = filters.startFrom;
+  if (filters.startTo) params.startTo = filters.startTo;
+  if (filters.dueFrom) params.dueFrom = filters.dueFrom;
+  if (filters.dueTo) params.dueTo = filters.dueTo;
+
+  if (filters.mandatory != null && filters.mandatory !== "")
+    params.mandatory = filters.mandatory === "true";
+
+  if (filters.paid != null && filters.paid !== "")
+    params.paid = filters.paid === "true";
+
+  console.log("SEARCH PARAMS >>>", params);
+
+  try {
+    const data = await searchFeePayments(params);
+    setPayments(data);
+  } catch (error) {
+    console.error("Error searching fee payments:", error);
+    alert("Lỗi khi lọc phiếu thu");
+  }
+};
+
+
 
   // Load loại phí
   const loadFees = async () => {
@@ -78,16 +110,38 @@ export default function KhoanThu() {
   };
 
   // Cập nhật phiếu thu
-  const handleUpdate = async () => {
-    const res = await updateFeePayment(editingPayment.id, editingPayment);
-    if (res.success) {
-      alert("Cập nhật thành công!");
-      setEditingPayment(null);
-      loadPayments();
-    } else {
-      alert("Lỗi khi cập nhật: " + res.message);
-    }
+const handleUpdate = async () => {
+  const payload = {
+    roomNumber: editingPayment.roomNumber,
+    feeId: editingPayment.feeId,
+    billingYear: editingPayment.billingYear,
+    billingMonth: editingPayment.billingMonth,
+    mandatory: editingPayment.mandatory,
+    paid: editingPayment.paid,
+
+    // BigDecimal
+    usageAmount: editingPayment.usageAmount?.toString(),
+    voluntaryAmount: editingPayment.voluntaryAmount?.toString(),
+    startDate: toDateString(editingPayment.startDate),
+    dueDate: toDateString(editingPayment.dueDate),
+    paidDate: toDateString(editingPayment.paidDate),
   };
+
+  console.log("PAYLOAD SENT >>>", payload);
+
+  const res = await updateFeePayment(editingPayment.id, payload);
+
+  if (res.success) {
+    alert("Cập nhật thành công!");
+    setEditingPayment(null);
+    loadPayments();
+  } else {
+    alert("Lỗi khi cập nhật: " + res.message);
+  }
+};
+
+
+
 
   // Tạo loại phí mới
   const handleCreateFee = async (e) => {
@@ -114,33 +168,37 @@ export default function KhoanThu() {
       <h1 className="text-2xl font-bold mb-4">Khoản thu</h1>
 
       {/* Form lọc */}
-      <div className="grid grid-cols-5 gap-4 mb-4 items-end">
-        <input
-          placeholder="Số căn hộ"
-          className="border px-2 py-1"
-          value={filters.roomNumber}
-          onChange={(e) => setFilters({ ...filters, roomNumber: e.target.value })}
-        />
-        <input
-          placeholder="Loại phí ID"
-          className="border px-2 py-1"
-          value={filters.feeId}
-          onChange={(e) => setFilters({ ...filters, feeId: e.target.value })}
-        />
-        <input
-          placeholder="Năm"
-          className="border px-2 py-1"
-          value={filters.billingYear}
-          onChange={(e) => setFilters({ ...filters, billingYear: e.target.value })}
-        />
-        <input
-          placeholder="Tháng"
-          className="border px-2 py-1"
-          value={filters.billingMonth}
-          onChange={(e) => setFilters({ ...filters, billingMonth: e.target.value })}
-        />
-        <Button onClick={handleSearch}>Lọc</Button>
-      </div>
+<div className="grid grid-cols-5 gap-4 mb-4 items-end">
+  <input
+    placeholder="Số căn hộ"
+    className="border px-2 py-1"
+    value={filters.roomNumber || ""}
+    onChange={(e) => setFilters({ ...filters, roomNumber: e.target.value })}
+  />
+  <input
+    type="number"
+    placeholder="Loại phí ID"
+    className="border px-2 py-1"
+    value={filters.feeId || ""}
+    onChange={(e) => setFilters({ ...filters, feeId: e.target.value })}
+  />
+  <input
+    type="number"
+    placeholder="Năm"
+    className="border px-2 py-1"
+    value={filters.billingYear || ""}
+    onChange={(e) => setFilters({ ...filters, billingYear: e.target.value })}
+  />
+  <input
+    type="number"
+    placeholder="Tháng"
+    className="border px-2 py-1"
+    value={filters.billingMonth || ""}
+    onChange={(e) => setFilters({ ...filters, billingMonth: e.target.value })}
+  />
+  <Button onClick={handleSearch}>Lọc</Button>
+</div>
+
 
       {/* Bảng danh sách phiếu thu */}
       <FeePaymentTable
@@ -151,10 +209,9 @@ export default function KhoanThu() {
       />
 
       {/* Form chỉnh sửa phiếu thu */}
-      {/* Form chỉnh sửa phiếu thu */}
-{editingPayment && (
-  <div className="mt-6 border p-6 rounded bg-white shadow">
-    <h2 className="text-xl font-bold mb-4">Chỉnh sửa phiếu thu</h2>
+      {editingPayment && (
+        <div className="mt-6 border p-6 rounded bg-white shadow">
+          <h2 className="text-xl font-bold mb-4">Chỉnh sửa phiếu thu</h2>
 
     <div className="grid grid-cols-2 gap-4">
       <InputField
@@ -168,10 +225,14 @@ export default function KhoanThu() {
         }
       />
       <InputField
-        label="Loại phí"
+        label="Loại phí (Fee ID)"
+        type="number"
         value={editingPayment.feeId}
         onChange={(e) =>
-          setEditingPayment({ ...editingPayment, feeId: e.target.value })
+          setEditingPayment({
+            ...editingPayment,
+            feeId: Number(e.target.value)
+          })
         }
       />
       <InputField
@@ -221,7 +282,7 @@ export default function KhoanThu() {
       <InputField
         label="Ngày bắt đầu"
         type="date"
-        value={editingPayment.startDate || ""}
+        value={toDateString(editingPayment.startDate) || ""}
         onChange={(e) =>
           setEditingPayment({
             ...editingPayment,
@@ -232,7 +293,7 @@ export default function KhoanThu() {
       <InputField
         label="Hạn nộp"
         type="date"
-        value={editingPayment.dueDate || ""}
+        value={toDateString(editingPayment.dueDate) || ""}
         onChange={(e) =>
           setEditingPayment({
             ...editingPayment,
@@ -240,6 +301,21 @@ export default function KhoanThu() {
           })
         }
       />
+
+      <div>
+        <label className="block font-medium mb-1">Bắt buộc</label>
+        <input
+          type="checkbox"
+          checked={editingPayment.mandatory || false}
+          onChange={(e) =>
+            setEditingPayment({
+              ...editingPayment,
+              mandatory: e.target.checked
+            })
+          }
+        />
+      </div>
+
       <div>
         <label className="block font-medium mb-1">Trạng thái</label>
         <select
@@ -256,11 +332,12 @@ export default function KhoanThu() {
           <option value="true">Đã nộp</option>
         </select>
       </div>
+
       {editingPayment.paid && (
         <InputField
           label="Ngày nộp"
           type="date"
-          value={editingPayment.paidDate || ""}
+          value={toDateString(editingPayment.paidDate) || ""}
           onChange={(e) =>
             setEditingPayment({
               ...editingPayment,
@@ -282,6 +359,7 @@ export default function KhoanThu() {
     </div>
   </div>
 )}
+
 
 
       {/* Nút tạo khoản thu và quản lý loại phí */}

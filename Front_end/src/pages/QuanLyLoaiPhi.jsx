@@ -119,12 +119,7 @@ export default function QuanLyLoaiPhi() {
             value={newFee.type}
             onChange={(e) => setNewFee({ ...newFee, type: e.target.value })}
           >
-            <option value="SERVICE_FEE">Phí dịch vụ (diện tích)</option>
-            <option value="PARKING">Phí gửi xe</option>
-            <option value="ELECTRICITY">Phí điện</option>
-            <option value="WATER">Phí nước</option>
-            <option value="MANAGEMENT_FEE">Phí quản lý</option>
-            <option value="OPTIONAL">Tự nguyện</option>
+            <option value="SERVICE_FEE">Phí dịch vụ (diện tích)</option> <option value="GUI_XE_MAY">Phí gửi xe máy</option> <option value="GUI_XE_O_TO">Phí gửi ô tô</option> <option value="ELECTRICITY">Phí điện</option> <option value="WATER">Phí nước</option> <option value="MANAGEMENT_FEE">Phí quản lý</option> <option value="OPTIONAL">Tự nguyện</option>
           </select>
         </div>
         <InputField

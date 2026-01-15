@@ -38,6 +38,19 @@ export default function ChiTietCanHo() {
         navigate(`/cu_dan/${row.id}`);
     };
 
+    // ✅ thêm hàm handleConfirm
+    const handleConfirm = async () => {
+        try {
+            await householdAPI.deleteHouse(id);
+            alert("Đã xoá thành công");
+            setConfirm({ open: false });
+            navigate("/can_ho");
+        } catch (error) {
+            console.error("Lỗi xoá căn hộ:", error);
+            alert("Xoá không thành công");
+        }
+    };
+
     const [canHo, setCanHo] = useState({
         "roomNumber": "203",
         "ownerName": "Nguyễn Văn A",
@@ -50,7 +63,6 @@ export default function ChiTietCanHo() {
             try {
                 const response = await householdAPI.getDetailById(id);
                 const { residents, ...responseNew } = response.data.data;
-                // console.log(response);
                 setCanHo(responseNew);
                 setResidentList(residents.map((r, idx) => ({
                     ...r,
@@ -96,11 +108,9 @@ export default function ChiTietCanHo() {
                         </h1>
                     </div>
 
-
                     <div className="space-y-4">
                         {
                             infor.map((item, index) => {
-                                // console.log(item.key, cuDan[item.key] || "Không có");
                                 return (<Info label={item.label} value={canHo[item.key] || null} />);
                             })
                         }
@@ -187,4 +197,3 @@ function Info({ label, value }) {
         </div>
     );
 }
-

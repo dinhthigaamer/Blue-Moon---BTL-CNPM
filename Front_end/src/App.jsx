@@ -18,7 +18,8 @@ import KhoanThu from "./pages/KhoanThu";
 import TaoKhoanThu from "./pages/TaoKhoanThu";
 import TraCuu from "./pages/TraCuu";
 import QLTaiKhoan from "./pages/taikhoan/QLTaiKhoan";
-import QuanLyLoaiPhi from "./pages/QuanLyLoaiPhi";   // 👈 thêm import
+import QuanLyLoaiPhi from "./pages/QuanLyLoaiPhi";
+import CongNo from "./pages/CongNo"; // ✅ sửa lại import nếu cần
 
 // Tài khoản
 import TaiKhoan from "./pages/taikhoan/TaiKhoan";
@@ -79,7 +80,8 @@ export default function App() {
         <Route path="/khoan_thu" element={<KhoanThu />} />
         <Route path="/khoan_thu/tao" element={<TaoKhoanThu />} />
         <Route path="/tra_cuu" element={<TraCuu />} />
-        <Route path="/loai_phi" element={<QuanLyLoaiPhi />} /> {/* 👈 thêm route */}
+        <Route path="/loai_phi" element={<QuanLyLoaiPhi />} />
+        <Route path="/cong-no" element={<CongNo />} /> {/* ✅ sửa lại tên route */}
       </Route>
     </Routes>
   );

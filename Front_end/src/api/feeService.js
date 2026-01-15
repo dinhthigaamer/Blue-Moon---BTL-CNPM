@@ -32,11 +32,12 @@ export const getFeePaymentById = async (id) => {
   return res.data;
 };
 
-// Tìm kiếm khoản thu 
+// Tìm kiếm khoản thu
 export const searchFeePayments = async (params) => {
-  const res = await axiosClient.post("/fee-payments/search", params);
-  return res.data;
+  const res = await axiosClient.get("/fee-payments/search", { params });
+  return res.data.data; // nếu backend trả ApiResponse<List<FeePaymentDTO>>
 };
+
 
 // ---------------- Fee APIs ----------------
 
@@ -84,27 +85,43 @@ export const deleteFee = async (id) => {
 
 // ---------------- Statistics APIs ----------------
 
-// Thống kê tổng thu theo tháng
+
+
+// Thống kê tổng thu theo tháng (GET + query params)
 export const getMonthlyRevenue = async ({ year, month }) => {
-  const res = await axiosClient.get("/statistics/monthly-revenue", { params: { year, month } });
-  return res.data;
+  const res = await axiosClient.get("/statistics/monthly-revenue", {
+    params: { year, month }
+  });
+  return res.data.data; // ApiResponse<MonthlyRevenueOutDTO> → lấy data
 };
 
-// Thống kê theo từng loại phí
+// Thống kê theo từng loại phí (GET + query params)
 export const getFeeSummary = async ({ feeId, year, month }) => {
-  const res = await axiosClient.get("/statistics/fee-summary", { params: { feeId, year, month } });
-  return res.data;
+  const res = await axiosClient.get("/statistics/fee-summary", {
+    params: { feeId, year, month }
+  });
+  return res.data.data; // ApiResponse<FeeSummaryOutDTO>
 };
 
-// Thống kê khoản thu tự nguyện
+// Thống kê khoản thu tự nguyện (GET + query params)
 export const getVoluntarySummary = async ({ year, month }) => {
-  const res = await axiosClient.get("/statistics/voluntary-summary", { params: { year, month } });
-  return res.data;
+  const res = await axiosClient.get("/statistics/voluntary-summary", {
+    params: { year, month }
+  });
+  return res.data.data; // ApiResponse<VoluntarySummaryOutDTO>
 };
 
-// Đếm số dân và số hộ dân
+// Thống kê cư trú (GET, không có params)
 export const getResidentsCount = async () => {
   const res = await axiosClient.get("/statistics/residents");
-  // API mới trả về { residentCount, householdCount }
-  return res.data;
+  return res.data.data; // ApiResponse<ResidentAndHouseholdCountDTO>
 };
+
+export const getOutstandingFees = async () => {
+  const res = await axiosClient.get("/fee-payments/outstanding");
+  return res.data.data; // [{ roomNumber, totalOutstandingAmount }, ...]
+};
+
+
+
+

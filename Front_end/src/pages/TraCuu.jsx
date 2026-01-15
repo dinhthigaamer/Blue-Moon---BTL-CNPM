@@ -1,10 +1,22 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   getMonthlyRevenue,
   getFeeSummary,
   getVoluntarySummary,
-  getResidentsCount
 } from "../api/feeService";
+import {
+  Chart as ChartJS,
+  CategoryScale,
+  LinearScale,
+  BarElement,
+  Title,
+  Tooltip,
+  Legend
+} from "chart.js";
+import { Bar } from "react-chartjs-2";
+import { useNavigate } from "react-router-dom";
+
+ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend);
 
 // Button tái sử dụng
 function Button({ children, ...props }) {
@@ -19,35 +31,103 @@ function Button({ children, ...props }) {
 }
 
 export default function TraCuu() {
-  const [year, setYear] = useState("");
+  const [year, setYear] = useState(new Date().getFullYear());
   const [month, setMonth] = useState("");
   const [feeId, setFeeId] = useState("");
   const [result, setResult] = useState({});
+  const [monthlyTotals, setMonthlyTotals] = useState([]);
+  const navigate = useNavigate();
+
+  // Gọi API cho tất cả 12 tháng khi chọn năm
+  useEffect(() => {
+    const fetchYearlyRevenue = async () => {
+      if (!year) return;
+      try {
+        const promises = Array.from({ length: 12 }, (_, i) =>
+          getMonthlyRevenue({ year: Number(year), month: i + 1 })
+        );
+        const results = await Promise.all(promises);
+        setMonthlyTotals(results.map((r) => r.total));
+      } catch (err) {
+        console.error("Error fetching yearly revenue:", err);
+      }
+    };
+    fetchYearlyRevenue();
+  }, [year]);
 
   const handleMonthlyRevenue = async () => {
-    const res = await getMonthlyRevenue({ year, month });
-    if (res.success) setResult({ ...result, monthlyRevenue: res.data });
+    try {
+      const data = await getMonthlyRevenue({
+        year: Number(year),
+        month: Number(month)
+      });
+      setResult((prev) => ({ ...prev, monthlyRevenue: data }));
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi thống kê doanh thu tháng");
+    }
   };
 
   const handleFeeSummary = async () => {
-    const res = await getFeeSummary({ feeId, year, month });
-    if (res.success) setResult({ ...result, feeSummary: res.data });
+    try {
+      const data = await getFeeSummary({
+        feeId: Number(feeId),
+        year: Number(year),
+        month: Number(month)
+      });
+      setResult((prev) => ({ ...prev, feeSummary: data }));
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi thống kê theo loại phí");
+    }
   };
 
   const handleVoluntarySummary = async () => {
-    const res = await getVoluntarySummary({ year, month });
-    if (res.success) setResult({ ...result, voluntarySummary: res.data });
+    try {
+      const data = await getVoluntarySummary({
+        year: Number(year),
+        month: Number(month)
+      });
+      setResult((prev) => ({ ...prev, voluntarySummary: data }));
+    } catch (err) {
+      console.error(err);
+      alert("Lỗi khi thống kê khoản tự nguyện");
+    }
   };
 
-  const handleResidentsCount = async () => {
-    const res = await getResidentsCount();
-    if (res.success) setResult({ ...result, residentsCount: res.data });
+  // Dữ liệu biểu đồ
+  const chartData = {
+    labels: Array.from({ length: 12 }, (_, i) => `Tháng ${i + 1}`),
+    datasets: [
+      {
+        label: "Doanh thu (VNĐ)",
+        data: monthlyTotals,
+        backgroundColor: "rgba(20, 184, 166, 0.7)",
+        borderRadius: 6
+      }
+    ]
+  };
+
+  const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: { display: false },
+      title: { display: true, text: `Tổng doanh thu theo tháng - Năm ${year}` }
+    },
+    scales: {
+      y: {
+        ticks: {
+          callback: (value) => value.toLocaleString() + " đ"
+        }
+      }
+    }
   };
 
   return (
-    <div className="p-6">
-      <h1 className="text-2xl font-bold mb-4">Thống kê</h1>
+    <div className="p-6 bg-gray-50 min-h-screen">
+      <h1 className="text-2xl font-bold mb-4 text-teal-700">Thống kê</h1>
 
+      {/* Input filter */}
       <div className="grid grid-cols-3 gap-4 mb-6">
         <div>
           <label className="block mb-1">Năm:</label>
@@ -78,15 +158,16 @@ export default function TraCuu() {
         </div>
       </div>
 
+      {/* Action buttons */}
       <div className="space-x-2 mb-6">
         <Button onClick={handleMonthlyRevenue}>Thống kê doanh thu tháng</Button>
         <Button onClick={handleFeeSummary}>Thống kê theo loại phí</Button>
         <Button onClick={handleVoluntarySummary}>Thống kê khoản tự nguyện</Button>
-        <Button onClick={handleResidentsCount}>Tổng số cư dân</Button>
+        <Button onClick={() => navigate("/cong-no")}>Thống kê công nợ</Button>
       </div>
 
       {/* Hiển thị kết quả */}
-      <div className="space-y-4">
+      <div className="space-y-4 mb-10">
         {result.monthlyRevenue && (
           <div className="border p-4 rounded bg-white">
             <h2 className="font-semibold">Doanh thu tháng</h2>
@@ -117,13 +198,11 @@ export default function TraCuu() {
             </p>
           </div>
         )}
+      </div>
 
-        {result.residentsCount && (
-          <div className="border p-4 rounded bg-white">
-            <h2 className="font-semibold">Tổng số cư dân</h2>
-            <p>{result.residentsCount} người</p>
-          </div>
-        )}
+      {/* Biểu đồ doanh thu theo tháng */}
+      <div className="bg-white shadow rounded-lg p-6">
+        <Bar data={chartData} options={chartOptions} />
       </div>
     </div>
   );
