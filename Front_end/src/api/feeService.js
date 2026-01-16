@@ -112,10 +112,11 @@ export const getVoluntarySummary = async ({ year, month }) => {
 };
 
 // Thống kê cư trú (GET, không có params)
-export const getResidentsCount = async () => {
+export const getResidentsStatistics = async () => {
   const res = await axiosClient.get("/statistics/residents");
-  return res.data.data; // ApiResponse<ResidentAndHouseholdCountDTO>
+  return res.data; // { success, message, data: { residentCount, householdCount } }
 };
+
 
 export const getOutstandingFees = async () => {
   const res = await axiosClient.get("/fee-payments/outstanding");
