@@ -99,8 +99,9 @@ public class StatisticServiceImpl implements StatisticServer {
 
     public ResidentAndHouseholdCountDTO countResidents() {
         Long residentCount = residentRepository.count();
-        Long householdCount = householdRepository.countByIsVacantFalse();
+        Long householdCount = householdRepository.findAll().stream()
+                .filter(h -> h.getResidents().size() >= 1)
+                .count();
         return new ResidentAndHouseholdCountDTO(residentCount, householdCount);
     }
-
 }
